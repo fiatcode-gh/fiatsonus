@@ -31,6 +31,29 @@ dart test -x soak   # fast suite
 dart test -t soak   # long-run checks
 ```
 
+## Tools
+
+All from `packages/fiatsonus_engine`:
+
+```sh
+dart run tool/render.dart --scape waterfall --seed 42 --secs 120 --param height=0.8
+dart run tool/listening_set.dart
+mkdir -p build && dart compile exe tool/bench.dart -o build/bench && build/bench --min-factor 150
+dart test -t soak
+```
+
+- `render.dart` writes one soundscape to a 16-bit WAV file under `out/`.
+- `listening_set.dart` renders the listening set (defaults, each param at 0
+  and 1, sweeps, a 10-minute file) and a `README.txt` with the sign-off
+  questions to `out/listening/<scape>/`.
+- `bench` measures the realtime factor of the full engine path and fails
+  below the given median. The number counts only on the AOT build
+  (`dart compile exe`); under `dart run` it reports but refuses
+  `--min-factor`.
+- `dart test -t soak` runs the long-run checks (8 simulated hours per rate).
+
+`out/` and `build/` are not committed.
+
 ## Design
 
 Recipes, interfaces and decisions live in
