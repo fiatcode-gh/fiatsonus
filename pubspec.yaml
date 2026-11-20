@@ -1,0 +1,11 @@
+name: fiatsonus_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.14.0
+
+workspace:
+  - packages/fiatsonus_engine
+
+dev_dependencies:
+  lints: ^6.1.0
