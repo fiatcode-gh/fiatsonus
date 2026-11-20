@@ -51,6 +51,28 @@ void _grain(
   return (left, right);
 }
 
+/// Renders [frames] frames in calls of [chunk] frames into fresh zeroed
+/// buffers and returns them joined.
+(Float32List, Float32List) _renderChunked(
+  VoicePool pool,
+  int frames,
+  int chunk,
+) {
+  final left = Float32List(frames);
+  final right = Float32List(frames);
+  final l = Float32List(kBlockFrames);
+  final r = Float32List(kBlockFrames);
+  for (var done = 0; done < frames; done += chunk) {
+    final n = frames - done < chunk ? frames - done : chunk;
+    l.fillRange(0, kBlockFrames, 0.0);
+    r.fillRange(0, kBlockFrames, 0.0);
+    pool.render(l, r, n);
+    left.setAll(done, Float32List.sublistView(l, 0, n));
+    right.setAll(done, Float32List.sublistView(r, 0, n));
+  }
+  return (left, right);
+}
+
 double _peak(Float32List buf) {
   var p = 0.0;
   for (final v in buf) {
@@ -175,6 +197,45 @@ void main() {
     }
     expect(previous, closeTo(0, 1e-6));
   });
+
+  for (final chunk in [1, 7, 32, 100]) {
+    test('steal fade survives $chunk-frame render calls', () {
+      final a = pool(capacity: 4);
+      final b = pool(capacity: 4);
+      for (final level in [0.2, 0.4, 0.6, 0.8]) {
+        _grain(a, 48000, decay: 1, level: level);
+        _grain(b, 48000, decay: 1, level: level);
+      }
+      final (aL0, aR0) = _render(a, 10);
+      final (bL0, bR0) = _renderChunked(b, 10 * kBlockFrames, chunk);
+      expect(bL0, orderedEquals(aL0));
+      expect(bR0, orderedEquals(aR0));
+
+      _grain(a, 48000, decay: 1, level: 1.0, offset: 10);
+      _grain(b, 48000, decay: 1, level: 1.0, offset: 10);
+      expect(a.stolenCount, 1);
+      expect(b.stolenCount, 1);
+      final (aL, aR) = _render(a, 2);
+      final (bL, bR) = _renderChunked(b, 2 * kBlockFrames, chunk);
+      expect(bL, orderedEquals(aL));
+      expect(bR, orderedEquals(aR));
+    });
+
+    test('a start offset beyond a $chunk-frame call is kept', () {
+      final a = pool();
+      final b = pool();
+      _grain(a, 48000, offset: 200);
+      _grain(b, 48000, offset: 200);
+      expect(a.activeCount, 1);
+      expect(b.activeCount, 1);
+      final (aL, aR) = _render(a, 6);
+      final (bL, bR) = _renderChunked(b, 6 * kBlockFrames, chunk);
+      expect(bL, orderedEquals(aL));
+      expect(bR, orderedEquals(aR));
+      expect(a.activeCount, 0);
+      expect(b.activeCount, 0);
+    });
+  }
 
   test('no steal candidate: a grain beyond capacity in one block drops', () {
     final p = pool(capacity: 2);

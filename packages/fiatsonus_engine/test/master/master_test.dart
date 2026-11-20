@@ -322,6 +322,44 @@ void main() {
       );
     });
 
+    test('NaN on the right channel only mutes the block and re-fades', () {
+      expectRecovery(
+        () => FakeSoundscape()
+          ..faultAtBlock = 400
+          ..faultOnRight = true,
+      );
+    });
+
+    test('infinity on the right channel only mutes the block and re-fades', () {
+      expectRecovery(
+        () => FakeSoundscape()
+          ..faultAtBlock = 400
+          ..faultOnRight = true
+          ..faultWithInfinity = true,
+      );
+    });
+
+    test('a fault while the limiter is reducing restores unity gain', () {
+      final m = Master(sampleRate: _rate, seed: 1);
+      final f = FakeSoundscape(left: 3.0, right: 3.0)..faultAtBlock = 400;
+      m
+        ..add(f)
+        ..start('fake');
+      final out = _take(m, 800 * 256);
+      const bad = 400 * 256;
+      expect(_l(out, bad - 1), inInclusiveRange(27000, 29203));
+      expect(m.faultBlocks, 1);
+      // 3·u² stays below 0.5 here, so the limiter is idle exactly when its
+      // gain is back at 1.
+      for (var k = 0; k < 39000; k++) {
+        expect(
+          (_l(out, bad + 256 + k) - _fadeIn(3.0, k, 2 * _rate)).abs(),
+          lessThanOrEqualTo(1),
+          reason: '$k',
+        );
+      }
+    });
+
     test('a throwing soundscape mutes the block and re-fades', () {
       expectRecovery(() => FakeSoundscape()..throwAtBlock = 400);
     });

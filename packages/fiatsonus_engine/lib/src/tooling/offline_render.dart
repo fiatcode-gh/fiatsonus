@@ -38,7 +38,7 @@ final class RenderSummary {
     required this.faultBlocks,
     required this.endedSilent,
     required this.elapsed,
-    this.sampleRate = 48000,
+    required this.sampleRate,
   });
 
   /// Frames written to the sink.

@@ -110,6 +110,23 @@ void main() {
     expect(sink.writes, hasLength(1));
   });
 
+  test('chunkFrames below 1 throws ArgumentError', () async {
+    for (final bad in [0, -1]) {
+      final (m, _) = _master();
+      expect(
+        () => SinkPump(m, RecordingSink(), chunkFrames: bad),
+        throwsArgumentError,
+        reason: '$bad',
+      );
+    }
+    final (m, _) = _master();
+    final sink = RecordingSink();
+    final pump = SinkPump(m, sink, chunkFrames: 1);
+    expect(await pump.run(frames: 3), 3);
+    expect(sink.writes.map((w) => w.length), [2, 2, 2]);
+    expect(sink.data, _twin(3));
+  });
+
   test('a failing write completes run with that error', () async {
     final (m, _) = _master();
     final pump = SinkPump(m, RecordingSink(writeError: StateError('device')));

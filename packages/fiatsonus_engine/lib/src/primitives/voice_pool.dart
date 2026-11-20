@@ -20,8 +20,12 @@ final class Voice {
   int position = 0;
   double gainL = 0.0;
   double gainR = 0.0;
+
+  /// Frames still to wait before the first rendered frame.
   int start = 0;
-  bool spawnedThisBlock = false;
+
+  /// Has not rendered a frame yet; never a steal candidate.
+  bool unrendered = false;
   bool active = false;
 
   /// Reads, filters and envelopes `scratch[from..to)`.
@@ -39,7 +43,9 @@ final class VoicePool {
   final Float32List _scratch = Float32List(kBlockFrames);
   final Float32List _accL = Float32List(kBlockFrames);
   final Float32List _accR = Float32List(kBlockFrames);
-  bool _accUsed = false;
+
+  /// Frames of pending steal-fade audio at the head of [_accL]/[_accR].
+  int _accFrames = 0;
   int _active = 0;
   int _stolen = 0;
 
@@ -70,7 +76,8 @@ final class VoicePool {
   /// Voices stolen since construction.
   int get stolenCount => _stolen;
 
-  /// Schedules a grain [offset] frames into the next [render].
+  /// Schedules a grain [offset] frames from the first frame of the next
+  /// [render] call; the offset is kept across shorter calls.
   void spawn(
     NoiseTable table,
     int channel,
@@ -104,7 +111,7 @@ final class VoicePool {
     if (voice == null) {
       for (var i = 0; i < voices.length; i++) {
         final v = voices[i];
-        if (v.spawnedThisBlock) continue;
+        if (v.unrendered) continue;
         if (voice == null || v.envelope.value < voice.envelope.value) {
           voice = v;
         }
@@ -124,7 +131,7 @@ final class VoicePool {
       ..gainL = Panner.left(pan)
       ..gainR = Panner.right(pan)
       ..start = start
-      ..spawnedThisBlock = true
+      ..unrendered = true
       ..active = true;
     voice.filter
       ..reset()
@@ -154,11 +161,12 @@ final class VoicePool {
         accR[i] += s * gr;
       }
     }
-    _accUsed = true;
+    if (k > _accFrames) _accFrames = k;
   }
 
   /// Adds every active voice into the first [frames] samples of [left] and
-  /// [right].
+  /// [right]. A voice whose start lies beyond [frames], and steal-fade audio
+  /// beyond [frames], wait for the next call.
   void render(Float32List left, Float32List right, int frames) {
     final scratch = _scratch;
     final voices = _voices;
@@ -166,6 +174,11 @@ final class VoicePool {
     for (var n = 0; n < voices.length; n++) {
       final v = voices[n];
       if (!v.active) continue;
+      if (v.start >= frames) {
+        v.start -= frames;
+        active++;
+        continue;
+      }
       final source = v.table;
       final from = v.start;
       final remaining = v.envelope.remainingFrames;
@@ -180,7 +193,7 @@ final class VoicePool {
         }
       }
       v.start = 0;
-      v.spawnedThisBlock = false;
+      v.unrendered = false;
       if (v.envelope.isDone) {
         v.active = false;
         v.table = null;
@@ -188,15 +201,22 @@ final class VoicePool {
         active++;
       }
     }
-    if (_accUsed) {
+    final pending = _accFrames;
+    if (pending > 0) {
+      final n = pending < frames ? pending : frames;
       final accL = _accL, accR = _accR;
-      for (var i = 0; i < frames; i++) {
+      for (var i = 0; i < n; i++) {
         left[i] += accL[i];
         right[i] += accR[i];
       }
-      accL.fillRange(0, kBlockFrames, 0.0);
-      accR.fillRange(0, kBlockFrames, 0.0);
-      _accUsed = false;
+      final rest = pending - n;
+      for (var i = 0; i < rest; i++) {
+        accL[i] = accL[i + n];
+        accR[i] = accR[i + n];
+      }
+      accL.fillRange(rest, pending, 0.0);
+      accR.fillRange(rest, pending, 0.0);
+      _accFrames = rest;
     }
     _active = active;
   }
@@ -206,7 +226,7 @@ final class VoicePool {
     for (var i = 0; i < _voices.length; i++) {
       final v = _voices[i]
         ..active = false
-        ..spawnedThisBlock = false
+        ..unrendered = false
         ..start = 0
         ..table = null;
       v.envelope.reset();
@@ -215,7 +235,7 @@ final class VoicePool {
     _scratch.fillRange(0, kBlockFrames, 0.0);
     _accL.fillRange(0, kBlockFrames, 0.0);
     _accR.fillRange(0, kBlockFrames, 0.0);
-    _accUsed = false;
+    _accFrames = 0;
     _active = 0;
   }
 }

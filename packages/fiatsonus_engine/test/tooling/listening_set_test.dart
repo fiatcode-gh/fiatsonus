@@ -27,6 +27,7 @@ const RenderSummary _summary = RenderSummary(
   faultBlocks: 0,
   endedSilent: true,
   elapsed: Duration(seconds: 1),
+  sampleRate: 48000,
 );
 
 /// The `- [ ]` lines of the Acceptance list in the doc's waterfall section.

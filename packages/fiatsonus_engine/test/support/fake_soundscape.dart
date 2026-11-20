@@ -36,6 +36,9 @@ final class FakeSoundscape implements Soundscape {
   int? faultAtBlock;
   bool faultWithInfinity = false;
 
+  /// Writes the fault sample into the right channel instead of the left.
+  bool faultOnRight = false;
+
   /// 0-based render call that throws a [StateError].
   int? throwAtBlock;
 
@@ -65,7 +68,12 @@ final class FakeSoundscape implements Soundscape {
       right[i] += r;
     }
     if (block == faultAtBlock) {
-      left[frames ~/ 2] += faultWithInfinity ? double.infinity : double.nan;
+      final fault = faultWithInfinity ? double.infinity : double.nan;
+      if (faultOnRight) {
+        right[frames ~/ 2] += fault;
+      } else {
+        left[frames ~/ 2] += fault;
+      }
     }
   }
 

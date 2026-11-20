@@ -17,10 +17,17 @@ final class SinkPump {
   Future<void>? _inFlight;
   int _session = 0;
 
+  /// [chunkFrames] must be at least 1, else [ArgumentError].
   SinkPump(Master master, AudioSink sink, {int chunkFrames = 1024})
     : _master = master,
       _sink = sink,
-      _chunkFrames = chunkFrames,
+      _chunkFrames = chunkFrames >= 1
+          ? chunkFrames
+          : throw ArgumentError.value(
+              chunkFrames,
+              'chunkFrames',
+              'must be at least 1',
+            ),
       _buffer = Int16List(chunkFrames * 2);
 
   /// Number of runs started or cancelled so far.

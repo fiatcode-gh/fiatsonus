@@ -21,6 +21,16 @@ List<int> _starts(GrainCloud cloud, int blocks) {
   return out;
 }
 
+/// Absolute frame of the first grain, rendering whole blocks after the
+/// [skipped] blocks already consumed.
+int _first(GrainCloud cloud, {int skipped = 0}) {
+  for (var b = skipped; b < 100000; b++) {
+    final at = cloud.nextStart(kBlockFrames);
+    if (at != -1) return b * kBlockFrames + at;
+  }
+  fail('no grain');
+}
+
 void main() {
   for (final rate in [44100, 48000]) {
     group('at $rate Hz', () {
@@ -46,8 +56,35 @@ void main() {
           expect(cv, inInclusiveRange(0.9, 1.1));
         });
       }
+
+      for (final tiny in [1e-5, double.minPositive]) {
+        test('a near-zero rate ($tiny) does not stall later grains', () {
+          final cloud = GrainCloud(Rng(5))..prepare(rate);
+          cloud.rate = tiny;
+          expect(cloud.nextStart(kBlockFrames), -1);
+          cloud.rate = 400;
+          final count = _starts(cloud, 60 * rate ~/ kBlockFrames).length;
+          printOnFailure('count $count');
+          expect((count - 24000).abs() / 24000, lessThan(0.05));
+        });
+      }
     });
   }
+
+  test('a rate change rescales the pending gap', () {
+    final b = GrainCloud(Rng(5))
+      ..prepare(48000)
+      ..rate = 2;
+    final bFirst = _first(b);
+    expect(bFirst, greaterThan(256));
+
+    final a = GrainCloud(Rng(5))
+      ..prepare(48000)
+      ..rate = 1;
+    expect(a.nextStart(kBlockFrames), -1);
+    a.rate = 2;
+    expect(_first(a, skipped: 1), closeTo(bFirst + 128, 1));
+  });
 
   test('rate 0 returns -1 forever; raising it starts grains', () {
     final cloud = GrainCloud(Rng(1))..prepare(48000);

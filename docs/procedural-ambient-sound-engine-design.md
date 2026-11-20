@@ -453,10 +453,11 @@ A small command-line tool renders any soundscape with a seed, a duration, and pa
 - Limiter: stereo-linked, knee at 0.5, ceiling 0.8912 (just under −1 dBFS), instant attack, 150 ms release. Largest legal Int16 magnitude: 29203.
 - Noise tables: white 4.37 s, pink 5.23 s, brown 5.81 s, stereo, each channel normalised to RMS 0.25 with zero mean; pink and brown are high-passed at 20 Hz; the loop seam is crossfaded over 100 ms. The brown coefficient is scaled by 44100 / sample rate. Different lengths keep layers from looping together.
 - Biquad in this unit: low-pass, high-pass, band-pass. Peaking and high-shelf arrive with the first soundscape that needs them. Smoothing is done by the caller's Smoother; the biquad recomputes coefficients only when its inputs change.
-- Voices: one noise reader, one biquad, one envelope, one pan per voice; 64 at most. A stolen voice fades out over 64 frames before the new grain starts.
+- Voices: one noise reader, one biquad, one envelope, one pan per voice; 64 at most. A stolen voice fades out over 64 frames before the new grain starts, also when the caller renders in calls shorter than that.
+- Grain timing: the wait for the next grain is kept as a rate-free random value and converted with the current rate, so a rate change takes effect at once, also after a rate near zero.
 - Reverb: four-line feedback delay network (29.7, 37.1, 41.1, 43.7 ms), RT60 1.6 s, damping 4 kHz, mono send, stereo return.
 - Not built in this unit: EventScheduler, Delay, sine LFO.
 - Loudness measure for the Level check: ungated BS.1770 K-weighted stereo loudness (LUFS). Waterfall band: −21 to −19 LUFS at default params.
 - Click check: the largest sample-to-sample jump divided by the RMS of the jumps in the 2048 samples before it must stay at or below 12. Fades and param steps are also proven exactly against a twin render.
-- Long run: 8 simulated hours on the AOT build with the VM's GC log on. Pass: no garbage collection during the run, memory spread within 4 MiB, at most 64 voices, every ten-minute loudness window within ±0.5 LU of the first.
+- Long run: 8 simulated hours on the AOT build with the VM's GC log on. Pass: no garbage collection during the run, memory spread within 4 MiB, at most 64 voices, the loudness of the first 60 s of every ten-minute window within ±0.5 LU of the first window's.
 - CPU: the benchmark reports the realtime factor on the AOT build. Unit 1 target: waterfall defaults at 48 kHz render at 150× realtime or faster on one desktop core.

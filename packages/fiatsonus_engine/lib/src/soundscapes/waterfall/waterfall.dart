@@ -114,6 +114,18 @@ final class Waterfall implements Soundscape {
   @override
   int get activeVoices => _pool.activeCount;
 
+  /// True when every filter state and the reverb memory are exactly 0.0 and
+  /// no voice is active. Scans the reverb memory: diagnostics only, never
+  /// called from render.
+  bool get isQuiet =>
+      _roarHp.isQuiet &&
+      _roarLp.isQuiet &&
+      _bodyLp.isQuiet &&
+      _sprayHp.isQuiet &&
+      _distanceLp.isQuiet &&
+      _reverb.isQuiet &&
+      _pool.activeCount == 0;
+
   @override
   void prepare(int sampleRate, int seed, NoiseBank noise) {
     _params.prepare(sampleRate);

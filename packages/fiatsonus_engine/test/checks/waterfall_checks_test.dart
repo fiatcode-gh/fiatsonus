@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:fiatsonus_engine/fiatsonus_engine.dart';
 import 'package:test/test.dart';
 
+import '../support/fake_soundscape.dart';
 import 'soundscape_checks.dart';
 
 const _config = SoundscapeCheckConfig(
@@ -17,6 +20,34 @@ double _lufs(Waterfall scape, int rate, Map<String, double> params) =>
 
 void main() {
   defineSoundscapeChecks(_config);
+
+  group('S8: a master fault resets the waterfall', () {
+    for (final rate in checkRates) {
+      test('$rate Hz', () {
+        final waterfall = Waterfall();
+        final fake = FakeSoundscape(left: 0, right: 0)..faultAtBlock = 400;
+        final master = Master(sampleRate: rate, seed: 1)
+          ..add(waterfall)
+          ..add(fake)
+          ..start(waterfall.id)
+          ..start(fake.id);
+        final out = Int16List(kBlockFrames * 2);
+        for (var b = 0; b < 400; b++) {
+          master.render(out, kBlockFrames);
+        }
+        expect(waterfall.isQuiet, isFalse);
+
+        master.render(out, kBlockFrames);
+        expect(out, everyElement(0));
+        expect(master.faultBlocks, 1);
+        expect(waterfall.isQuiet, isTrue);
+
+        master.render(out, kBlockFrames);
+        expect(waterfall.isQuiet, isFalse);
+        expect(master.faultBlocks, 1);
+      });
+    }
+  });
 
   group('width 0 is mono', () {
     for (final rate in checkRates) {

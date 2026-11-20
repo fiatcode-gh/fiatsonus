@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:fiatsonus_engine/src/core/engine_constants.dart';
 import 'package:fiatsonus_engine/src/primitives/noise_table.dart';
 import 'package:fiatsonus_engine/src/primitives/rng.dart';
+import 'package:fiatsonus_engine/src/primitives/smoother.dart';
 import 'package:fiatsonus_engine/src/soundscapes/waterfall/waterfall.dart';
 import 'package:test/test.dart';
 
@@ -360,6 +361,69 @@ void main() {
         final (l, r) = _render(w, _blocks(rate, 2));
         expect(_allFinite(l) && _allFinite(r), isTrue);
         expect(_rmsStereo(l, r, 0, l.length), greaterThan(1e-3));
+      });
+
+      test('isQuiet: true when prepared, false while playing, true after '
+          'reset', () {
+        final w = _make(rate);
+        expect(w.isQuiet, isTrue);
+        _render(w, _blocks(rate, 2));
+        expect(w.isQuiet, isFalse);
+        expect(w.activeVoices, greaterThan(0));
+        w.reset();
+        expect(w.isQuiet, isTrue);
+      });
+
+      test('reset silences a ringing spray tail in the next block', () {
+        final w = _make(rate, solo: {WaterfallLayer.spray});
+        _render(w, _blocks(rate, 2));
+        w.setParam('spray', 0);
+        final limit = _blocks(rate, 5);
+        Float32List? tailL;
+        Float32List? tailR;
+        for (var b = 0; b < limit; b++) {
+          final before = w.blocksRendered(WaterfallLayer.spray);
+          final (l, r) = _render(w, 1);
+          if (w.blocksRendered(WaterfallLayer.spray) == before) {
+            tailL = l;
+            tailR = r;
+            break;
+          }
+        }
+        expect(tailL, isNotNull, reason: 'spray still processed after 5 s');
+        expect(
+          tailL!.any((x) => x != 0.0) || tailR!.any((x) => x != 0.0),
+          isTrue,
+        );
+        w.reset();
+        final (l, r) = _render(w, 1);
+        expect(l, everyElement(0.0));
+        expect(r, everyElement(0.0));
+        expect(w.isQuiet, isTrue);
+      });
+
+      test('a width step ramps linearly inside its first block', () {
+        final a = _make(rate);
+        final b = _make(rate);
+        _render(a, _blocks(rate, 2));
+        _render(b, _blocks(rate, 2));
+        b.setParam('width', 0);
+        final (aL, aR) = _render(a, 1);
+        final (bL, bR) = _render(b, 1);
+        final w1 =
+            (Smoother(0.7)
+                  ..prepare(rate, const Duration(milliseconds: 200))
+                  ..target = 0)
+                .next();
+        final dw = w1 - 0.7;
+        var total = 0.0;
+        for (var i = 0; i < kBlockFrames; i++) {
+          final e = (aL[i] - aR[i]) * (dw / 1.4) * (i + 1) / kBlockFrames;
+          total += e.abs();
+          expect(((bL[i] - aL[i]) - e).abs(), lessThan(1e-6), reason: 'L $i');
+          expect(((bR[i] - aR[i]) + e).abs(), lessThan(1e-6), reason: 'R $i');
+        }
+        expect(total, greaterThan(0.01));
       });
 
       test('a short block writes only its frames', () {
