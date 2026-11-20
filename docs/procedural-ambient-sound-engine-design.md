@@ -214,20 +214,24 @@ A waterfall is a thick, steady roar with a deep body and fine spray. It's the ea
 
 | Layer | Recipe | Notes |
 | --- | --- | --- |
-| Roar | Pink + white noise (70/30) → high-pass 80 Hz → low-pass 6–10 kHz. Very slow random walk on level (depth 4% of base, 0.02–0.05 Hz). | Main layer. Very stable. |
-| Body | Brown noise → low-pass 120–250 Hz. | The "weight" of falling water. Scales with height. |
-| Spray | White noise → high-pass 4 kHz. Random walk on level (depth 15%, 0.1–0.4 Hz). | Gusts of mist. |
-| Texture | Dense noise-burst grains, band-pass 800–4,000 Hz, Q 0.7–1.2, 5–30 ms, 100–400 per second, each at low level (about −30 dB under the roar). | Stops the roar from sounding like static. Spread wide. |
-| Placement | Roar and body use decorrelated left and right noise (independent channels) for width. Width control blends toward mono. | No moving sources. |
+| Roar | Pink + white noise (70/30) → high-pass 80 Hz → low-pass 6–10 kHz (Height). Gain 1.0. Very slow random walk on level (depth 4% of base, 0.02–0.05 Hz). | Main layer. Very stable. |
+| Body | Brown noise → low-pass 250–120 Hz (Height). Gain 1.0 × body level. | The "weight" of falling water. Scales with height. |
+| Spray | White noise → high-pass 4 kHz. Gain 1.0 × Spray. Random walk on level (depth 15%, 0.1–0.4 Hz). | Gusts of mist. Off at Spray 0. |
+| Texture | Dense noise-burst grains from white noise: band-pass 800–4,000 Hz (log-uniform), Q 0.7–1.2, 5–30 ms (attack 1.5–2 ms, exponential decay), 100–400 per second, level 0.6–1.0, pan −0.9 to +0.9. Texture gain 1.4. | Stops the roar from sounding like static. Spread wide. |
+| Distance stage | Whole mix → low-pass (Distance) → reverb send (RT60 1.6 s, damping 4 kHz, wet 0.5) → level. | One low-pass and one reverb for the soundscape. |
+| Output | Output trim 0.78 → width (mid/side). | The trim sets −20 LUFS at default params. |
+| Placement | Roar, body and spray use decorrelated left and right noise (independent channels) for width. Width control blends the whole output toward mono. | No moving sources. |
 
 **Params**
 
 | Param | Default | Maps to |
 | --- | --- | --- |
-| Height | 0.5 | Body level 0.3 → 1.0. Roar low-pass 6 → 10 kHz. Texture rate. |
-| Spray | 0.4 | Spray level. |
-| Width | 0.7 | Stereo width, mono (0) to fully decorrelated (1). |
-| Distance | 0.4 | Master low-pass 12 kHz → 1.5 kHz. Reverb send 0.1 → 0.6. Level 0 → −12 dB. Texture fades out faster than roar. |
+| Height | 0.5 | Body level 0.3 + 0.7·h. Body low-pass 250 − 130·h Hz. Roar low-pass 6,000 + 4,000·h Hz. Texture rate 100 + 300·h per second. |
+| Spray | 0.4 | Spray level = s (linear). 0 switches the layer off. |
+| Width | 0.7 | Side signal × w: mono (0) to fully decorrelated (1). No loudness compensation. |
+| Distance | 0.4 | Low-pass 12,000 × 0.125^d Hz (12 kHz → 1.5 kHz). Reverb send 0.1 + 0.5·d. Level −12·d dB. Texture a further −12·d dB, so it fades out faster than the roar. |
+
+The doc's first texture level (about −30 dB under the roar per grain) measured about 47 dB under the roar as a layer and was inaudible; the gain above puts the texture about 14 LU under the roar at default params. Levels are tuned by listening and changed here and in the code together.
 
 **Acceptance**
 

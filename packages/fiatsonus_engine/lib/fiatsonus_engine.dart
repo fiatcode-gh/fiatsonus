@@ -10,3 +10,5 @@ export 'src/core/soundscape.dart';
 export 'src/master/master.dart';
 export 'src/master/sink_pump.dart';
 export 'src/primitives/noise_table.dart' show NoiseBank;
+export 'src/soundscapes/registry.dart';
+export 'src/soundscapes/waterfall/waterfall.dart';
