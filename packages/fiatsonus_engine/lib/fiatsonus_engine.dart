@@ -6,3 +6,5 @@ export 'src/core/audio_sink.dart';
 export 'src/core/engine_constants.dart';
 export 'src/core/param_set.dart';
 export 'src/core/param_spec.dart';
+export 'src/core/soundscape.dart';
+export 'src/primitives/noise_table.dart' show NoiseBank;
