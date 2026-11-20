@@ -4,4 +4,5 @@ library;
 
 export 'src/core/audio_sink.dart';
 export 'src/core/engine_constants.dart';
+export 'src/core/param_set.dart';
 export 'src/core/param_spec.dart';
