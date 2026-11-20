@@ -400,9 +400,9 @@ Flutter has no built-in way to play generated audio, so the app needs a plugin t
 
 The engine core is pure Dart, so most testing runs offline on a desktop: render to a WAV file, check numbers, then listen. A soundscape is done when it passes every automatic check below plus its own acceptance list.
 
-**Offline renderer (proposal)**
+**Offline renderer**
 
-A small command-line tool renders any soundscape with a seed, a duration, and param values to a WAV file. For example: `dart run tool/render.dart --scape ocean --seed 42 --secs 120 --param waveSize=0.8`. The same seed must always give the same file.
+A small command-line tool renders any soundscape with a seed, a duration, and param values to a WAV file. From `packages/fiatsonus_engine`: `dart run tool/render.dart --scape waterfall --seed 42 --secs 120 --param height=0.8` (options: `--rate`, `--sweep <param>`, `--out`). The same seed always gives the same file.
 
 **Automatic checks (run on every soundscape and preset)**
 
