@@ -1,0 +1,73 @@
+ACTIVITY MANAGER SERVICES (dumpsys activity services)
+  User 0 active services:
+  * ServiceRecord{a601a49 u0 com.android.bbkmusic/.service.MusicService c:com.android.bbkmusic}
+    intent={cmp=com.android.bbkmusic/.service.MusicService}
+    packageName=com.android.bbkmusic
+    processName=com.android.bbkmusic
+    targetSdkVersion=35
+    baseDir=/system/app/BBKMusic/BBKMusic.apk
+    dataDir=/data/user/0/com.android.bbkmusic
+    app=ProcessRecord{3862d59 24608:com.android.bbkmusic/u0a105}
+    useNewWiuLogic_forCapabilities()=true
+    useNewWiuLogic_forStart()=true
+    useNewBfslLogic()=true
+    mAllowWiu_noBinding=DENIED
+    mAllowWiu_inBindService=DENIED
+    mAllowWiu_byBindings=DENIED
+    getFgsAllowWiu_legacy=DENIED
+    getFgsAllowWiu_new=DENIED
+    getFgsAllowWiu_forStart=DENIED
+    getFgsAllowWiu_forCapabilities=DENIED
+    allowUiJobScheduling=false
+    recentCallingPackage=com.android.bbkmusic
+    recentCallingUid=10105
+    mAllowStart_noBinding=DENIED
+    mAllowStart_inBindService=DENIED
+    mAllowStart_byBindings=DENIED
+    getFgsAllowStart_legacy=DENIED
+    getFgsAllowStart_new=DENIED
+    getFgsAllowStart=DENIED
+    startForegroundCount=1
+    infoAllowStartForeground=null
+    isForeground=false foregroundId=10001 types=0x00000000 foregroundNoti=Notification(channel=com.android.bbkmusic.PLAY_ID shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=ONGOING_EVENT|NO_CLEAR|NO_DISMISS color=0x00000000 category=transport actions=3 vis=PUBLIC internalType=0 internalPriority=0 internalGroupPriority=0 internalFlag=0)
+    createTime=-1m4s529ms startingBgTimeout=--
+    lastActivity=-54s614ms restartTime=-1m4s528ms createdFromFg=true
+    startRequested=true delayedStop=false stopIfKilled=true callStart=true lastStartId=6
+ startCommandResult=2
+    Bindings:
+    * IntentBindRecord{402a490 CREATE}:
+      intent={xflg=0x4 cmp=com.android.bbkmusic/.service.MusicService}
+      binder=android.os.BinderProxy@aa42189
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{310358e ProcessRecord{3862d59 24608:com.android.bbkmusic/u0a105}}
+        Per-process Connections:
+          ConnectionRecord{4596459 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@52af0a0 flags=0x1}
+          ConnectionRecord{96233b8 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@5a7f61b flags=0x1}
+          ConnectionRecord{a3f6355 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@615de0c flags=0x1}
+          ConnectionRecord{f24b0d2 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@8042f5d flags=0x1}
+      * Client AppBindRecord{80c41af ProcessRecord{b89833f 13438:com.vivo.musicwidgetmix/u0a172}}
+        Per-process Connections:
+          ConnectionRecord{89410f9 u0 cp:com.vivo.musicwidgetmix CR com.android.bbkmusic/.service.MusicService(a601a49):@c67ebc0 flags=0x1}
+    All Connections:
+      ConnectionRecord{4596459 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@52af0a0 flags=0x1}
+      ConnectionRecord{96233b8 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@5a7f61b flags=0x1}
+      ConnectionRecord{a3f6355 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@615de0c flags=0x1}
+      ConnectionRecord{f24b0d2 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@8042f5d flags=0x1}
+      ConnectionRecord{89410f9 u0 cp:com.vivo.musicwidgetmix CR com.android.bbkmusic/.service.MusicService(a601a49):@c67ebc0 flags=0x1}
+
+  Connection bindings to services:
+  * ConnectionRecord{4596459 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@52af0a0 flags=0x1}
+    binding=AppBindRecord{310358e com.android.bbkmusic/.service.MusicService:com.android.bbkmusic}
+    conn=android.os.BinderProxy@52af0a0 flags=0x1
+  * ConnectionRecord{96233b8 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@5a7f61b flags=0x1}
+    binding=AppBindRecord{310358e com.android.bbkmusic/.service.MusicService:com.android.bbkmusic}
+    conn=android.os.BinderProxy@5a7f61b flags=0x1
+  * ConnectionRecord{a3f6355 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@615de0c flags=0x1}
+    binding=AppBindRecord{310358e com.android.bbkmusic/.service.MusicService:com.android.bbkmusic}
+    conn=android.os.BinderProxy@615de0c flags=0x1
+  * ConnectionRecord{f24b0d2 u0 cp:com.android.bbkmusic CR com.android.bbkmusic/.service.MusicService(a601a49):@8042f5d flags=0x1}
+    binding=AppBindRecord{310358e com.android.bbkmusic/.service.MusicService:com.android.bbkmusic}
+    conn=android.os.BinderProxy@8042f5d flags=0x1
+  * ConnectionRecord{89410f9 u0 cp:com.vivo.musicwidgetmix CR com.android.bbkmusic/.service.MusicService(a601a49):@c67ebc0 flags=0x1}
+    binding=AppBindRecord{80c41af com.android.bbkmusic/.service.MusicService:com.vivo.musicwidgetmix}
+    conn=android.os.BinderProxy@c67ebc0 flags=0x1

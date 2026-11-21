@@ -1,0 +1,825 @@
+Start begin: 11-03 12:47:48.567
+Start end:   11-03 12:47:55.520
+Now:         11-21 09:07:29.160
+Notification Clients:
+   pid    uid  name
+   679  10224  com.google.android.youtube
+  1960   1041  audioserver
+  2332   1013  media
+  2883   1000  android.uid.system
+  4887  10087  android.uid.systemui
+  5241   1000  android.uid.system
+  5359   1002  android.uid.bluetooth
+  5394   1000  android.uid.system
+  5420  10238  android.uid.qtiphone
+  5540   1001  android.uid.phone
+  5589  10104  com.android.launcher3
+  9822  10175  com.android.camera
+ 20451  10086  com.android.mms
+Global session refs:
+  session  cnt     pid    uid  name
+      705    2    4887  10087  android.uid.systemui
+     1089    1    9822  10175  com.android.camera
+     1097    1    9822  10175  com.android.camera
+     1465    1    4887  10087  android.uid.systemui
+Hardware status: 0
+mHifiState = 0
+mHifiConfigState = 0
+mLowPower = false
+mSimcardPlugOutVolumeTable = 100
+Vibrator infos(size=1):
+  - AudioVibratorInfo{id: 0, resonantFrequency: nan, qFactor: nan, maxAmplitude: nan}
+Bluetooth latency modes are enabled
+
+ ## BEGIN thread dump 
+
+Output thread 0xb40000728f167430, name AudioOut_D, tid 2921, type 0 (MIXER):
+  I/O handle: 13
+  Standby: yes
+  Sample rate: 48000 Hz
+  HAL frame count: 192
+  HAL format: 0x3 (AUDIO_FORMAT_PCM_32_BIT)
+  HAL buffer size: 1536 bytes
+  Channel count: 2
+  Channel mask: 0x00000003 (front-left, front-right)
+  Processing format: 0x5 (AUDIO_FORMAT_PCM_FLOAT)
+  Processing frame size: 8 bytes
+  Pending config events: none
+  Output devices: 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+  Input device: 0 (AUDIO_DEVICE_NONE)
+  Audio source: 0 (AUDIO_SOURCE_DEFAULT)
+  Timestamp stats: n=13069 disc=150 cold=3 nRdy=0 err=63 rate=0.999961 jitterMs(ave=0.000494863 std=0.20274 min=-3.95448 max=6.47214) localSR(47994.4, 5.31829e-07) correctedJitterMs(ave=0.000470959 std=0.058899 min=-2.91661 max=1.89344)
+  Timestamp corrected: no
+  Last write occurred (msecs): 648423
+  Process time ms stats: ave=0.305231 std=0.184083 min=0.193698 max=0.701458
+  Hal write jitter ms stats: ave=-0.0153281 std=0.0603513 min=-0.2025 max=0.040208
+  Threadloop write latency stats: ave=61.022 std=11.7749 min=54.7227 max=163.6
+  Monopipe write pipe depth stats: ave=1184.02 std=74.751 min=1152 max=1344
+  Master volume: 1.000000
+  Master mute: off
+  Mixer channel Mask: 0x3 (front-left, front-right)
+  Normal frame count: 960
+  Total writes: 7751
+  Delayed writes: 131
+  Blocked in write: no
+  Suspend count: 0
+  Fast track availMask=0xfe
+  Standby delay ns=1000000000
+  AudioStreamOut: 0xb4000071cf16b050 flags 0x6 (AUDIO_OUTPUT_FLAG_PRIMARY|AUDIO_OUTPUT_FLAG_FAST)
+  Frames written: 7440960
+  Suspended frames: 0
+  PipeSink frames written: 7440960
+  Hal stream dump:
+      Signal power history (resolution: 1000.0 ms):
+       11-17 17:22:52.256: [  -53.2 ] sum(-3.4)
+       11-17 21:08:47.111: [  -53.2  -53.2 ] sum(-0.3)
+       11-18 12:43:11.943: [  -53.2  -53.2 ] sum(-0.3)
+       11-18 21:14:19.292: [  -53.2  -60.3 ] sum(-2.6)
+       11-19 08:32:09.853: [  -53.2 ] sum(-3.4)
+       11-19 08:33:19.008: [  -53.2 ] sum(-3.4)
+       11-19 13:28:24.760: [  -65.1  -53.2 ] sum(-3.1)
+       11-19 13:29:59.782: [  -53.2 ] sum(-3.4)
+       11-19 13:37:17.650: [  -61.2  -53.2 ] sum(-2.7)
+       11-20 07:41:43.946: [  -53.2  -53.2 ] sum(-0.3)
+       11-20 10:05:26.819: [  -65.1 ] sum(-15.3)
+       11-20 10:05:32.138: [  -53.2 ] sum(-3.4)
+       11-20 10:14:49.466: [  -61.2 ] sum(-11.4)
+       11-20 10:26:51.577: [  -65.1  -61.2  -53.2 ] sum(-2.5)
+       11-20 20:49:39.250: [  -53.2  -65.1  -53.2 ] sum(-0.2)
+       11-21 07:12:35.817: [  -52.4 ] sum(-2.6)
+       11-21 07:57:13.709: [  -53.2 ] sum(-3.4)
+       11-21 08:34:58.769: [  -53.2 ] sum(-3.4)
+       11-21 08:56:37.113: [  -53.2
+      Signal power history (resolution: 50.0 ms):
+       11-19 13:37:17.650: [  -49.5  -71.4  -54.3  -69.8  -94.3 -117.2 ] sum(-11.4)
+       11-19 20:54:43.497: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-20 07:41:43.946: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-20 09:47:20.400: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-20 10:05:26.819: [  -53.4  -72.9  -58.4  -67.8  -91.3 -118.7 ] sum(-15.3)
+       11-20 10:05:32.138: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-20 10:14:49.466: [  -49.5  -71.4  -54.3  -69.8  -94.3 -117.2 ] sum(-11.4)
+       11-20 10:26:51.577: [  -53.4  -72.9  -58.4  -67.8  -91.3 -118.7 ] sum(-15.3)
+       11-20 10:41:23.208: [  -49.5  -71.4  -54.3  -69.8  -94.3 -117.2 ] sum(-11.4)
+       11-20 12:59:12.154: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-20 20:49:39.250: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-21 07:09:11.739: [  -53.4  -72.9  -58.4  -67.8  -91.3 -118.7 ] sum(-15.3)
+       11-21 07:11:42.428: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-21 07:12:35.817: [  -48.7  -64.6  -82.8  -74.2  -41.9  -51.2  -70.4  -47.1  -50.4  -72.9
+       11-21 07:12:36.317:    -91.2 -106.8 -125.3 ] sum(-2.6)
+       11-21 07:57:13.709: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-21 08:34:58.769: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-21 08:56:37.113: [  -41.8  -60.3  -74.9  -45.6  -60.6  -81.0  -96.7 -113.8 ] sum(-3.4)
+       11-21 08:56:39.939: [  -53.4  -72.9  -58.4  -67.8  -91.3 -118.7 ] sum(-15.3)
+
+    -33.4 -|      |        |        |        |      |        |      |      |      |        |        |      |        |             |        |        |        |
+    -41.8 -|      |*  *    |*  *    |*  *    |      |*  *    |      |      |      |*  *    |*  *    |      |*  *    |    *        |*  *    |*  *    |*  *    |
+    -50.1 -|* *   |        |        |        |*     |        |* *   |*     |* *   |        |        |*     |        |*    * **    |        |        |        |*
+    -58.5 -|      | *  *   | *  *   | *  *   |  *   | *  *   |      |  *   |      | *  *   | *  *   |  *   | *  *   |             | *  *   | *  *   | *  *   |  *
+    -66.8 -|   *  |        |        |        |   *  |        |   *  |   *  |   *  |        |        |   *  |        | *    *      |        |        |        |   *
+    -75.2 -| *    |  *     |  *     |  *     | *    |  *     | *    | *    | *    |  *     |  *     | *    |  *     |   *     *   |  *     |  *     |  *     | *
+    -83.5 -|      |     *  |     *  |     *  |      |     *  |      |      |      |     *  |     *  |      |     *  |  *          |     *  |     *  |     *  |
+    -91.9 -|    * |        |        |        |    * |        |    * |    * |    * |        |        |    * |        |          *  |        |        |        |    *
+   -100.2 -|      |      * |      * |      * |      |      * |      |      |      |      * |      * |      |      * |             |      * |      * |      * |
+   -108.6 -|      |        |        |        |      |        |      |      |      |        |        |      |        |           * |        |        |        |
+   -116.9 -|     *|       *|       *|       *|     *|       *|     *|     *|     *|       *|       *|     *|       *|             |       *|       *|       *|     *
+   -125.3 -|      |        |        |        |      |        |      |      |      |        |        |      |        |            *|        |        |        |
+   -133.6 -|      |        |        |        |      |        |      |      |      |        |        |      |        |             |        |        |        |
+   -142.0 -|      |        |        |        |      |        |      |      |      |        |        |      |        |             |        |        |        |
+           |________________________________________________________________________________________________________________________________________________________
+
+
+  Thread throttle time (msecs): 0
+  AudioMixer tracks: 88 128 129 207 
+  Master mono: off
+  Master balance: 0.000000 (0.000000)
+  FastMixer thread 0xb40000731f163010 tid=2920  FastMixer command=COLD_IDLE writeSequence=79062 framesWritten=7589952
+            numTracks=1 writeErrors=0 underruns=10 overruns=192
+            sampleRate=48000 frameCount=192 measuredWarmup=7.76 ms, warmupCycles=5
+            mixPeriod=4.00 ms latency=21.00 ms
+  FastMixer Timestamp stats: n=38751 disc=129 cold=0 nRdy=0 err=0 rate=0.999442 jitterMs(ave=4.86181e-05 std=0.172742 min=-3.56536 max=6.48797) localSR(47990.7, 5.71227e-07) correctedJitterMs(ave=-0.000323987 std=0.0279478 min=-2.36703 max=1.49104)
+  Fast tracks: sMaxFastTracks=8 activeMask=0x1
+  Index Active Full Partial Empty  Recent Ready    Written
+      0    yes  863       0     0    full   960    7440000
+      1     no    0       0     0    full     0          0
+      2     no    0       0     0    full     0          0
+      3     no    0       0     0    full     0          0
+      4     no    0       0     0    full     0          0
+      5     no    0       0     0    full     0          0
+      6     no    0       0     0    full     0          0
+      7     no    0       0     0    full     0          0
+Bluetooth latency modes are not enabled
+HAL does not support Bluetooth latency modes
+Supported latency modes: { }
+
+  Normal mixer raw underrun counters: partial=0 empty=0
+  4 Tracks of which 0 are active
+    Type     Id Active Client(pid/uid) Session Port Id S  Flags   Format Chn mask  SRate ST Usg CT  G db  L dB  R dB  VS dB  PortVol dB  PortMuted   Server FrmCnt  FrmRdy F Underruns  Flushed BitPerfect InternalMute   Latency
+       S    207     no    4887/  10087    1465     181 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 000058D6  11371       0 f         0        0      false        false   57.77 k
+       S    129     no    9822/  10175    1097     103 S  0x600 00000001 00000003  44100  7   d  4   -27    -8    -8     0          -19      false 00017520   6368       0 f         0        0      false        false   56.93 k
+             88     no    4887/  10087     705      62 S  0x600 00000001 00000003  48000  5   5  4   -32     0     0     0          -32      false 00005028  24000       0 f         0        0      false        false   98.05 k
+       S    128     no    9822/  10175    1089     102 S  0x600 00000001 00000003  44100  7   d  4   -27    -8    -8     0          -19      false 0000C700   6368       0 f         0        0      false        false   69.64 k
+  0 Effect Chains
+  Local log:
+                                                         Type     Id Active Client(pid/uid) Session Port Id S  Flags   Format Chn mask  SRate ST Usg CT  G db  L dB  R dB  VS dB  PortVol dB  PortMuted   Server FrmCnt  FrmRdy F Underruns  Flushed BitPerfect InternalMute   Latency
+   11-19 07:42:55.505 AT::remove    (0xb4000072bf176ca0)         153     no    2883/   1000    1305     127 S  0x600 00000001 00000003  44100  1   d  4   -15     0     0     0          -15      false 000054DA  22050       0 f         0        0      false        false   60.07 k
+   11-19 07:42:56.015 threadLoop_standby: framesWritten:6170880  suspendedFrames:0  monoPipeWritten:6170880  monoPipeLeft:768
+   11-19 07:42:56.015 threadLoop_standby: BOOTTIME offset 1253731249961634: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6170880  time: 110437124749223), ([2]  position: 6168912  time: 110437144368858), ([3]  position: 6170880  time: 110437124749223), ([4]  position: 6168336  time: 110437132380785)
+   11-19 08:00:03.188 removeTrack_l (0xb4000072bf176ca0)         153     no    2883/   1000    1305     127 T  0x600 00000001 00000003  44100  1   d  4   -15     0     0     0          -15      false 000054DA  22050       0 f         0        0      false        false   60.07 k
+   11-19 08:32:09.616 AT::add       (0xb4000072bf176ca0)         154     no    4887/  10087    1313     128 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-19 08:32:10.297 AT::remove    (0xb4000072bf176ca0)         154     no    4887/  10087    1313     128 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   81.79 k
+   11-19 08:32:10.298 removeTrack_l (0xb4000072bf176ca0)         154     no    4887/  10087    1313     128 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   81.79 k
+   11-19 08:32:11.193 threadLoop_standby: framesWritten:6239040  suspendedFrames:0  monoPipeWritten:6239040  monoPipeLeft:2496
+   11-19 08:32:11.194 threadLoop_standby: BOOTTIME offset 1253731249961634: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6239040  time: 113392313710335), ([2]  position: 6235344  time: 113392321215023), ([3]  position: 6238080  time: 113392293703929), ([4]  position: 6234960  time: 113392313234658)
+   11-19 08:33:18.806 AT::add       (0xb4000072bf176ca0)         155     no    4887/  10087    1321     129 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-19 08:33:19.441 AT::remove    (0xb4000072bf176ca0)         155     no    4887/  10087    1321     129 I  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   94.19 k
+   11-19 08:33:19.448 removeTrack_l (0xb4000072bf176ca0)         155     no    4887/  10087    1321     129 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   94.19 k
+   11-19 08:33:20.329 threadLoop_standby: framesWritten:6306240  suspendedFrames:0  monoPipeWritten:6306240  monoPipeLeft:2496
+   11-19 08:33:20.329 threadLoop_standby: BOOTTIME offset 1253731249961634: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6306240  time: 113461439368382), ([2]  position: 6302544  time: 113461457596715), ([3]  position: 6306240  time: 113461439368382), ([4]  position: 6301968  time: 113461445582965)
+   11-19 13:28:24.461 AT::add       (0xb4000072bf17ace0)    S    133     no    4887/  10087    1129     107 A  0x200 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 000058D6  11371       0 F         0        0      false        false   61.96 k
+   11-19 13:28:25.068 AT::remove    (0xb4000072bf17ace0)    S    133     no    4887/  10087    1129     107 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00008541  11371       0 f         0        0      false        false   59.64 k
+   11-19 13:28:25.577 threadLoop_standby: framesWritten:6346560  suspendedFrames:0  monoPipeWritten:6346560  monoPipeLeft:960
+   11-19 13:28:25.577 threadLoop_standby: BOOTTIME offset 1253731249961634: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6346560  time: 131166686897357), ([2]  position: 6344400  time: 131166702553034), ([3]  position: 6346560  time: 131166686897357), ([4]  position: 6344016  time: 131166694556315)
+   11-19 13:28:41.804 AT::add       (0xb4000072bf170c40)         156     no    4887/  10087    1337     130 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-19 13:28:42.408 AT::remove    (0xb4000072bf170c40)         156     no    4887/  10087    1337     130 S  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   58.80 k
+   11-19 13:28:42.431 removeTrack_l (0xb4000072bf170c40)         156     no    4887/  10087    1337     130 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   58.80 k
+   11-19 13:28:43.316 threadLoop_standby: framesWritten:6413760  suspendedFrames:0  monoPipeWritten:6413760  monoPipeLeft:768
+   11-19 13:28:43.316 threadLoop_standby: BOOTTIME offset 1253731249961634: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6413760  time: 131184425672558), ([2]  position: 6411792  time: 131184443942194), ([3]  position: 6413760  time: 131184425672558), ([4]  position: 6411216  time: 131184432084017)
+   11-19 13:29:59.635 AT::add       (0xb4000072bf170c40)         157     no    4887/  10087    1345     131 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-19 13:30:00.231 AT::remove    (0xb4000072bf170c40)         157     no    4887/  10087    1345     131 S  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   57.61 k
+   11-19 13:30:00.262 removeTrack_l (0xb4000072bf170c40)         157     no    4887/  10087    1345     131 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   57.61 k
+   11-19 13:30:01.141 threadLoop_standby: framesWritten:6480960  suspendedFrames:0  monoPipeWritten:6480960  monoPipeLeft:768
+   11-19 13:30:01.141 threadLoop_standby: BOOTTIME offset 1253731249961634: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6480960  time: 131262250497633), ([2]  position: 6478992  time: 131262267945237), ([3]  position: 6480960  time: 131262250497633), ([4]  position: 6478608  time: 131262259933154)
+   11-19 13:37:17.507 AT::add       (0xb4000072bf170c40)    S    158     no    4887/  10087    1353     132 A  0x000 00000001 00000003  44100  1   d  4  -inf    -6    -6     0          -15      false 00000000  11974   11974 F         0        0      false        false       new
+   11-19 13:37:17.511 removeTrack_l (0xb4000072bf17ace0)    S    133     no    4887/  10087    1129     107 T  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00008541  11371       0 f         0        0      false        false   59.64 k
+   11-19 13:37:17.975 AT::remove    (0xb4000072bf170c40)    S    158     no    4887/  10087    1353     132 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002EC6  11974       0 f         0        0      false        false   82.64 k
+   11-19 13:37:18.464 threadLoop_standby: framesWritten:6522240  suspendedFrames:0  monoPipeWritten:6522240  monoPipeLeft:1920
+   11-19 13:37:18.465 threadLoop_standby: BOOTTIME offset 1253731249961634: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6522240  time: 131699574526060), ([2]  position: 6519120  time: 131699592596685), ([3]  position: 6522240  time: 131699574526060), ([4]  position: 6518544  time: 131699580694289)
+   11-19 20:54:43.290 AT::add       (0xb4000072bf176ca0)         159     no    4887/  10087    1361     133 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-19 20:54:43.942 AT::remove    (0xb4000072bf176ca0)         159     no    4887/  10087    1361     133 I  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   83.28 k
+   11-19 20:54:43.946 removeTrack_l (0xb4000072bf176ca0)         159     no    4887/  10087    1361     133 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   83.28 k
+   11-19 20:54:44.428 threadLoop_standby: framesWritten:6570240  suspendedFrames:0  monoPipeWritten:6570240  monoPipeLeft:2112
+   11-19 20:54:44.428 threadLoop_standby: BOOTTIME offset 1273782459380613: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6570240  time: 137894328418488), ([2]  position: 6566928  time: 137894345242186), ([3]  position: 6570240  time: 137894328418488), ([4]  position: 6566544  time: 137894337187863)
+   11-20 07:41:43.747 AT::add       (0xb4000072bf176ca0)         160     no    4887/  10087    1385     134 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-20 07:41:44.389 AT::remove    (0xb4000072bf176ca0)         160     no    4887/  10087    1385     134 S  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   85.23 k
+   11-20 07:41:44.410 removeTrack_l (0xb4000072bf176ca0)         160     no    4887/  10087    1385     134 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   85.23 k
+   11-20 07:41:44.877 threadLoop_standby: framesWritten:6618240  suspendedFrames:0  monoPipeWritten:6618240  monoPipeLeft:2112
+   11-20 07:41:44.877 threadLoop_standby: BOOTTIME offset 1311068262036624: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6618240  time: 139428974697851), ([2]  position: 6614928  time: 139428992270872), ([3]  position: 6618240  time: 139428974697851), ([4]  position: 6614352  time: 139428980373476)
+   11-20 09:47:20.197 AT::add       (0xb4000072bf176ca0)         161     no    4887/  10087    1393     135 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-20 09:47:20.841 AT::remove    (0xb4000072bf176ca0)         161     no    4887/  10087    1393     135 I  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   85.77 k
+   11-20 09:47:20.852 removeTrack_l (0xb4000072bf176ca0)         161     no    4887/  10087    1393     135 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   85.77 k
+   11-20 09:47:21.328 threadLoop_standby: framesWritten:6666240  suspendedFrames:0  monoPipeWritten:6666240  monoPipeLeft:2304
+   11-20 09:47:21.328 threadLoop_standby: BOOTTIME offset 1318354121599619: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6666240  time: 139679565993849), ([2]  position: 6662736  time: 139679582017599), ([3]  position: 6666240  time: 139679565993849), ([4]  position: 6662352  time: 139679574047287)
+   11-20 10:05:26.611 AT::add       (0xb4000072bf17ace0)    S    162     no    4887/  10087    1401     136 A  0x000 00000001 00000003  44100  1   d  4  -inf    -6    -6     0          -15      false 00000000  11371   11371 F         0        0      false        false       new
+   11-20 10:05:26.622 removeTrack_l (0xb4000072bf170c40)    S    158     no    4887/  10087    1353     132 T  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002EC6  11974       0 f         0        0      false        false   82.64 k
+   11-20 10:05:27.128 AT::remove    (0xb4000072bf17ace0)    S    162     no    4887/  10087    1401     136 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002C6B  11371       0 f         0        0      false        false   59.80 k
+   11-20 10:05:28.036 threadLoop_standby: framesWritten:6725760  suspendedFrames:0  monoPipeWritten:6725760  monoPipeLeft:960
+   11-20 10:05:28.036 threadLoop_standby: BOOTTIME offset 1318916532253806: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6725760  time: 140203863710159), ([2]  position: 6723600  time: 140203879259587), ([3]  position: 6725760  time: 140203863710159), ([4]  position: 6723216  time: 140203871316618)
+   11-20 10:05:31.988 AT::add       (0xb4000072bf17ed20)         163     no    4887/  10087    1409     137 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-20 10:05:32.589 AT::remove    (0xb4000072bf17ed20)         163     no    4887/  10087    1409     137 S  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   57.32 k
+   11-20 10:05:32.618 removeTrack_l (0xb4000072bf17ed20)         163     no    4887/  10087    1409     137 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   57.32 k
+   11-20 10:05:33.497 threadLoop_standby: framesWritten:6792960  suspendedFrames:0  monoPipeWritten:6792960  monoPipeLeft:768
+   11-20 10:05:33.497 threadLoop_standby: BOOTTIME offset 1318916532253806: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6792960  time: 140209324873595), ([2]  position: 6790992  time: 140209342805262), ([3]  position: 6792960  time: 140209324873595), ([4]  position: 6790608  time: 140209333753334)
+   11-20 10:14:49.406 AT::add       (0xb4000072bf170c40)    S    202     no    4887/  10087    1417     176 A  0x000 00000001 00000003  44100  1   d  4  -inf    -6    -6     0          -15      false 00000000  11974   11974 F         0        0      false        false       new
+   11-20 10:14:49.411 removeTrack_l (0xb4000072bf17ace0)    S    162     no    4887/  10087    1401     136 T  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002C6B  11371       0 f         0        0      false        false   59.80 k
+   11-20 10:14:49.790 AT::remove    (0xb4000072bf170c40)    S    202     no    4887/  10087    1417     176 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002EC6  11974       0 f         0        0      false        false   82.69 k
+   11-20 10:14:50.689 threadLoop_standby: framesWritten:6854400  suspendedFrames:0  monoPipeWritten:6854400  monoPipeLeft:2496
+   11-20 10:14:50.690 threadLoop_standby: BOOTTIME offset 1318916532253806: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6854400  time: 140766527162966), ([2]  position: 6850704  time: 140766533138434), ([3]  position: 6853440  time: 140766507166559), ([4]  position: 6850320  time: 140766525209997)
+   11-20 10:26:51.398 AT::add       (0xb4000072bf17fd30)    S    203     no    4887/  10087    1425     177 A  0x000 00000001 00000003  44100  1   d  4  -inf    -6    -6     0          -15      false 00000000  11371   11371 F         0        0      false        false       new
+   11-20 10:26:51.403 removeTrack_l (0xb4000072bf170c40)    S    202     no    4887/  10087    1417     176 T  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002EC6  11974       0 f         0        0      false        false   82.69 k
+   11-20 10:26:51.885 AT::remove    (0xb4000072bf17fd30)    S    203     no    4887/  10087    1425     177 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002C6B  11371       0 f         0        0      false        false   58.95 k
+   11-20 10:26:52.393 threadLoop_standby: framesWritten:6894720  suspendedFrames:0  monoPipeWritten:6894720  monoPipeLeft:768
+   11-20 10:26:52.393 threadLoop_standby: BOOTTIME offset 1319594719754161: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6894720  time: 140810033644355), ([2]  position: 6892752  time: 140810052851387), ([3]  position: 6894720  time: 140810033644355), ([4]  position: 6892176  time: 140810040877324)
+   11-20 10:41:23.050 AT::add       (0xb4000072bf17ace0)    S    204     no    4887/  10087    1433     178 A  0x000 00000001 00000003  44100  1   d  4  -inf    -6    -6     0          -15      false 00000000  11974   11974 F         0        0      false        false       new
+   11-20 10:41:23.071 removeTrack_l (0xb4000072bf17fd30)    S    203     no    4887/  10087    1425     177 T  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002C6B  11371       0 f         0        0      false        false   58.95 k
+   11-20 10:41:23.532 AT::remove    (0xb4000072bf17ace0)    S    204     no    4887/  10087    1433     178 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002EC6  11974       0 f         0        0      false        false   83.16 k
+   11-20 10:41:24.021 threadLoop_standby: framesWritten:6936000  suspendedFrames:0  monoPipeWritten:6936000  monoPipeLeft:1920
+   11-20 10:41:24.022 threadLoop_standby: BOOTTIME offset 1319594719754161: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6936000  time: 141681661591471), ([2]  position: 6932880  time: 141681680565846), ([3]  position: 6936000  time: 141681661591471), ([4]  position: 6932304  time: 141681668655117)
+   11-20 12:59:11.959 AT::add       (0xb4000072bf170c40)         205     no    4887/  10087    1449     179 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-20 12:59:12.600 AT::remove    (0xb4000072bf170c40)         205     no    4887/  10087    1449     179 I  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   81.91 k
+   11-20 12:59:12.610 removeTrack_l (0xb4000072bf170c40)         205     no    4887/  10087    1449     179 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   81.91 k
+   11-20 12:59:13.086 threadLoop_standby: framesWritten:6984000  suspendedFrames:0  monoPipeWritten:6984000  monoPipeLeft:2112
+   11-20 12:59:13.086 threadLoop_standby: BOOTTIME offset 1327576989597524: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 6984000  time: 141968456681205), ([2]  position: 6980688  time: 141968472306726), ([3]  position: 6984000  time: 141968456681205), ([4]  position: 6980304  time: 141968464320372)
+   11-20 20:49:39.049 AT::add       (0xb4000072bf170c40)         206     no    4887/  10087    1457     180 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-20 20:49:39.696 AT::remove    (0xb4000072bf170c40)         206     no    4887/  10087    1457     180 I  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   81.87 k
+   11-20 20:49:39.703 removeTrack_l (0xb4000072bf170c40)         206     no    4887/  10087    1457     180 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   81.87 k
+   11-20 20:49:40.182 threadLoop_standby: framesWritten:7032000  suspendedFrames:0  monoPipeWritten:7032000  monoPipeLeft:2112
+   11-20 20:49:40.182 threadLoop_standby: BOOTTIME offset 1354233973875114: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7032000  time: 143538568160242), ([2]  position: 7028688  time: 143538584356908), ([3]  position: 7032000  time: 143538568160242), ([4]  position: 7028304  time: 143538576290502)
+   11-21 07:09:11.566 AT::add       (0xb4000072bf170c40)    S    207     no    4887/  10087    1465     181 A  0x000 00000001 00000003  44100  1   d  4  -inf    -6    -6     0          -15      false 00000000  11371   11371 F         0        0      false        false       new
+   11-21 07:09:11.572 removeTrack_l (0xb4000072bf17ace0)    S    204     no    4887/  10087    1433     178 T  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002EC6  11974       0 f         0        0      false        false   83.16 k
+   11-21 07:09:12.046 AT::remove    (0xb4000072bf170c40)    S    207     no    4887/  10087    1465     181 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002C6B  11371       0 f         0        0      false        false   60.34 k
+   11-21 07:09:12.556 threadLoop_standby: framesWritten:7072320  suspendedFrames:0  monoPipeWritten:7072320  monoPipeLeft:768
+   11-21 07:09:12.556 threadLoop_standby: BOOTTIME offset 1390570250185085: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7072320  time: 144374665517527), ([2]  position: 7070352  time: 144374685286954), ([3]  position: 7072320  time: 144374665517527), ([4]  position: 7069776  time: 144374673233464)
+   11-21 07:11:42.272 AT::add       (0xb4000072bf17fd30)         208     no    4887/  10087    1473     182 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-21 07:11:42.879 AT::remove    (0xb4000072bf17fd30)         208     no    4887/  10087    1473     182 S  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   57.73 k
+   11-21 07:11:42.917 removeTrack_l (0xb4000072bf17fd30)         208     no    4887/  10087    1473     182 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   57.73 k
+   11-21 07:11:43.783 threadLoop_standby: framesWritten:7139520  suspendedFrames:0  monoPipeWritten:7139520  monoPipeLeft:960
+   11-21 07:11:43.784 threadLoop_standby: BOOTTIME offset 1390570250185085: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7139520  time: 144525893077313), ([2]  position: 7137360  time: 144525909704032), ([3]  position: 7139520  time: 144525893077313), ([4]  position: 7136976  time: 144525901722157)
+   11-21 07:12:35.656 AT::add       (0xb4000072bf17fd30)         209     no    2883/   1000    1489     183 A  0x000 00000001 00000003  44100  1   d  4  -inf     0     0     0          -15      false 00000000  22050       0 f         0        0      false        false       new
+   11-21 07:12:35.968 AT::add       (0xb4000072bf17ed20)         210     no    4887/  10087    1497     184 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-21 07:12:36.365 AT::remove    (0xb4000072bf17fd30)         209     no    2883/   1000    1489     183 S  0x600 00000001 00000003  44100  1   d  4   -15     0     0     0          -15      false 000054DA  22050       0 f         0        0      false        false   69.45 k
+   11-21 07:12:36.484 AT::remove    (0xb4000072bf17ed20)         210     no    4887/  10087    1497     184 S  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   59.31 k
+   11-21 07:12:36.607 removeTrack_l (0xb4000072bf17ed20)         210     no    4887/  10087    1497     184 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   59.31 k
+   11-21 07:12:37.394 threadLoop_standby: framesWritten:7217280  suspendedFrames:0  monoPipeWritten:7217280  monoPipeLeft:768
+   11-21 07:12:37.394 threadLoop_standby: BOOTTIME offset 1390570250185085: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7217280  time: 144579503867761), ([2]  position: 7215312  time: 144579522473490), ([3]  position: 7217280  time: 144579503867761), ([4]  position: 7214736  time: 144579510509740)
+   11-21 07:13:45.405 removeTrack_l (0xb4000072bf17fd30)         209     no    2883/   1000    1489     183 T  0x600 00000001 00000003  44100  1   d  4   -15     0     0     0          -15      false 000054DA  22050       0 f         0        0      false        false   69.45 k
+   11-21 07:57:13.505 AT::add       (0xb4000072bf17fd30)         211     no    4887/  10087    1505     185 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-21 07:57:14.153 AT::remove    (0xb4000072bf17fd30)         211     no    4887/  10087    1505     185 I  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   82.72 k
+   11-21 07:57:14.156 removeTrack_l (0xb4000072bf17fd30)         211     no    4887/  10087    1505     185 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   82.72 k
+   11-21 07:57:15.048 threadLoop_standby: framesWritten:7285440  suspendedFrames:0  monoPipeWritten:7285440  monoPipeLeft:2688
+   11-21 07:57:15.049 threadLoop_standby: BOOTTIME offset 1390570250185085: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7285440  time: 147257168490073), ([2]  position: 7281552  time: 147257174295750), ([3]  position: 7284480  time: 147257148395281), ([4]  position: 7281168  time: 147257166295125)
+   11-21 08:34:58.547 AT::add       (0xb4000072bf17fd30)         212     no    4887/  10087    1513     186 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-21 08:34:59.199 AT::remove    (0xb4000072bf17fd30)         212     no    4887/  10087    1513     186 I  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false  101.87 k
+   11-21 08:34:59.202 removeTrack_l (0xb4000072bf17fd30)         212     no    4887/  10087    1513     186 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false  101.87 k
+   11-21 08:35:00.087 threadLoop_standby: framesWritten:7352640  suspendedFrames:0  monoPipeWritten:7352640  monoPipeLeft:2688
+   11-21 08:35:00.088 threadLoop_standby: BOOTTIME offset 1390570250185085: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7352640  time: 149522196745563), ([2]  position: 7348752  time: 149522214890511), ([3]  position: 7352640  time: 149522196745563), ([4]  position: 7348176  time: 149522202882699)
+   11-21 08:56:36.929 AT::add       (0xb4000072bf17fd30)         213     no    4887/  10087    1521     187 A  0x000 00000001 00000003  44100  5   5  4  -inf     0     0     0          -32      false 00000000  22050       0 f         0        0      false        false       new
+   11-21 08:56:37.561 AT::remove    (0xb4000072bf17fd30)         213     no    4887/  10087    1521     187 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   68.99 k
+   11-21 08:56:37.561 removeTrack_l (0xb4000072bf17fd30)         213     no    4887/  10087    1521     187 T  0x600 00000001 00000003  44100  5   5  4   -32     0     0     0          -32      false 00004306  22050       0 f         0        0      false        false   68.99 k
+   11-21 08:56:38.070 threadLoop_standby: framesWritten:7400640  suspendedFrames:0  monoPipeWritten:7400640  monoPipeLeft:960
+   11-21 08:56:38.070 threadLoop_standby: BOOTTIME offset 1390570250185085: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7400640  time: 150820179479755), ([2]  position: 7398480  time: 150820195682047), ([3]  position: 7400640  time: 150820179479755), ([4]  position: 7398096  time: 150820187261474)
+   11-21 08:56:39.807 AT::add       (0xb4000072bf170c40)    S    207     no    4887/  10087    1465     181 A  0x200 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 00002C6B  11371       0 F         0        0      false        false   60.34 k
+   11-21 08:56:40.249 AT::remove    (0xb4000072bf170c40)    S    207     no    4887/  10087    1465     181 S  0x600 00000001 00000003  44100  1   d  4   -21    -6    -6     0          -15      false 000058D6  11371       0 f         0        0      false        false   57.77 k
+   11-21 08:56:40.758 threadLoop_standby: framesWritten:7440960  suspendedFrames:0  monoPipeWritten:7440960  monoPipeLeft:768
+   11-21 08:56:40.758 threadLoop_standby: BOOTTIME offset 1390570250185085: ExtendedTimestamp: ([0]  position: 0  time: -1), ([1]  position: 7440960  time: 150822867506525), ([2]  position: 7438992  time: 150822884838557), ([3]  position: 7440960  time: 150822867506525), ([4]  position: 7438608  time: 150822876936317)
+
+Output thread 0xb40000728f161a20, name AudioOut_15, tid 2937, type 0 (MIXER):
+  I/O handle: 21
+  Standby: yes
+  Sample rate: 48000 Hz
+  HAL frame count: 1920
+  HAL format: 0x3 (AUDIO_FORMAT_PCM_32_BIT)
+  HAL buffer size: 15360 bytes
+  Channel count: 2
+  Channel mask: 0x00000003 (front-left, front-right)
+  Processing format: 0x3 (AUDIO_FORMAT_PCM_32_BIT)
+  Processing frame size: 8 bytes
+  Pending config events: none
+  Output devices: 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+  Input device: 0 (AUDIO_DEVICE_NONE)
+  Audio source: 0 (AUDIO_SOURCE_DEFAULT)
+  Timestamp stats: n=13197 disc=46 cold=1 nRdy=0 err=0 rate=1.00007 jitterMs(ave=-0.000730079 std=0.319839 min=-37.4782 max=5.1601) localSR(48001.8, 1.68513e-08) correctedJitterMs(ave=-0.000217502 std=0.0357522 min=-37.4782 max=5.1601)
+  Timestamp corrected: no
+  Last write occurred (msecs): 10705553
+  Master volume: 1.000000
+  Master mute: off
+  Mixer channel Mask: 0x3 (front-left, front-right)
+  Normal frame count: 1920
+  Total writes: 13196
+  Delayed writes: 2
+  Blocked in write: no
+  Suspend count: 0
+  Fast track availMask=0xfe
+  Standby delay ns=600000000
+  AudioStreamOut: 0xb4000071cf16ae10 flags 0x8 (AUDIO_OUTPUT_FLAG_DEEP_BUFFER)
+  Frames written: 25336320
+  Suspended frames: 0
+  Hal stream dump:
+      Signal power history (resolution: 1000.0 ms):
+       11-20 10:11:39.093:    -49.6  -51.4  -51.6  -51.5  -50.3  -51.7  -49.2  -49.4  -52.2  -51.4
+       11-20 10:11:49.093:    -49.5  -50.5  -50.5  -51.5  -49.0  -53.8  -50.6  -51.6  -50.0  -51.8
+       11-20 10:11:59.093:    -51.7  -48.5  -51.0  -50.7  -51.1  -54.6  -49.4  -52.6  -51.4  -50.5
+       11-20 10:12:09.092:    -54.3  -49.1  -49.5  -51.0  -50.2  -51.4  -50.5  -51.1  -51.2  -50.7
+       11-20 10:12:19.093:    -51.1  -50.8  -51.2  -51.0  -50.9  -51.7  -51.6  -51.8  -50.3  -50.6
+       11-20 10:12:29.093:    -50.6  -50.2  -49.5  -50.1  -49.6  -50.3  -50.3  -49.4  -49.8  -49.7
+       11-20 10:12:39.092:    -49.6  -50.3  -50.6  -50.9  -49.4  -51.7  -47.8  -50.0  -50.3  -50.5
+       11-20 10:12:49.092:    -50.0  -49.0  -50.5  -49.9  -50.6  -50.5  -50.0  -51.2  -49.8  -51.3
+       11-20 10:12:59.092:    -49.9  -50.0  -50.1  -52.2  -50.2  -50.9  -51.6  -50.3  -50.0  -51.6
+       11-20 10:13:09.092:    -49.8  -51.9  -48.6  -49.4  -50.6  -50.6  -51.3  -49.3  -50.5  -48.9
+       11-20 10:13:19.093:    -49.3  -49.7  -51.0  -50.1  -50.8  -51.4  -51.2  -51.4  -50.2  -50.2
+       11-20 10:13:29.092:    -51.0  -50.2  -50.0  -50.7  -49.3  -49.4  -50.0  -50.0  -50.3  -52.0
+       11-20 10:13:39.092:    -49.9  -50.6  -51.1  -50.2  -51.9  -50.5  -51.1  -50.8  -50.5  -50.7
+       11-20 10:13:49.092:    -52.4  -50.4  -51.4  -51.2  -51.0  -50.3  -50.9  -50.4  -51.8  -51.1
+       11-20 10:13:59.093:    -50.5  -49.6  -50.6  -50.6  -52.3  -50.0  -52.3  -50.5  -50.7  -51.4
+       11-20 10:14:09.092:    -49.0  -50.2  -52.3  -51.0  -51.2  -51.8  -50.9  -50.3  -50.4  -51.4
+       11-20 10:14:19.092:    -51.5  -51.6  -50.8  -50.2  -51.8  -49.0  -49.9  -53.3  -51.6  -50.2
+       11-20 10:14:29.093:    -51.0  -50.3  -49.2  -50.0  -50.9  -51.8  -49.8  -50.8  -50.8  -50.6
+       11-20 10:14:39.092:    -50.7  -49.9  -50.7  -53.6  -50.9  -51.1  -50.6  -51.6  -50.6  -50.6
+      Signal power history (resolution: 50.0 ms):
+       11-20 10:14:39.442:    -58.8  -61.4  -60.7  -62.8  -61.7  -47.9  -51.0  -49.0  -49.0  -49.5
+       11-20 10:14:39.943:    -47.7  -52.5  -48.5  -47.9  -49.2  -51.1  -50.8  -48.5  -47.4  -47.3
+       11-20 10:14:40.442:    -50.1  -57.7  -49.7  -48.9  -61.6  -48.4  -49.0  -51.2  -52.6  -49.9
+       11-20 10:14:40.942:    -49.3  -51.9  -53.2  -49.4  -51.0  -60.4  -51.5  -51.4  -56.9  -54.4
+       11-20 10:14:41.442:    -66.9  -49.6  -50.5  -49.3  -50.1  -48.7  -48.9  -49.0  -47.2  -52.4
+       11-20 10:14:41.942:    -51.2  -49.3  -53.2  -46.6  -46.3  -48.9  -47.9  -50.5  -56.2  -65.8
+       11-20 10:14:42.442:    -68.6  -68.9  -73.6  -80.6  -82.0  -72.3  -64.1  -65.5  -89.9 -102.9 ] sum(4.3)
+       11-20 10:14:43.212: [  -49.9  -52.2  -48.9  -50.5  -51.0  -51.2  -54.2  -49.2  -50.1  -49.1
+       11-20 10:14:43.712:    -51.0  -67.8  -50.5  -51.4  -49.9  -47.7  -48.8  -49.5  -51.9  -61.5
+       11-20 10:14:44.212:    -65.7  -64.5  -62.8  -58.1  -50.6  -49.6  -51.5  -56.1  -48.5  -48.5
+       11-20 10:14:44.712:    -50.3  -53.7  -51.2  -47.5  -47.4  -49.4  -51.8  -48.1  -55.5  -49.2
+       11-20 10:14:45.212:    -50.2  -49.4  -60.5  -51.1  -49.7  -52.3  -52.2  -49.2  -49.2  -50.3
+       11-20 10:14:45.712:    -49.0  -64.3  -72.8  -49.7  -50.8  -49.4  -48.8  -47.9  -47.5  -49.4
+       11-20 10:14:46.212:    -59.7  -57.6  -60.6  -72.1  -50.3  -50.2  -50.2  -49.8  -58.4  -63.5
+       11-20 10:14:46.712:    -66.3  -63.3  -62.3  -49.2  -47.9  -48.7  -50.6  -49.6  -49.7  -48.0
+       11-20 10:14:47.212:    -48.1  -48.7  -48.5  -51.1  -48.8  -49.9  -55.1  -52.4  -54.3  -51.3
+       11-20 10:14:47.713:    -53.1  -59.5  -51.1  -52.4  -49.7  -51.5  -50.5  -50.7  -50.9  -48.1
+       11-20 10:14:48.212:    -47.6  -56.1  -50.0  -49.3  -49.5  -47.8  -50.7  -51.8  -51.3  -51.5
+       11-20 10:14:48.711:    -51.3  -50.3  -48.0  -49.1  -57.3  -72.2 ] sum(6.7)
+
+    -40.7 -|                                                                      |
+    -46.3 -|     * ** * **   ***   * **                  ****    ****             |  *      *     **           **   **  *            *     ***               **   **** *              **    *      **
+    -52.0 -|      *  * *  ***   * *    ******** ** * ****    ****    *            |** ****** * ***  **     ***   ***  **  *** *******   ***   *    ****     *  ***    * * **** *******   *** ******
+    -57.6 -|*                    *             *  *                   *           |                       *   *          *   *                 **      *                 *    *         *            *
+    -63.3 -| ****                   *                                  *      **  |                   ****                            *          *      * **
+    -69.0 -|                                        *                   **        |           *                                                          *
+    -74.6 -|                                                              *  *    |                                                    *          *                                                   *
+    -80.3 -|                                                               **     |
+    -85.9 -|                                                                      |
+    -91.6 -|                                                                    * |
+    -97.3 -|                                                                      |
+   -102.9 -|                                                                     *|
+   -108.6 -|                                                                      |
+   -114.2 -|                                                                      |
+           |___________________________________________________________________________________________________________________________________________________________________________________________
+
+
+  Thread throttle time (msecs): 113
+  AudioMixer tracks: 
+  Master mono: off
+  Master balance: 0.000000 (balance 0 channelCount 2 volumes: 1 1)
+  No FastMixer
+Bluetooth latency modes are not enabled
+HAL does not support Bluetooth latency modes
+Supported latency modes: { }
+
+  Normal mixer raw underrun counters: partial=0 empty=0
+  0 Tracks
+  0 Effect Chains
+  Local log:
+                                                         Type     Id Active Client(pid/uid) Session Port Id S  Flags   Format Chn mask  SRate ST Usg CT  G db  L dB  R dB  VS dB  PortVol dB  PortMuted   Server FrmCnt  FrmRdy F Underruns  Flushed BitPerfect InternalMute   Latency
+   11-03 12:47:51.477 CFG_EVENT_CREATE_AUDIO_PATCH: old device  (Empty device types) new device 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+   11-20 10:06:01.948 AT::add       (0xb4000072bf17ed20)         164     no   31626/  10224    1329     138 r  0x000 00000001 00000003  48000  3   1  2  -inf  -inf  -inf     0          -56      false 00000000  24000       0 f         0        0      false        false       new
+   11-20 10:06:02.388 AT::remove    (0xb4000072bf17ed20)         164     no   31626/  10224    1329     138 T  0x600 00000001 00000003  48000  3   1  2  -inf  -inf  -inf     0          -56      false 00003480  24000       0 f         0    22080      false        false  127.51 k
+   11-20 10:06:02.389 removeTrack_l (0xb4000072bf17ed20)         164     no   31626/  10224    1329     138 T  0x600 00000001 00000003  48000  3   1  2  -inf  -inf  -inf     0          -56      false 00003480  24000       0 f         0    22080      false        false  127.51 k
+   11-20 10:06:03.391 AT::add       (0xb4000072bf17ed20)         165     no   31626/  10224    1329     139 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -56      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:01.858 AT::add       (0xb4000072bf170c40)         166     no   31626/  10224    1329     140 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:01.975 AT::remove    (0xb4000072bf17ed20)         165     no   31626/  10224    1329     139 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 002AD500  24000       0 f         0    22080      false        false  148.72 k
+   11-20 10:07:01.975 removeTrack_l (0xb4000072bf17ed20)         165     no   31626/  10224    1329     139 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 002AD500  24000       0 f         0    22080      false        false  148.72 k
+   11-20 10:07:10.286 AT::add       (0xb4000072bf17ed20)         167     no   31626/  10224    1329     141 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:10.373 AT::remove    (0xb4000072bf170c40)         166     no   31626/  10224    1329     140 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00062700  24000       0 f         0    22080      false        false  148.16 k
+   11-20 10:07:10.373 removeTrack_l (0xb4000072bf170c40)         166     no   31626/  10224    1329     140 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00062700  24000       0 f         0    22080      false        false  148.16 k
+   11-20 10:07:11.311 AT::add       (0xb4000072bf170c40)         168     no   31626/  10224    1329     142 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:11.414 AT::remove    (0xb4000072bf17ed20)         167     no   31626/  10224    1329     141 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0000BB80  24000       0 f         0    20160      false        false  147.99 k
+   11-20 10:07:11.415 removeTrack_l (0xb4000072bf17ed20)         167     no   31626/  10224    1329     141 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0000BB80  24000       0 f         0    20160      false        false  147.99 k
+   11-20 10:07:13.571 AT::add       (0xb4000072bf17ed20)         169     no   31626/  10224    1329     143 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:13.695 AT::remove    (0xb4000072bf170c40)         168     no   31626/  10224    1329     142 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0001A400  24000       0 f         0    22080      false        false  148.34 k
+   11-20 10:07:13.695 removeTrack_l (0xb4000072bf170c40)         168     no   31626/  10224    1329     142 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0001A400  24000       0 f         0    22080      false        false  148.34 k
+   11-20 10:07:19.665 AT::add       (0xb4000072bf170c40)         170     no   31626/  10224    1329     144 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:19.773 AT::remove    (0xb4000072bf17ed20)         169     no   31626/  10224    1329     143 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00047400  24000       0 f         0    22080      false        false  147.90 k
+   11-20 10:07:19.774 removeTrack_l (0xb4000072bf17ed20)         169     no   31626/  10224    1329     143 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00047400  24000       0 f         0    22080      false        false  147.90 k
+   11-20 10:07:23.146 AT::add       (0xb4000072bf17ed20)         171     no   31626/  10224    1329     145 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:23.254 AT::remove    (0xb4000072bf170c40)         170     no   31626/  10224    1329     144 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00028500  24000       0 f         0    20160      false        false  148.35 k
+   11-20 10:07:23.255 removeTrack_l (0xb4000072bf170c40)         170     no   31626/  10224    1329     144 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00028500  24000       0 f         0    20160      false        false  148.35 k
+   11-20 10:07:25.000 AT::add       (0xb4000072bf170c40)         172     no   31626/  10224    1329     146 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:25.093 AT::remove    (0xb4000072bf17ed20)         171     no   31626/  10224    1329     145 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00015180  24000       0 f         0    22080      false        false  147.87 k
+   11-20 10:07:25.093 removeTrack_l (0xb4000072bf17ed20)         171     no   31626/  10224    1329     145 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00015180  24000       0 f         0    22080      false        false  147.87 k
+   11-20 10:07:48.214 AT::remove    (0xb4000072bf170c40)         172     no   31626/  10224    1329     146 S  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 0010E288  24000       0 f         0        0      false        false  127.87 k
+   11-20 10:07:48.242 removeTrack_l (0xb4000072bf170c40)         172     no   31626/  10224    1329     146 T  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 0010E288  24000       0 f         0        0      false        false  127.87 k
+   11-20 10:07:48.278 AT::add       (0xb4000072bf17ed20)         173     no   31626/  10224    1329     147 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:48.796 AT::add       (0xb4000072bf170c40)         174     no   31626/  10224    1329     148 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:48.894 AT::remove    (0xb4000072bf17ed20)         173     no   31626/  10224    1329     147 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00005A00  24000       0 f         0    22080      false        false  148.35 k
+   11-20 10:07:48.894 removeTrack_l (0xb4000072bf17ed20)         173     no   31626/  10224    1329     147 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00005A00  24000       0 f         0    22080      false        false  148.35 k
+   11-20 10:07:50.516 AT::add       (0xb4000072bf17ed20)         175     no   31626/  10224    1329     149 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:07:50.613 AT::remove    (0xb4000072bf170c40)         174     no   31626/  10224    1329     148 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00013B00  24000       0 f         0    22080      false        false  148.72 k
+   11-20 10:07:50.614 removeTrack_l (0xb4000072bf170c40)         174     no   31626/  10224    1329     148 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00013B00  24000       0 f         0    22080      false        false  148.72 k
+   11-20 10:07:52.325 AT::add       (0xb4000072bf170c40)         176     no   31626/  10224    1329     150 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000       0 f         0        0      false        false       new
+   11-20 10:07:52.453 AT::remove    (0xb4000072bf17ed20)         175     no   31626/  10224    1329     149 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00015180  24000       0 f         0    22080      false        false  147.64 k
+   11-20 10:07:52.454 removeTrack_l (0xb4000072bf17ed20)         175     no   31626/  10224    1329     149 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00015180  24000       0 f         0    22080      false        false  147.64 k
+   11-20 10:08:01.019 AT::add       (0xb4000072bf17ed20)         177     no   31626/  10224    1329     151 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:08:01.134 AT::remove    (0xb4000072bf170c40)         176     no   31626/  10224    1329     150 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00065B80  24000       0 f         0    10560      false        false  148.17 k
+   11-20 10:08:01.134 removeTrack_l (0xb4000072bf170c40)         176     no   31626/  10224    1329     150 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00065B80  24000       0 f         0    10560      false        false  148.17 k
+   11-20 10:08:42.183 AT::add       (0xb4000072bf170c40)         178     no   31626/  10224    1329     152 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:08:42.294 AT::remove    (0xb4000072bf17ed20)         177     no   31626/  10224    1329     151 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 001E1E00  24000       0 f         0    22080      false        false  148.07 k
+   11-20 10:08:42.295 removeTrack_l (0xb4000072bf17ed20)         177     no   31626/  10224    1329     151 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 001E1E00  24000       0 f         0    22080      false        false  148.07 k
+   11-20 10:08:48.055 AT::remove    (0xb4000072bf170c40)         178     no   31626/  10224    1329     152 S  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 00042B88  24000       0 f         0        0      false        false  126.26 k
+   11-20 10:08:48.110 removeTrack_l (0xb4000072bf170c40)         178     no   31626/  10224    1329     152 T  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 00042B88  24000       0 f         0        0      false        false  126.26 k
+   11-20 10:08:48.136 AT::add       (0xb4000072bf17ed20)         179     no   31626/  10224    1329     153 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:08:51.596 AT::add       (0xb4000072bf170c40)         180     no   31626/  10224    1329     154 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:08:51.694 AT::remove    (0xb4000072bf17ed20)         179     no   31626/  10224    1329     153 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00028500  24000       0 f         0    22080      false        false  148.52 k
+   11-20 10:08:51.695 removeTrack_l (0xb4000072bf17ed20)         179     no   31626/  10224    1329     153 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00028500  24000       0 f         0    22080      false        false  148.52 k
+   11-20 10:08:55.045 AT::add       (0xb4000072bf17ed20)         181     no   31626/  10224    1329     155 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:08:55.133 AT::remove    (0xb4000072bf170c40)         180     no   31626/  10224    1329     154 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00027D80  24000       0 f         0    22080      false        false  147.99 k
+   11-20 10:08:55.133 removeTrack_l (0xb4000072bf170c40)         180     no   31626/  10224    1329     154 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00027D80  24000       0 f         0    22080      false        false  147.99 k
+   11-20 10:09:16.093 AT::remove    (0xb4000072bf17ed20)         181     no   31626/  10224    1329     155 S  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 000F5148  24000       0 f         0        0      false        false  127.18 k
+   11-20 10:09:16.110 removeTrack_l (0xb4000072bf17ed20)         181     no   31626/  10224    1329     155 T  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 000F5148  24000       0 f         0        0      false        false  127.18 k
+   11-20 10:09:16.136 AT::add       (0xb4000072bf170c40)         182     no   31626/  10224    1329     156 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:09:49.256 AT::remove    (0xb4000072bf170c40)         182     no   31626/  10224    1329     156 S  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 00182688  24000       0 f         0        0      false        false  127.11 k
+   11-20 10:09:49.324 removeTrack_l (0xb4000072bf170c40)         182     no   31626/  10224    1329     156 T  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 00182688  24000       0 f         0        0      false        false  127.11 k
+   11-20 10:09:49.343 AT::add       (0xb4000072bf17ed20)         183     no   31626/  10224    1329     157 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   18240 f         0        0      false        false       new
+   11-20 10:09:49.976 AT::add       (0xb4000072bf170c40)         184     no   31626/  10224    1329     158 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:09:50.094 AT::remove    (0xb4000072bf17ed20)         183     no   31626/  10224    1329     157 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00007080  24000       0 f         0    22080      false        false  147.84 k
+   11-20 10:09:50.095 removeTrack_l (0xb4000072bf17ed20)         183     no   31626/  10224    1329     157 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00007080  24000       0 f         0    22080      false        false  147.84 k
+   11-20 10:09:57.568 AT::add       (0xb4000072bf17ed20)         185     no   31626/  10224    1329     159 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:09:57.654 AT::remove    (0xb4000072bf170c40)         184     no   31626/  10224    1329     158 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00058200  24000       0 f         0    22080      false        false  147.95 k
+   11-20 10:09:57.654 removeTrack_l (0xb4000072bf170c40)         184     no   31626/  10224    1329     158 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00058200  24000       0 f         0    22080      false        false  147.95 k
+   11-20 10:09:59.605 AT::add       (0xb4000072bf170c40)         186     no   31626/  10224    1329     160 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:09:59.694 AT::remove    (0xb4000072bf17ed20)         185     no   31626/  10224    1329     159 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00017700  24000       0 f         0    20160      false        false  148.60 k
+   11-20 10:09:59.694 removeTrack_l (0xb4000072bf17ed20)         185     no   31626/  10224    1329     159 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00017700  24000       0 f         0    20160      false        false  148.60 k
+   11-20 10:10:00.752 AT::add       (0xb4000072bf17ed20)         187     no   31626/  10224    1329     161 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:10:00.853 AT::remove    (0xb4000072bf170c40)         186     no   31626/  10224    1329     160 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0000D200  24000       0 f         0    22080      false        false  148.10 k
+   11-20 10:10:00.853 removeTrack_l (0xb4000072bf170c40)         186     no   31626/  10224    1329     160 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0000D200  24000       0 f         0    22080      false        false  148.10 k
+   11-20 10:10:14.594 AT::add       (0xb4000072bf170c40)         188     no   31626/  10224    1329     162 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:10:14.694 AT::remove    (0xb4000072bf17ed20)         187     no   31626/  10224    1329     161 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 000A1B80  24000       0 f         0    22080      false        false  148.07 k
+   11-20 10:10:14.694 removeTrack_l (0xb4000072bf17ed20)         187     no   31626/  10224    1329     161 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 000A1B80  24000       0 f         0    22080      false        false  148.07 k
+   11-20 10:10:18.154 AT::add       (0xb4000072bf17ed20)         189     no   31626/  10224    1329     163 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000       0 f         0        0      false        false       new
+   11-20 10:10:18.254 AT::remove    (0xb4000072bf170c40)         188     no   31626/  10224    1329     162 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00029400  24000       0 f         0    22080      false        false  147.36 k
+   11-20 10:10:18.255 removeTrack_l (0xb4000072bf170c40)         188     no   31626/  10224    1329     162 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00029400  24000       0 f         0    22080      false        false  147.36 k
+   11-20 10:10:19.578 AT::add       (0xb4000072bf170c40)         190     no   31626/  10224    1329     164 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:10:19.695 AT::remove    (0xb4000072bf17ed20)         189     no   31626/  10224    1329     163 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00010680  24000       0 f         0    16320      false        false  148.58 k
+   11-20 10:10:19.695 removeTrack_l (0xb4000072bf17ed20)         189     no   31626/  10224    1329     163 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00010680  24000       0 f         0    16320      false        false  148.58 k
+   11-20 10:11:22.188 AT::add       (0xb4000072bf17ed20)         191     no   31626/  10224    1329     165 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:11:22.254 AT::remove    (0xb4000072bf170c40)         190     no   31626/  10224    1329     164 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 002DCA80  24000       0 f         0    22080      false        false  147.42 k
+   11-20 10:11:22.254 removeTrack_l (0xb4000072bf170c40)         190     no   31626/  10224    1329     164 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 002DCA80  24000       0 f         0    22080      false        false  147.42 k
+   11-20 10:11:37.298 AT::add       (0xb4000072bf170c40)         192     no   31626/  10224    1329     166 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:11:37.414 AT::remove    (0xb4000072bf17ed20)         191     no   31626/  10224    1329     165 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 000B0B80  24000       0 f         0    22080      false        false  147.98 k
+   11-20 10:11:37.414 removeTrack_l (0xb4000072bf17ed20)         191     no   31626/  10224    1329     165 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 000B0B80  24000       0 f         0    22080      false        false  147.98 k
+   11-20 10:11:43.366 AT::add       (0xb4000072bf17ed20)         193     no   31626/  10224    1329     167 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:11:43.454 AT::remove    (0xb4000072bf170c40)         192     no   31626/  10224    1329     166 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00046500  24000       0 f         0    22080      false        false  148.30 k
+   11-20 10:11:43.454 removeTrack_l (0xb4000072bf170c40)         192     no   31626/  10224    1329     166 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00046500  24000       0 f         0    22080      false        false  148.30 k
+   11-20 10:12:05.331 AT::add       (0xb4000072bf170c40)         194     no   31626/  10224    1329     168 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   15048 f         0        0      false        false       new
+   11-20 10:12:05.413 AT::remove    (0xb4000072bf17ed20)         193     no   31626/  10224    1329     167 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00100E00  24000       0 f         0    22080      false        false  142.43 k
+   11-20 10:12:05.413 removeTrack_l (0xb4000072bf17ed20)         193     no   31626/  10224    1329     167 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00100E00  24000       0 f         0    22080      false        false  142.43 k
+   11-20 10:12:10.716 AT::add       (0xb4000072bf17ed20)         195     no   31626/  10224    1329     169 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:12:10.814 AT::remove    (0xb4000072bf170c40)         194     no   31626/  10224    1329     168 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0003ED00  24000       0 f         0    20160      false        false  148.09 k
+   11-20 10:12:10.814 removeTrack_l (0xb4000072bf170c40)         194     no   31626/  10224    1329     168 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 0003ED00  24000       0 f         0    20160      false        false  148.09 k
+   11-20 10:12:42.575 AT::remove    (0xb4000072bf17ed20)         195     no   31626/  10224    1329     169 S  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 00173A48  24000       0 f         0        0      false        false  126.42 k
+   11-20 10:12:42.632 removeTrack_l (0xb4000072bf17ed20)         195     no   31626/  10224    1329     169 T  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 00173A48  24000       0 f         0        0      false        false  126.42 k
+   11-20 10:12:42.655 AT::add       (0xb4000072bf170c40)         196     no   31626/  10224    1329     170 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:12:43.528 AT::add       (0xb4000072bf17ed20)         197     no   31626/  10224    1329     171 r  0x000 00000001 00000003  48000  3   1  2  -inf  -3.4  -3.4     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:12:43.615 AT::remove    (0xb4000072bf170c40)         196     no   31626/  10224    1329     170 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00009D80  24000       0 f         0    22080      false        false  148.50 k
+   11-20 10:12:43.616 removeTrack_l (0xb4000072bf170c40)         196     no   31626/  10224    1329     170 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00009D80  24000       0 f         0    22080      false        false  148.50 k
+   11-20 10:12:47.385 AT::add       (0xb4000072bf170c40)         198     no   31626/  10224    1329     172 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:12:47.494 AT::remove    (0xb4000072bf17ed20)         197     no   31626/  10224    1329     171 T  0x600 00000001 00000003  48000  3   1  2  -inf  -3.4  -3.4     0          -34      false 0002D000  24000       0 f         0    22080      false        false  147.66 k
+   11-20 10:12:47.494 removeTrack_l (0xb4000072bf17ed20)         197     no   31626/  10224    1329     171 T  0x600 00000001 00000003  48000  3   1  2  -inf  -3.4  -3.4     0          -34      false 0002D000  24000       0 f         0    22080      false        false  147.66 k
+   11-20 10:13:31.175 AT::remove    (0xb4000072bf170c40)         198     no   31626/  10224    1329     172 S  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 001FF188  24000       0 f         0        0      false        false  126.88 k
+   11-20 10:13:31.213 removeTrack_l (0xb4000072bf170c40)         198     no   31626/  10224    1329     172 T  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 001FF188  24000       0 f         0        0      false        false  126.88 k
+   11-20 10:13:31.252 AT::add       (0xb4000072bf17ed20)         199     no   31626/  10224    1329     173 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:13:40.004 AT::add       (0xb4000072bf170c40)         200     no   31626/  10224    1329     174 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000   24000 f         0        0      false        false       new
+   11-20 10:13:40.095 AT::remove    (0xb4000072bf17ed20)         199     no   31626/  10224    1329     173 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00066300  24000       0 f         0    22080      false        false  148.56 k
+   11-20 10:13:40.095 removeTrack_l (0xb4000072bf17ed20)         199     no   31626/  10224    1329     173 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00066300  24000       0 f         0    22080      false        false  148.56 k
+   11-20 10:14:43.016 AT::remove    (0xb4000072bf170c40)         200     no   31626/  10224    1329     174 S  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 002E0CC8  24000       0 f         0        0      false        false  126.83 k
+   11-20 10:14:43.079 removeTrack_l (0xb4000072bf170c40)         200     no   31626/  10224    1329     174 T  0x600 00000001 00000003  48000  3   1  2   -34     0     0     0          -34      false 002E0CC8  24000       0 f         0        0      false        false  126.83 k
+   11-20 10:14:43.133 AT::add       (0xb4000072bf170c40)         201     no   31626/  10224    1329     175 r  0x000 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00000000  24000       0 f         0        0      false        false       new
+   11-20 10:14:49.093 AT::remove    (0xb4000072bf170c40)         201     no   31626/  10224    1329     175 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00043F80  24000       0 f         0    24000      false        false  128.29 k
+   11-20 10:14:49.094 removeTrack_l (0xb4000072bf170c40)         201     no   31626/  10224    1329     175 T  0x600 00000001 00000003  48000  3   1  2  -inf     0     0     0          -34      false 00043F80  24000       0 f         0    24000      false        false  128.29 k
+
+Output thread 0xb40000728f16ce40, name AudioOut_2D, tid 2946, type 0 (MIXER):
+  I/O handle: 45
+  Standby: yes
+  Sample rate: 48000 Hz
+  HAL frame count: 960
+  HAL format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  HAL buffer size: 3840 bytes
+  Channel count: 2
+  Channel mask: 0x00000003 (front-left, front-right)
+  Processing format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  Processing frame size: 4 bytes
+  Pending config events: none
+  Output devices: 0x10000 (AUDIO_DEVICE_OUT_TELEPHONY_TX)
+  Input device: 0 (AUDIO_DEVICE_NONE)
+  Audio source: 0 (AUDIO_SOURCE_DEFAULT)
+  Timestamp stats: n=1 disc=1 cold=0 nRdy=0 err=0 rate=nan jitterMs(unavail) localSR(nan, nan) correctedJitterMs(unavail)
+  Timestamp corrected: no
+  Master volume: 1.000000
+  Master mute: off
+  Mixer channel Mask: 0x3 (front-left, front-right)
+  Normal frame count: 960
+  Total writes: 0
+  Delayed writes: 0
+  Blocked in write: no
+  Suspend count: 0
+  Fast track availMask=0xfe
+  Standby delay ns=1000000000
+  AudioStreamOut: 0xb4000071cf16ab10 flags 0 (AUDIO_OUTPUT_FLAG_NONE)
+  Frames written: 0
+  Suspended frames: 0
+  Hal stream dump:
+      Signal power history: (none)
+      Signal power history: (none)
+  Thread throttle time (msecs): 0
+  AudioMixer tracks: 
+  Master mono: off
+  Master balance: 0.000000 (balance 0 channelCount 2 volumes: 1 1)
+  No FastMixer
+Bluetooth latency modes are not enabled
+HAL does not support Bluetooth latency modes
+Supported latency modes: { }
+
+  Normal mixer raw underrun counters: partial=0 empty=0
+  0 Tracks
+  0 Effect Chains
+  Local log:
+                                                         Type     Id Active Client(pid/uid) Session Port Id S  Flags   Format Chn mask  SRate ST Usg CT  G db  L dB  R dB  VS dB  PortVol dB  PortMuted   Server FrmCnt  FrmRdy F Underruns  Flushed BitPerfect InternalMute   Latency
+   11-03 12:47:51.507 CFG_EVENT_CREATE_AUDIO_PATCH: old device  (Empty device types) new device 0x10000 (AUDIO_DEVICE_OUT_TELEPHONY_TX)
+
+Output thread 0xb40000728f183680, name AudioOut_35, tid 2947, type 0 (MIXER):
+  I/O handle: 53
+  Standby: yes
+  Sample rate: 48000 Hz
+  HAL frame count: 960
+  HAL format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  HAL buffer size: 3840 bytes
+  Channel count: 2
+  Channel mask: 0x00000003 (front-left, front-right)
+  Processing format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  Processing frame size: 4 bytes
+  Pending config events: none
+  Output devices: 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+  Input device: 0 (AUDIO_DEVICE_NONE)
+  Audio source: 0 (AUDIO_SOURCE_DEFAULT)
+  Timestamp stats: n=1 disc=1 cold=0 nRdy=0 err=0 rate=nan jitterMs(unavail) localSR(nan, nan) correctedJitterMs(unavail)
+  Timestamp corrected: no
+  Master volume: 1.000000
+  Master mute: off
+  Mixer channel Mask: 0x3 (front-left, front-right)
+  Normal frame count: 960
+  Total writes: 0
+  Delayed writes: 0
+  Blocked in write: no
+  Suspend count: 0
+  Fast track availMask=0xfe
+  Standby delay ns=1000000000
+  AudioStreamOut: 0xb4000071cf16a910 flags 0x8000 (AUDIO_OUTPUT_FLAG_VOIP_RX)
+  Frames written: 0
+  Suspended frames: 0
+  Hal stream dump:
+      Signal power history: (none)
+      Signal power history: (none)
+  Thread throttle time (msecs): 0
+  AudioMixer tracks: 
+  Master mono: off
+  Master balance: 0.000000 (balance 0 channelCount 2 volumes: 1 1)
+  No FastMixer
+Bluetooth latency modes are not enabled
+HAL does not support Bluetooth latency modes
+Supported latency modes: { }
+
+  Normal mixer raw underrun counters: partial=0 empty=0
+  0 Tracks
+  0 Effect Chains
+  Local log:
+                                                         Type     Id Active Client(pid/uid) Session Port Id S  Flags   Format Chn mask  SRate ST Usg CT  G db  L dB  R dB  VS dB  PortVol dB  PortMuted   Server FrmCnt  FrmRdy F Underruns  Flushed BitPerfect InternalMute   Latency
+   11-03 12:47:51.535 CFG_EVENT_CREATE_AUDIO_PATCH: old device  (Empty device types) new device 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+
+Output thread 0xb40000728f178260, name AudioOut_3D, tid 2948, type 0 (MIXER):
+  I/O handle: 61
+  Standby: yes
+  Sample rate: 48000 Hz
+  HAL frame count: 960
+  HAL format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  HAL buffer size: 3840 bytes
+  Channel count: 2
+  Channel mask: 0x00000003 (front-left, front-right)
+  Processing format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  Processing frame size: 4 bytes
+  Pending config events: none
+  Output devices: 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+  Input device: 0 (AUDIO_DEVICE_NONE)
+  Audio source: 0 (AUDIO_SOURCE_DEFAULT)
+  Timestamp stats: n=1 disc=1 cold=0 nRdy=0 err=0 rate=nan jitterMs(unavail) localSR(nan, nan) correctedJitterMs(unavail)
+  Timestamp corrected: no
+  Master volume: 1.000000
+  Master mute: off
+  Mixer channel Mask: 0x3 (front-left, front-right)
+  Normal frame count: 960
+  Total writes: 0
+  Delayed writes: 0
+  Blocked in write: no
+  Suspend count: 0
+  Fast track availMask=0xfe
+  Standby delay ns=1000000000
+  AudioStreamOut: 0xb4000071cf16b0d0 flags 0x10000 (AUDIO_OUTPUT_FLAG_INCALL_MUSIC)
+  Frames written: 0
+  Suspended frames: 0
+  Hal stream dump:
+      Signal power history: (none)
+      Signal power history: (none)
+  Thread throttle time (msecs): 0
+  AudioMixer tracks: 
+  Master mono: off
+  Master balance: 0.000000 (balance 0 channelCount 2 volumes: 1 1)
+  No FastMixer
+Bluetooth latency modes are not enabled
+HAL does not support Bluetooth latency modes
+Supported latency modes: { }
+
+  Normal mixer raw underrun counters: partial=0 empty=0
+  0 Tracks
+  0 Effect Chains
+  Local log:
+                                                         Type     Id Active Client(pid/uid) Session Port Id S  Flags   Format Chn mask  SRate ST Usg CT  G db  L dB  R dB  VS dB  PortVol dB  PortMuted   Server FrmCnt  FrmRdy F Underruns  Flushed BitPerfect InternalMute   Latency
+   11-03 12:47:51.549 CFG_EVENT_CREATE_AUDIO_PATCH: old device  (Empty device types) new device 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+
+ ## BEGIN setParameters dump 
+
+  Rejected setParameters:
+
+  App setParameters:
+    11-03 12:49:24.680 UID 10238, 3 KVP received: vsid=297816064;call_state=1;call_type=UNKNOWN
+    11-03 12:49:24.687 UID 10238, 3 KVP received: vsid=299651072;call_state=1;call_type=UNKNOWN
+    11-03 12:49:24.701 UID 10238, 3 KVP received: vsid=297816064;call_state=1;call_type=UNKNOWN
+    11-03 12:49:24.711 UID 10238, 3 KVP received: vsid=299651072;call_state=1;call_type=UNKNOWN
+    11-03 12:49:24.714 UID 10238, 3 KVP received: vsid=297816064;call_state=1;call_type=UNKNOWN
+    11-03 12:49:24.719 UID 10238, 3 KVP received: vsid=299651072;call_state=1;call_type=UNKNOWN
+    11-03 12:49:30.053 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-04 09:01:20.657 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-05 12:53:20.134 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-05 13:20:12.575 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-12 14:40:03.941 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-12 14:41:09.474 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-13 09:26:57.284 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-13 09:29:30.292 UID 10072, 1 KVP received: PlaybackCaptureProtectSupport=com.android.contacts
+    11-13 09:31:40.272 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-16 11:54:52.726 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-16 11:55:02.035 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 11:55:41.655 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 11:56:45.584 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 11:57:22.509 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 11:57:29.602 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 11:58:00.652 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 11:58:48.489 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 11:59:09.992 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 12:00:07.033 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 12:01:05.610 UID 10175, 1 KVP received: PlaybackCaptureProtectSupport=com.android.camera
+    11-16 12:01:51.386 UID 10175, 1 KVP received: nxplvfs_record_type=-1
+    11-16 12:01:51.679 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-16 15:09:11.626 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-19 13:37:17.441 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-20 10:05:26.588 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-20 10:06:01.905 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:06:03.357 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:01.830 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:10.257 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:11.281 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:13.550 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:19.642 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:23.124 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:24.973 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:48.227 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:48.759 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:50.490 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:07:52.309 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:08:00.998 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:08:42.161 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:08:48.096 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:08:51.562 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:08:55.010 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:09:16.096 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:09:49.310 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:09:49.953 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:09:57.527 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:09:59.584 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:10:00.725 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:10:14.563 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:10:18.132 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:10:19.552 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:11:22.153 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:11:37.278 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:11:43.341 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:12:05.308 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:12:10.691 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:12:42.617 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:12:43.508 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:12:47.360 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:13:31.212 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:13:39.979 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:14:43.107 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:14:49.383 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-20 10:26:51.387 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-20 10:41:23.018 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-21 07:09:11.536 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+
+  System setParameters:
+    11-20 10:06:06.631 UID  1013, 1 KVP received: vdecRemove=31626
+    11-20 10:06:06.649 UID  1013, 1 KVP received: vdecAdd=31626
+    11-20 10:06:06.666 UID  1013, 1 KVP received: vdecAdd=31626
+    11-20 10:07:55.279 UID  1013, 1 KVP received: vdecRemove=31626
+    11-20 10:08:00.984 UID  1013, 1 KVP received: vdecAdd=31626
+    11-20 10:14:45.115 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:14:45.989 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:14:46.100 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:14:47.155 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:14:47.801 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:14:49.128 UID  1013, 1 KVP received: vdecRemove=31626
+    11-20 10:14:49.131 UID  1013, 1 KVP received: vdecRemove=31626
+    11-20 10:14:49.529 UID  1000, 1 KVP received: screen_state=off
+    11-20 10:14:49.856 UID  1000, 1 KVP received: screen_state=off
+    11-20 10:26:49.049 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:26:49.185 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:26:54.603 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:30:08.338 UID  1000, 1 KVP received: stereo_rotation=1
+    11-20 10:30:08.445 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:30:08.536 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:30:08.871 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:30:08.900 UID  1000, 1 KVP received: stereo_rotation=0
+    11-20 10:30:08.954 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:30:09.519 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:30:10.863 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:30:13.608 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:31:51.298 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:31:54.536 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:32:10.485 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:32:14.365 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:41:22.056 UID  1000, 1 KVP received: screen_state=on
+    11-20 10:41:23.131 UID  1000, 1 KVP received: screen_state=off
+    11-20 10:41:23.313 UID  1000, 1 KVP received: screen_state=off
+    11-20 10:41:23.417 UID  1000, 1 KVP received: screen_state=off
+    11-20 12:59:11.929 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-20 20:49:39.008 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-20 22:00:02.067 UID  1000, 1 KVP received: notification_spk_big_volume=0
+    11-20 22:00:02.074 UID  1000, 1 KVP received: alarm_spk_big_volume=0
+    11-20 22:00:02.078 UID  1000, 1 KVP received: music_spk_big_volume=0
+    11-20 22:00:02.083 UID  1000, 1 KVP received: ring_spk_big_volume=0
+    11-21 07:00:01.773 UID  1000, 1 KVP received: notification_spk_big_volume=0
+    11-21 07:00:01.780 UID  1000, 1 KVP received: alarm_spk_big_volume=0
+    11-21 07:00:01.784 UID  1000, 1 KVP received: music_spk_big_volume=0
+    11-21 07:00:01.786 UID  1000, 1 KVP received: ring_spk_big_volume=0
+    11-21 07:09:09.017 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:09:09.106 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:09:09.111 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:09:20.751 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:09:24.261 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:09:27.298 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:11:18.687 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:11:24.134 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:11:24.886 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:11:32.675 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:11:42.236 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-21 07:12:04.742 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:12:07.739 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:12:10.329 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:12:13.567 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:12:32.300 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:12:35.384 UID  1000, 1 KVP received: power_state=2
+    11-21 07:12:35.455 UID  1000, 1 KVP received: power_state=1
+    11-21 07:12:35.607 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:12:35.643 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=android
+    11-21 07:12:35.943 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-21 07:12:40.004 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:12:45.835 UID  1000, 1 KVP received: screen_state=on
+    11-21 07:42:42.973 UID  1000, 1 KVP received: screen_state=off
+    11-21 07:42:43.092 UID  1000, 1 KVP received: screen_state=off
+    11-21 07:42:43.252 UID  1000, 1 KVP received: screen_state=off
+    11-21 07:57:13.467 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-21 08:08:36.344 UID  1000, 1 KVP received: notification_spk_big_volume=0
+    11-21 08:08:36.351 UID  1000, 1 KVP received: alarm_spk_big_volume=0
+    11-21 08:08:36.357 UID  1000, 1 KVP received: music_spk_big_volume=0
+    11-21 08:08:36.361 UID  1000, 1 KVP received: ring_spk_big_volume=0
+    11-21 08:34:58.507 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-21 08:56:36.127 UID  1000, 1 KVP received: screen_state=on
+    11-21 08:56:36.273 UID  1000, 1 KVP received: screen_state=on
+    11-21 08:56:36.915 UID  1013, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
+    11-21 08:56:42.497 UID  1000, 1 KVP received: screen_state=on
+
+ ## BEGIN misc af dump 
+
+Patches:
+  Patch 12: No software bridge (thread 0x0 => thread 0x0) thread 0xb40000728f16be88 num sinks (1) first device type 00000002
+  Patch 20: No software bridge (thread 0x0 => thread 0x0) thread 0xb40000728f166478 num sinks (1) first device type 00000002
+  Patch 28: No software bridge (thread 0x0 => thread 0x0) thread 0xb40000728f171898 num sinks (1) first device type 00010000
+  Patch 36: No software bridge (thread 0x0 => thread 0x0) thread 0xb40000728f1880d8 num sinks (1) first device type 00000002
+  Patch 44: No software bridge (thread 0x0 => thread 0x0) thread 0xb40000728f17ccb8 num sinks (1) first device type 00000002
+
+Device Effects:
+
+Sound Dose:
+CSD is disabled

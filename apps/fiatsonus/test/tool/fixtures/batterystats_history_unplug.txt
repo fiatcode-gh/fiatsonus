@@ -1,0 +1,52 @@
+Battery History [Format: 2] (101% used, 4162KB used of 4096KB, 1741 strings using 75KB):
+  10-21 10:18:47.785 TIME: 2026-10-21-10-18-47
+  10-21 10:18:57.913 081 stats=0:"battery-state"
+  10-21 10:18:57.913 081
+  10-21 10:18:57.859 081 plug=usb volt=4155 charge=4539 +plugged
+  10-21 10:18:57.957 081
+  10-21 10:18:57.966 081
+  10-21 10:18:57.967 081 +job=u0a205:"com.google.android.calendar/.jobservices.CalendarProviderObserverJobService"
+  10-21 10:18:58.020 081
+                 Details: cpu=98870u+180450s
+                          /proc/stat=114610 usr, 165300 sys, 2460 io, 16910 irq, 6950 sirq, 3492450 idle (8.1% of 10h 33m 6s 800ms), SubsystemPowerState Empty
+  10-21 10:18:58.028 081 volt=4103 -job=u0a205:"com.google.android.calendar/.jobservices.CalendarProviderObserverJobService"
+  10-21 10:18:58.166 081 +audio +state=1000:"audio"
+  10-21 10:18:58.191 081
+  10-21 10:18:58.228 081
+  10-21 10:18:58.228 081
+  10-21 10:18:58.380 081 volt=4075
+  10-21 10:18:58.629 081 status=charging plug=ac volt=4107 -audio -state=1000:"audio"
+  10-21 10:18:58.877 081 +usb_data +tmpwhitelist=1000:"4c86e6b com.vivo.pie.PIE_ELAPSED_REALTIME/u0"
+  10-21 10:18:59.211 081 +audio +state=10087:"audio"
+  10-21 10:31:29.148 084
+  10-21 10:31:43.289 084 charge=4768
+  10-21 10:31:57.894 084 charge=4772
+  10-21 10:32:00.035 084 +job=1000:"com.vivo.globalanimation/.GlobalAnimationJobService"
+  10-21 10:32:00.042 084 -job=1000:"com.vivo.globalanimation/.GlobalAnimationJobService"
+  10-21 10:32:10.063 084 +tmpwhitelist=u0a180:"4d9ae08 com.vivo.alarm.filter/u0"
+  10-21 10:32:20.068 084 -tmpwhitelist=u0a180:"4d9ae08 com.vivo.alarm.filter/u0"
+  10-21 10:32:29.159 084 stats=0:"procstate-change"
+  10-21 10:32:40.407 084 stats=0:"battery-state"
+  10-21 10:32:40.331 084 status=discharging plug=none volt=4276 charge=4789 -plugged
+  10-21 10:32:40.395 084 -audio -state=2000:"audio"
+  10-21 10:32:40.398 084 -longwake=2000:"AudioIn"
+  10-21 10:32:40.399 084 -video -state=2000:"video"
+  10-21 10:32:40.695 084
+                 Details: cpu=98870u+180450s
+                          /proc/stat=114610 usr, 165300 sys, 2460 io, 16910 irq, 6950 sirq, 3492450 idle (8.1% of 10h 33m 6s 800ms), SubsystemPowerState Empty
+  10-21 10:42:40.369 084 temp=280 volt=4212 charge=4764
+  10-21 10:42:53.854 084 charge=4761
+  10-21 10:52:40.368 084 charge=4736
+  10-22 02:50:55.370 TIME: 2026-10-22-02-50-55
+  10-22 08:22:41.190 078 charge=4406 +running wake_reason=0:"244 pm8xxx_rtc_alarm"
+  10-22 08:39:58.998 078 +running -wifi_radio wake_reason=0:"226 WLAN_CE_2" stats=0:"wifi-data: inactive"
+  10-22 08:39:59.327 078 -running
+  10-22 08:39:59.889 078 +running +wifi_radio wake_reason=0:"226 WLAN_CE_2" stats=0:"wifi-data: active"
+  10-22 08:40:00.280 078 -running
+  10-22 08:40:38.317 078 +running -wifi_radio wake_reason=0:"327 swr_wake_irq" stats=0:"wifi-data: inactive"
+  10-22 08:40:38.652 078 stats=0:"battery-state"
+  10-22 08:40:38.652 078
+  10-22 08:40:38.615 078 plug=usb volt=4141 charge=4401 +plugged screenwake=1000:"android.server.power:PLUGGED:true"
+  10-22 08:40:38.933 078
+  10-22 08:40:38.958 078
+  10-22 08:40:39.169 078
