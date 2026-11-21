@@ -6,6 +6,7 @@ environment:
 
 workspace:
   - packages/fiatsonus_engine
+  - apps/fiatsonus
 
 dev_dependencies:
   lints: ^6.1.0

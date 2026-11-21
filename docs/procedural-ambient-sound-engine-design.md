@@ -126,7 +126,7 @@ abstract interface class AudioSink {
 - A param maps to internal values only inside the soundscape. Use a curve where it helps, for example `rate = 3 + pow(p, 1.5) * 80`.
 - Every mapping is written as a table in that soundscape's section of this document. When code and document disagree, fix one of them in the same change.
 - Start and stop always fade (default 2 s in, 3 s out). Never cut audio at a non-zero sample. The master owns the fades; a soundscape never fades itself.
-- Messages from the UI isolate to the engine isolate carry only `(soundscapeId, paramId, value)`. No closures, no objects.
+- Messages from the UI isolate to the engine isolate are only `['start', soundscapeId, fadeMs]`, `['stop', soundscapeId, fadeMs]` and `['param', soundscapeId, paramId, value]`. No closures, no objects.
 - Mixing several soundscapes (for example rain + wind) is done by the master. Soundscapes do not know about each other.
 
 ## Safety rules

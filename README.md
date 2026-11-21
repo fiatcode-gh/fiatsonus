@@ -12,16 +12,16 @@ rendering only. No app yet.
 
 - `packages/fiatsonus_engine`: the pure Dart engine.
 - `docs/`: the design reference.
-- `apps/fiatsonus`: the future Flutter app (not created yet).
+- `apps/fiatsonus`: the Android app (engine host only so far).
 
 ## Checks
 
 From the repository root:
 
 ```sh
-dart pub get
+flutter pub get
 dart format --output=none --set-exit-if-changed .
-dart analyze --fatal-infos
+flutter analyze --fatal-infos
 ```
 
 From `packages/fiatsonus_engine`:
@@ -29,6 +29,12 @@ From `packages/fiatsonus_engine`:
 ```sh
 dart test -x soak   # fast suite
 dart test -t soak   # long-run checks
+```
+
+From `apps/fiatsonus`:
+
+```sh
+tool/test.sh        # host tests; puts an NDK clang on PATH when none exists
 ```
 
 ## Tools
