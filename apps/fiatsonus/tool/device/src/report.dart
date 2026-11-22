@@ -17,26 +17,34 @@ class ReportOptions {
     this.battery = false,
     this.expectForeground = false,
     this.maxRenderRatio = 0.05,
+    this.minBatteryWindowSeconds = 3600,
   });
 
   final bool battery;
   final bool expectForeground;
   final double maxRenderRatio;
+  final int minBatteryWindowSeconds;
 }
 
 class Report {
-  const Report(this.results, this.failures);
+  const Report(this.results, this.cpu, this.failures);
 
   /// Result values by key, in output order.
   final Map<String, String> results;
+
+  /// `CPU PASS …`, `CPU MISS …` or `CPU UNKNOWN`: the render ratio against
+  /// its limit, reported apart from the functional verdict.
+  final String cpu;
   final List<String> failures;
 
+  /// The functional verdict; the CPU line does not decide it.
   bool get passed => failures.isEmpty;
 
-  /// One `RESULT key=value` line per result, then `PASS` or
+  /// One `RESULT key=value` line per result, the CPU line, then `PASS` or
   /// `FAIL <reason>; <reason>…`.
   String format() => [
     for (final MapEntry(:key, :value) in results.entries) 'RESULT $key=$value',
+    cpu,
     passed ? 'PASS' : 'FAIL ${failures.join('; ')}',
   ].join('\n');
 }
@@ -47,7 +55,6 @@ Report buildReport(Snapshot t0, Snapshot t1, ReportOptions options) =>
 /// Seconds an `FSTAT` line may lag its snapshot before logcat is taken to
 /// have lost lines or playback to have stopped.
 const _maxFstatAgeSeconds = 30;
-const _minBatteryWindowSeconds = 3600;
 
 class _ReportBuilder {
   _ReportBuilder(this.t0, this.t1, this.options);
@@ -107,8 +114,16 @@ class _ReportBuilder {
         failures.add('AudioService not in the foreground at t1');
       }
     }
-    if (options.battery) _battery(pid1);
-    return Report(results, failures);
+    if (options.battery) _battery(time0, time1);
+    return Report(results, _cpuLine(renderPct), failures);
+  }
+
+  String _cpuLine(double? renderPct) {
+    if (renderPct == null) return 'CPU UNKNOWN';
+    final limitPct = options.maxRenderRatio * 100;
+    final verdict = renderPct < limitPct ? 'PASS' : 'MISS';
+    return 'CPU $verdict render_ratio_pct=${renderPct.toStringAsFixed(2)} '
+        'limit_pct=${limitPct.toStringAsFixed(2)}';
   }
 
   /// Parses [file] of [snapshot]; a missing file or a [FormatException] is a
@@ -205,13 +220,6 @@ class _ReportBuilder {
     results['audio_s'] = audioS.toStringAsFixed(3);
     results['deficit_ms'] = deficitMs.toStringAsFixed(1);
 
-    final limitPct = options.maxRenderRatio * 100;
-    if (renderPct >= limitPct) {
-      failures.add(
-        'render_ratio_pct ${renderPct.toStringAsFixed(2)} >= '
-        '${limitPct.toStringAsFixed(2)}',
-      );
-    }
     for (final (key, value) in [
       ('underruns', f1.underruns - f0.underruns),
       ('starved_us', f1.starvedUs - f0.starvedUs),
@@ -264,43 +272,67 @@ class _ReportBuilder {
     }
   }
 
-  void _battery(int? pid1) {
-    final window = _parse(
-      t1,
-      'batterystats_history.txt',
-      parseUnpluggedWindow,
-      unparsable: 'no unplugged window in',
-    );
-    if (window != null) {
-      results['battery_mah'] = '${window.mah}';
-      results['battery_hours'] = window.hours.toStringAsFixed(3);
-      results['battery_mah_per_h'] = window.mahPerHour.toStringAsFixed(1);
-      results['battery_level_drop'] = '${window.levelDrop}';
-      if (window.seconds < _minBatteryWindowSeconds) {
-        failures.add(
-          'battery window ${window.seconds.toStringAsFixed(0)} s < '
-          '$_minBatteryWindowSeconds s',
-        );
+  void _battery(_Time? time0, _Time? time1) {
+    final local0 = _local(t0, time0);
+    final local1 = _local(t1, time1);
+    final history = t1.files['batterystats_history.txt'];
+    if (history == null) {
+      failures.add('t1/batterystats_history.txt missing');
+    } else if (local0 != null && local1 != null) {
+      final found = findUnpluggedWindow(history, t0: local0, t1: local1);
+      failures.addAll(found.failures);
+      final window = found.window;
+      if (window != null) {
+        results['battery_window'] =
+            '${_stamp(window.start)}..${_stamp(window.end)}';
+        results['battery_mah'] = '${window.mah}';
+        results['battery_hours'] = window.hours.toStringAsFixed(3);
+        results['battery_mah_per_h'] = window.mahPerHour.toStringAsFixed(1);
+        results['battery_level_drop'] = '${window.levelDrop}';
+        final min = options.minBatteryWindowSeconds;
+        if (window.seconds < min) {
+          failures.add(
+            'battery window ${window.seconds.toStringAsFixed(0)} s < $min s',
+          );
+        }
       }
     }
-    final uid = pid1 == null ? null : _uidOf(t1.files['services.txt'], pid1);
-    final estimate = _parse(
-      t1,
-      'batterystats_app.txt',
-      (text) => uid == null ? null : parseAppEstimateMah(text, uid),
-    );
-    results['battery_app_estimate_mah'] = estimate == null
-        ? 'n/a'
-        : '$estimate';
+
+    final battery0 = _parse(t0, 'battery.txt', _parseBattery);
+    final battery1 = _parse(t1, 'battery.txt', _parseBattery);
+    if (battery0 != null && battery1 != null) {
+      results['battery_counter_mah'] =
+          ((battery0.chargeCounterUah - battery1.chargeCounterUah) / 1000)
+              .toStringAsFixed(1);
+      results['battery_counter_level_drop'] =
+          '${battery0.level - battery1.level}';
+    }
+  }
+
+  /// The phone's local clock of a snapshot; its absence is a fail reason.
+  DateTime? _local(Snapshot snapshot, _Time? time) {
+    if (time == null) return null;
+    if (time.local == null) {
+      failures.add('no local= in ${snapshot.label}/time.txt');
+    }
+    return time.local;
   }
 }
 
+/// A local stamp held as UTC, without the `Z`.
+String _stamp(DateTime local) => local.toIso8601String().replaceFirst('Z', '');
+
 class _Time {
-  const _Time(this.epochMs, this.uptimeS);
+  const _Time(this.epochMs, this.uptimeS, this.local);
 
   final int epochMs;
   final double uptimeS;
+
+  /// The phone's local clock as a UTC value, when `time.txt` has `local=`.
+  final DateTime? local;
 }
+
+final _localTime = RegExp(r'^(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)$');
 
 _Time _parseTime(String text) {
   final values = <String, String>{
@@ -315,7 +347,39 @@ _Time _parseTime(String text) {
   if (epochMs == null || uptimeS == null) {
     throw FormatException('no epoch_ms or uptime_s', text);
   }
-  return _Time(epochMs, uptimeS);
+  final local = _localTime.firstMatch(values['local'] ?? '');
+  return _Time(
+    epochMs,
+    uptimeS,
+    local == null
+        ? null
+        : DateTime.utc(
+            int.parse(local.group(1)!),
+            int.parse(local.group(2)!),
+            int.parse(local.group(3)!),
+            int.parse(local.group(4)!),
+            int.parse(local.group(5)!),
+            int.parse(local.group(6)!),
+          ),
+  );
+}
+
+final _chargeCounter = RegExp(
+  r'^\s*Charge counter: (\d+)\s*$',
+  multiLine: true,
+);
+final _batteryLevel = RegExp(r'^\s*level: (\d+)\s*$', multiLine: true);
+
+/// `Charge counter` (µAh) and `level` (%) of `dumpsys battery`.
+({int chargeCounterUah, int level}) _parseBattery(String text) {
+  final counter = _chargeCounter.firstMatch(text);
+  final level = _batteryLevel.firstMatch(text);
+  if (counter == null) throw FormatException('no Charge counter', text);
+  if (level == null) throw FormatException('no level', text);
+  return (
+    chargeCounterUah: int.parse(counter.group(1)!),
+    level: int.parse(level.group(1)!),
+  );
 }
 
 final _serviceRecord = RegExp(r'^\s*\* ServiceRecord\{');
@@ -337,10 +401,3 @@ bool _audioServiceInForeground(String services) {
   }
   return false;
 }
-
-/// The uid (`u0a105` form) of the `ProcessRecord` of [pid], if listed.
-String? _uidOf(String? services, int pid) => services == null
-    ? null
-    : RegExp('ProcessRecord\\{[0-9a-f]+ $pid:[^/}]+/(\\S+?)\\}')
-          .firstMatch(services)
-          ?.group(1);

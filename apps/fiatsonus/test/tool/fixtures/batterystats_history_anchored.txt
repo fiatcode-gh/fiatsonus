@@ -1,0 +1,51 @@
+Battery History [Format: 2] (101% used, 4156KB used of 4096KB, 1741 strings using 75KB):
+  11-19 07:42:53.780 035 plug=usb volt=3793 charge=1760 +plugged
+  11-19 07:42:53.853 035 charge=1758
+  11-19 07:42:54.101 035 plug=ac stats=0:"get-stats"
+  11-19 07:58:25.757 055 charge=2979
+  11-19 08:10:53.255 068 charge=3732 +state=1000:"sensor:0x426"
+  11-19 08:15:54.123 TIME: 2026-11-19-08-15-54
+  11-19 08:22:54.077 081 charge=4442
+  11-19 10:41:09.099 TIME: 2026-11-19-10-41-09
+  11-19 13:28:21.014 RESET:TIME: 2026-11-19-13-28-21
+  11-19 13:28:21.014 090 status=discharging health=good plug=none temp=260 volt=4292 charge=5039 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wifi_radio +phone_scanning +plugged phone_state=out brightness=dim +wifi wifi_signal_strength=3 wifi_suppl=completed gps_signal_quality=none top=u0a206:"com.android.chrome"
+  11-19 13:28:21.014 090 -plugged userfg=0:"0"
+  11-19 13:37:19.958 TIME: 2026-11-19-13-37-19
+  11-19 14:28:48.326 TIME: 2026-11-19-14-28-48
+  11-19 15:08:20.594 090 volt=4250 charge=4942
+  11-19 15:20:28.001 TIME: 2026-11-19-15-20-28
+  11-19 16:15:39.849 TIME: 2026-11-19-16-15-39
+  11-19 17:06:54.753 TIME: 2026-11-19-17-06-54
+  11-19 18:00:07.304 TIME: 2026-11-19-18-00-07
+  11-19 20:58:20.856 087 charge=4737 +running wake_reason=0:"244 pm8xxx_rtc_alarm"
+  11-20 01:11:35.301 TIME: 2026-11-20-01-11-35
+  11-20 03:18:20.673 086 charge=4642 +running -wifi_radio wake_reason=0:"244 pm8xxx_rtc_alarm" stats=0:"wifi-data: inactive"
+  11-20 09:28:21.460 084 charge=4540 +running -wifi_radio wake_reason=0:"244 pm8xxx_rtc_alarm" stats=0:"wifi-data: inactive"
+  11-20 09:55:25.336 TIME: 2026-11-20-09-55-25
+  11-20 14:07:19.428 TIME: 2026-11-20-14-07-19
+  11-20 14:38:21.310 080 charge=4361 +running -wifi_radio wake_reason=0:"244 pm8xxx_rtc_alarm" stats=0:"wifi-data: inactive"
+  11-20 21:08:21.094 078 charge=4261 +running -wifi_radio wake_reason=0:"244 pm8xxx_rtc_alarm" stats=0:"wifi-data: inactive"
+  11-21 00:57:34.930 TIME: 2026-11-21-00-57-34
+  11-21 03:38:20.844 077 charge=4170 +running -wifi_radio wake_reason=0:"244 pm8xxx_rtc_alarm" stats=0:"wifi-data: inactive"
+  11-21 07:12:35.314 075 plug=usb volt=4084 +plugged
+  11-21 07:12:35.432 075 plug=ac charge=4107
+  11-21 07:24:55.080 079 charge=4371
+  11-21 07:52:14.983 088 charge=4955
+  11-21 08:08:33.380 TIME: 2026-11-21-08-08-33
+  11-21 08:09:35.364 090 charge=5010
+  11-21 10:01:07.522 TIME: 2026-11-21-10-01-07
+  11-21 11:56:23.532 TIME: 2026-11-21-11-56-23
+  11-21 12:17:54.700 090 stats=0:"battery-state"
+  11-21 12:17:54.666 090 status=discharging plug=none volt=4291 -plugged -charging screenwake=1000:"android.server.power:PLUGGED:false"
+  11-21 16:52:07.389 090 charge=4907 +running wake_reason=0:"-1 wakeup glink-native-adsp"
+  11-21 18:10:02.346 TIME: 2026-11-21-18-10-02
+  11-21 23:20:02.883 090 charge=4819 +running -wifi_radio wake_reason=0:"244 pm8xxx_rtc_alarm" stats=0:"wifi-data: inactive"
+  11-22 05:40:02.682 088 charge=4732 +running +wake_lock=1000:"QuickFrozen_SystemState" -wifi_radio wake_reason=0:"244 pm8xxx_rtc_alarm" stats=0:"wifi-data: inactive"
+  11-22 07:00:01.013 TIME: 2026-11-22-07-00-01
+  11-22 09:55:24.736 087 plug=ac volt=4222 charge=4670 +wake_lock=u0a238:"QcrilOemhookMsgTunnel" +plugged
+  11-22 10:02:05.212 088
+  11-22 10:02:05.223 088
+  11-22 10:02:05.245 088
+  11-22 10:02:05.246 088
+  11-22 10:02:05.247 088
+  11-22 10:02:05.261 088 stats=0:"dump"

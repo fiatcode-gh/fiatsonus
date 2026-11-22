@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../tool/device/src/report.dart';
 import 'fixtures.dart';
 import 'snapshot_pair.dart';
 
@@ -34,31 +35,58 @@ void main() {
     expect(r['engine_rate'], '48000');
     expect(r['device_rate'], '48000');
     expect(r['foreground'], 'true');
-    expect(r['battery_mah'], '388');
-    expect(r['battery_hours'], '22.133');
-    expect(r['battery_mah_per_h'], '17.5');
-    expect(r['battery_level_drop'], '6');
-    expect(r['battery_app_estimate_mah'], 'n/a');
+    expect(
+      r['battery_window'],
+      '2026-11-21T12:17:54.666..2026-11-22T09:55:24.736',
+    );
+    expect(r['battery_mah'], '340');
+    expect(r['battery_hours'], '21.625');
+    expect(r['battery_mah_per_h'], '15.7');
+    expect(r['battery_level_drop'], '3');
+    expect(r['battery_counter_mah'], '338.6');
+    expect(r['battery_counter_level_drop'], '3');
   });
 
-  test('the app estimate is read for the uid of the app process', () {
-    final t1 = passingT1()
-      ..['services.txt'] = audioServiceServices(uid: 'u0a206');
-
-    final report = reportOf(passingT0(), t1, battery: true);
-
-    expect(report.results['battery_app_estimate_mah'], '23.2');
-  });
-
-  test('the output is one RESULT line per result, then PASS', () {
+  test('the output is RESULT lines, one CPU line, then PASS', () {
     final lines = reportOf(passingT0(), passingT1()).format().split('\n');
 
     expect(lines.first, 'RESULT wall_s=600.000');
     expect(
-      lines.sublist(0, lines.length - 1),
+      lines.sublist(0, lines.length - 2),
       everyElement(startsWith('RESULT ')),
     );
+    expect(lines[lines.length - 2], startsWith('CPU '));
     expect(lines.last, 'PASS');
+  });
+
+  group('CPU line', () {
+    test('a render ratio at 17 % passes functionally with CPU MISS', () {
+      final report = reportOf(passingT0(), t1AtRenderPct(17));
+
+      expect(report.failures, isEmpty);
+      final lines = report.format().split('\n');
+      expect(lines.sublist(lines.length - 2), [
+        'CPU MISS render_ratio_pct=17.00 limit_pct=5.00',
+        'PASS',
+      ]);
+    });
+
+    test('a render ratio at 1 % is CPU PASS', () {
+      final lines = reportOf(passingT0(), passingT1()).format().split('\n');
+
+      expect(
+        lines[lines.length - 2],
+        'CPU PASS render_ratio_pct=1.00 limit_pct=5.00',
+      );
+    });
+
+    test('a pair without an FSTAT line is CPU UNKNOWN and fails', () {
+      final report = reportOf(passingT0(), passingT1()..['fstat.txt'] = '');
+
+      final lines = report.format().split('\n');
+      expect(lines[lines.length - 2], 'CPU UNKNOWN');
+      expect(lines.last, startsWith('FAIL '));
+    });
   });
 
   group('fails with one reason when', () {
@@ -78,13 +106,6 @@ void main() {
       expect(report.failures, [startsWith(reason)]);
       expect(report.passed, isFalse);
     }
-
-    test('the render ratio reaches the limit', () {
-      final t1 = passingT1()
-        ..['fstat.txt'] = t1Fstat(renderUs: 200000 + kWallSeconds * 60000)
-        ..['proc_stat.txt'] = procStat(utime: 3000, stime: 700);
-      expectOnly(t1, 'render_ratio_pct 6.00 >= 5.00');
-    });
 
     for (final (field, edit) in <(String, String Function())>[
       ('underruns 1', () => t1Fstat(underruns: 1)),
@@ -145,26 +166,6 @@ void main() {
         'AudioService not in the foreground at t1',
         expectForeground: true,
       );
-    });
-
-    test('the history holds no unplugged window', () {
-      final t1 = passingT1()
-        ..['batterystats_history.txt'] = fixture('batterystats_history.txt');
-      expectOnly(
-        t1,
-        'no unplugged window in t1/batterystats_history.txt',
-        battery: true,
-      );
-    });
-
-    test('the unplugged window is shorter than an hour', () {
-      final t1 = passingT1()
-        ..['batterystats_history.txt'] =
-            fixture('batterystats_history_unplug.txt').replaceFirst(
-              '10-22 08:40:38.615 078 plug=usb',
-              '10-21 11:20:38.615 078 plug=usb',
-            );
-      expectOnly(t1, 'battery window 2878 s < 3600 s', battery: true);
     });
 
     test('a value cannot be parsed', () {
@@ -231,5 +232,160 @@ void main() {
       report.format().split('\n').last,
       'FAIL underruns 1 != 0; faults 1 != 0; af_underruns 1 != 0',
     );
+  });
+
+  group('battery', () {
+    final anchored = fixture('batterystats_history_anchored.txt');
+    const windowEnd =
+        '  11-22 09:55:24.736 087 plug=ac volt=4222 charge=4670 '
+        '+wake_lock=u0a238:"QcrilOemhookMsgTunnel" +plugged\n';
+
+    Report batteryReport({
+      String? history,
+      String local0 = kLocal0,
+      String local1 = kLocal1,
+    }) {
+      final t0 = passingT0()
+        ..['time.txt'] = timeTxt(
+          epochMs: kEpoch0,
+          uptimeS: '1000.00',
+          local: local0,
+        );
+      final t1 = passingT1()
+        ..['time.txt'] = timeTxt(
+          epochMs: kEpoch1,
+          uptimeS: '1600.00',
+          local: local1,
+        );
+      if (history != null) t1['batterystats_history.txt'] = history;
+      return reportOf(t0, t1, battery: true);
+    }
+
+    test('a window that ended before t0 is not reported', () {
+      final report = batteryReport(
+        history: fixture('batterystats_history_unplug.txt'),
+        local0: '2026-11-21 10:00:00',
+      );
+
+      expect(report.failures, contains('no unplugged window after t0'));
+      expect(report.results, isNot(contains('battery_mah')));
+      expect(report.results, isNot(contains('battery_window')));
+    });
+
+    test('the window after t0 is reported, not an older one', () {
+      final report = batteryReport(history: anchored);
+
+      expect(report.failures, isEmpty);
+      final r = report.results;
+      expect(
+        r['battery_window'],
+        '2026-11-21T12:17:54.666..2026-11-22T09:55:24.736',
+      );
+      expect(r['battery_mah'], '340');
+      expect(r['battery_hours'], '21.625');
+      expect(r['battery_mah_per_h'], '15.7');
+      expect(r['battery_level_drop'], '3');
+    });
+
+    test('a last history line more than 600 s before t1 is stale', () {
+      // The last line of the history is 11-22 10:02:05.261.
+      final stale = batteryReport(local1: '2026-11-22 10:12:06');
+      final live = batteryReport(local1: '2026-11-22 10:12:05');
+
+      expect(stale.failures, ['battery history is stale or on another clock']);
+      expect(live.failures, isEmpty);
+    });
+
+    test('a second unplug after t0 fails', () {
+      final report = batteryReport(
+        history: anchored.replaceFirst(
+          windowEnd,
+          '$windowEnd  11-22 09:58:10.000 087 status=discharging plug=none '
+          'volt=4324 -plugged -charging\n',
+        ),
+      );
+
+      expect(report.failures, [
+        'more than one unplugged window between t0 and t1',
+      ]);
+    });
+
+    test('an unplug without a replug fails', () {
+      final report = batteryReport(
+        history: anchored.replaceFirst(windowEnd, ''),
+      );
+
+      expect(report.failures, ['the unplugged window has no end']);
+      expect(report.results, isNot(contains('battery_mah')));
+    });
+
+    test('a restated plug=none inside the window changes nothing', () {
+      final report = batteryReport(
+        history: anchored.replaceFirst(
+          '  11-21 23:20:02.883',
+          '  11-21 20:00:00.000 090 status=discharging plug=none volt=4324 '
+              '-plugged -charging\n  11-21 23:20:02.883',
+        ),
+      );
+
+      expect(report.failures, isEmpty);
+      expect(
+        report.results['battery_window'],
+        '2026-11-21T12:17:54.666..2026-11-22T09:55:24.736',
+      );
+      expect(report.results['battery_mah'], '340');
+    });
+
+    test('a history across the new year resolves against t1', () {
+      final report = batteryReport(
+        history: historyOf([
+          '12-31 23:40:00.000 090 plug=ac volt=4222 charge=4670 +plugged',
+          '12-31 23:55:00.000 090 status=discharging plug=none volt=4291 '
+              '-plugged -charging',
+          '01-01 00:30:00.000 089 charge=4600',
+          '01-01 01:00:00.000 088 plug=usb volt=4084 charge=4550 +plugged',
+          '01-01 01:04:00.000 088 stats=0:"dump"',
+        ]),
+        local0: '2026-12-31 23:50:00',
+        local1: '2027-01-01 01:05:00',
+      );
+
+      expect(report.failures, isEmpty);
+      expect(
+        report.results['battery_window'],
+        '2026-12-31T23:55:00.000..2027-01-01T01:00:00.000',
+      );
+      expect(report.results['battery_mah'], '120');
+      expect(report.results['battery_level_drop'], '2');
+    });
+
+    test('the counter results come from battery.txt', () {
+      final report = batteryReport(local1: '2026-11-22 11:00:00');
+
+      expect(report.failures, ['battery history is stale or on another clock']);
+      expect(report.results['battery_counter_mah'], '338.6');
+      expect(report.results['battery_counter_level_drop'], '3');
+    });
+
+    test('a battery.txt without Charge counter fails naming the file', () {
+      final t1 = passingT1()
+        ..['battery.txt'] = fixture('battery.txt')
+            .replaceFirst('  Charge counter: 5010642\n', '');
+
+      final report = reportOf(passingT0(), t1, battery: true);
+
+      expect(report.failures, [startsWith('unparsable t1/battery.txt')]);
+      expect(report.results, isNot(contains('battery_counter_mah')));
+    });
+
+    test('a time.txt without local fails only under --battery', () {
+      final t0 = passingT0()
+        ..['time.txt'] = timeTxt(epochMs: kEpoch0, uptimeS: '1000.00');
+
+      expect(reportOf(t0, passingT1(), battery: true).failures, [
+        'no local= in t0/time.txt',
+      ]);
+      expect(reportOf(t0, passingT1()).failures, isEmpty);
+    });
   });
 }

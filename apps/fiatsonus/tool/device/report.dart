@@ -2,10 +2,12 @@
 //
 // Usage: dart tool/device/report.dart --t0 <dir> --t1 <dir> [--battery]
 //        [--expect-foreground] [--max-render-ratio 0.05]
+//        [--min-battery-window 3600]
 //
-// Prints one `RESULT key=value` line per result, then `PASS` or
-// `FAIL <reason>; <reason>…`. Exits 0 on pass, 1 on fail, 64 on a usage
-// error.
+// Prints one `RESULT key=value` line per result, one `CPU` line (the render
+// ratio against --max-render-ratio), then `PASS` or
+// `FAIL <reason>; <reason>…`. Exits 0 on PASS, 1 on FAIL, whatever the CPU
+// line says, and 64 on a usage error.
 import 'dart:convert';
 import 'dart:io';
 
@@ -13,7 +15,8 @@ import 'src/report.dart';
 
 const _usage =
     'usage: dart tool/device/report.dart --t0 <dir> --t1 <dir> [--battery] '
-    '[--expect-foreground] [--max-render-ratio 0.05]';
+    '[--expect-foreground] [--max-render-ratio 0.05] '
+    '[--min-battery-window 3600]';
 
 void main(List<String> args) {
   String? t0;
@@ -21,6 +24,7 @@ void main(List<String> args) {
   var battery = false;
   var expectForeground = false;
   var maxRenderRatio = 0.05;
+  var minBatteryWindow = 3600;
 
   for (var i = 0; i < args.length; i++) {
     String value() => ++i < args.length
@@ -42,6 +46,16 @@ void main(List<String> args) {
           _usageError('--max-render-ratio wants a positive number, not $text');
         }
         maxRenderRatio = ratio;
+      case '--min-battery-window':
+        final text = value();
+        final seconds = int.tryParse(text);
+        if (seconds == null || seconds <= 0 || text.trim() != '$seconds') {
+          _usageError(
+            '--min-battery-window wants a positive whole number of seconds, '
+            'not $text',
+          );
+        }
+        minBatteryWindow = seconds;
       default:
         _usageError('unknown argument ${args[i]}');
     }
@@ -55,6 +69,7 @@ void main(List<String> args) {
       battery: battery,
       expectForeground: expectForeground,
       maxRenderRatio: maxRenderRatio,
+      minBatteryWindowSeconds: minBatteryWindow,
     ),
   );
   stdout.writeln(report.format());
