@@ -30,10 +30,15 @@ Future<void> main() async {
       soundscapeId: _scapeId,
       title: 'Waterfall',
     ),
+    // androidStopForegroundOnPause: `playing` turning false is the only
+    // signal audio_service has for leaving the foreground and releasing its
+    // wake lock; `stop()` alone cannot, because the activity's MediaBrowser
+    // keeps the service bound. PlaybackHandler keeps `playing` true through
+    // a transient interruption, so the foreground service lasts until stop.
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'dev.fiatcode.fiatsonus.playback',
       androidNotificationChannelName: 'Playback',
-      androidStopForegroundOnPause: false,
+      androidStopForegroundOnPause: true,
       androidResumeOnClick: false,
     ),
   );

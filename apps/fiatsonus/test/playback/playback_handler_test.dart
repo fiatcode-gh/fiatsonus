@@ -117,35 +117,66 @@ void main() {
     });
   }
 
-  test('a transient loss interrupts and a gain resumes', () async {
+  // audio_service leaves the foreground whenever `playing` turns false
+  // (androidStopForegroundOnPause), and Android forbids starting it again
+  // from the background. So an interruption keeps `playing` true, as
+  // audio_service documents for "will play as soon as it is ready".
+  test(
+    'a transient loss interrupts with the intent kept and a gain resumes',
+    () async {
+      final rig = _Rig();
+      await rig.playing();
+      final states = <PlaybackState>[];
+      rig.handler.playbackState.listen(states.add);
+
+      await rig.focusChange(FocusChange.lossTransient);
+
+      expect(rig.engine.calls.last, (
+        op: 'stop',
+        soundscapeId: _scape,
+        fade: const Duration(milliseconds: 200),
+      ));
+      expect(rig.phase, PlaybackPhase.interrupted);
+      expect(rig.state.playing, isTrue);
+      expect(rig.state.processingState, AudioProcessingState.buffering);
+      expect(rig.state.controls, [MediaControl.stop]);
+
+      await rig.engineState(false);
+      expect(rig.phase, PlaybackPhase.interrupted);
+      expect(rig.focus.abandons, 0);
+
+      await rig.focusChange(FocusChange.gain);
+
+      expect(rig.engine.calls.last, (
+        op: 'start',
+        soundscapeId: _scape,
+        fade: kPlayFade,
+      ));
+      expect(rig.phase, PlaybackPhase.playing);
+      expect(rig.state.playing, isTrue);
+      expect(rig.state.processingState, AudioProcessingState.ready);
+      expect(states.map((s) => s.playing), everyElement(isTrue));
+    },
+  );
+
+  test('playing turns false only together with idle', () async {
     final rig = _Rig();
+    final states = <PlaybackState>[];
+    rig.handler.playbackState.listen(states.add);
+
     await rig.playing();
-
     await rig.focusChange(FocusChange.lossTransient);
-
-    expect(rig.engine.calls.last, (
-      op: 'stop',
-      soundscapeId: _scape,
-      fade: const Duration(milliseconds: 200),
-    ));
-    expect(rig.phase, PlaybackPhase.interrupted);
-    expect(rig.state.playing, isFalse);
-    expect(rig.state.processingState, AudioProcessingState.ready);
-    expect(rig.state.controls, [MediaControl.stop]);
-
     await rig.engineState(false);
-    expect(rig.phase, PlaybackPhase.interrupted);
-    expect(rig.focus.abandons, 0);
-
     await rig.focusChange(FocusChange.gain);
+    await rig.engineState(true);
+    await rig.focusChange(FocusChange.lossTransient);
+    await rig.handler.stop();
+    await rig.engineState(false);
 
-    expect(rig.engine.calls.last, (
-      op: 'start',
-      soundscapeId: _scape,
-      fade: kPlayFade,
-    ));
-    expect(rig.phase, PlaybackPhase.playing);
-    expect(rig.state.playing, isTrue);
+    for (final state in states.where((s) => !s.playing)) {
+      expect(state.processingState, AudioProcessingState.idle);
+    }
+    expect(states.last.playing, isFalse);
   });
 
   test('a gain without an interruption does nothing', () async {

@@ -183,6 +183,10 @@ final class PlaybackHandler extends BaseAudioHandler {
     }
   }
 
+  /// A transient loss keeps `playing` true: audio_service leaves the
+  /// foreground whenever `playing` turns false, and the service must not be
+  /// started again from the background. `playing` turns false only with
+  /// `idle`, in [_finish].
   void _onFocusChange(FocusChange change) {
     final phase = _phase.value;
     switch (change) {
@@ -191,14 +195,17 @@ final class PlaybackHandler extends BaseAudioHandler {
         _engine.stop(_id, fade: kInterruptFade);
         playbackState.add(
           playbackState.value.copyWith(
-            processingState: AudioProcessingState.ready,
-            playing: false,
+            processingState: AudioProcessingState.buffering,
             controls: [MediaControl.stop],
           ),
         );
       case FocusChange.gain when phase == PlaybackPhase.interrupted && _want:
         _setPhase(PlaybackPhase.playing);
-        playbackState.add(playbackState.value.copyWith(playing: true));
+        playbackState.add(
+          playbackState.value.copyWith(
+            processingState: AudioProcessingState.ready,
+          ),
+        );
         _startEngine();
       case FocusChange.lossPermanent
           when phase == PlaybackPhase.playing ||
