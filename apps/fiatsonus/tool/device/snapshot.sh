@@ -13,10 +13,12 @@ fi
 require_device
 dir=$(outdir "$1")
 
-# Clock and CPU counters in one shell call, so they describe the same instant.
+# Clocks and CPU counters in one shell call, so they describe the same instant.
+# `local` is the phone's local clock, the clock of batterystats history stamps.
 raw=$(a shell "
   pid=\$(pidof $PKG)
   echo \"epoch_ms=\$(date +%s%3N)\"
+  echo \"local=\$(date '+%Y-%m-%d %H:%M:%S')\"
   echo \"uptime_s=\$(cut -d' ' -f1 /proc/uptime)\"
   echo '@@pid'
   echo \"\$pid\"
@@ -45,6 +47,5 @@ a shell logcat -d -v epoch -s flutter:I | tr -d '\r' | grep -F 'FSTAT ' | tail -
 services_dump >"$dir/services.txt"
 if $battery_stats; then
   a shell dumpsys batterystats --history | tr -d '\r' >"$dir/batterystats_history.txt"
-  a shell dumpsys batterystats --charged "$PKG" | tr -d '\r' >"$dir/batterystats_app.txt"
 fi
 say "snapshot $dir (pid $(cat "$dir/pid.txt"))"

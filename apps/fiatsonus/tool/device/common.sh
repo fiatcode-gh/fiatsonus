@@ -147,11 +147,39 @@ wait_gone() {
   ! "$what"
 }
 
-# Asserts the service and the notification of $PKG are both gone.
+# Whether the "Wake Locks:" section of `dumpsys power` (the locks held now,
+# not the wake lock logs further down) holds audio_service's lock.
+audio_wake_lock_held() {
+  a shell dumpsys power | tr -d '\r' |
+    awk -v tag="'com.ryanheise.audioservice.AudioService'" '
+      /^Wake Locks: size=/ { in_locks = 1; next }
+      in_locks && /^$/ { in_locks = 0 }
+      in_locks && index($0, tag) { found = 1 }
+      END { exit !found }'
+}
+
+# Asserts the service, the notification of $PKG and audio_service's wake lock
+# are all gone.
 assert_stopped_clean() {
   wait_gone service_present 5 || die "the service is still started or in the foreground after stop"
   wait_gone notification_present 5 || die "a notification of $PKG remains after stop"
-  say "service and notification gone"
+  wait_gone audio_wake_lock_held 5 || die "audio_service's wake lock is still held after stop"
+  say "service and notification gone; wake lock released"
+}
+
+# install_apk <apk>: Play's developer verification rejects adb installs
+# (INSTALL_FAILED_VERIFICATION_FAILURE) unless someone touched the phone
+# recently. Retries once a minute for up to 30 minutes so the user can.
+install_apk() {
+  local apk=$1 attempt
+  echo "TOUCH THE PHONE NOW: installing $(basename "$apk")"
+  for attempt in $(seq 1 30); do
+    wake_unlock
+    if a install -r "$apk"; then return 0; fi
+    [ "$attempt" -lt 30 ] || die "install failed $attempt times"
+    say "install failed; touch the phone. Retrying in 60s"
+    sleep 60
+  done
 }
 
 # Resolves <dir> to an absolute path and creates it.
