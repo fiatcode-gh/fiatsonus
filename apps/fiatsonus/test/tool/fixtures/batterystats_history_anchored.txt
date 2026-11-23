@@ -8,7 +8,7 @@ Battery History [Format: 2] (101% used, 4156KB used of 4096KB, 1741 strings usin
   11-19 08:22:54.077 081 charge=4442
   11-19 10:41:09.099 TIME: 2026-11-19-10-41-09
   11-19 13:28:21.014 RESET:TIME: 2026-11-19-13-28-21
-  11-19 13:28:21.014 090 status=discharging health=good plug=none temp=260 volt=4292 charge=5039 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wifi_radio +phone_scanning +plugged phone_state=out brightness=dim +wifi wifi_signal_strength=3 wifi_suppl=completed gps_signal_quality=none top=u0a206:"com.android.chrome"
+  11-19 13:28:21.014 090 status=discharging health=good plug=none temp=260 volt=4292 charge=5039 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wifi_radio +phone_scanning +plugged phone_state=out brightness=dim +wifi wifi_signal_strength=3 wifi_suppl=completed gps_signal_quality=none top=u0a206:"com.example.browser"
   11-19 13:28:21.014 090 -plugged userfg=0:"0"
   11-19 13:37:19.958 TIME: 2026-11-19-13-37-19
   11-19 14:28:48.326 TIME: 2026-11-19-14-28-48

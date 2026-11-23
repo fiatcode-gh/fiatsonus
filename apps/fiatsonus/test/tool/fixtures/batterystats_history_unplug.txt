@@ -5,11 +5,11 @@ Battery History [Format: 2] (101% used, 4162KB used of 4096KB, 1741 strings usin
   10-21 10:18:57.859 081 plug=usb volt=4155 charge=4539 +plugged
   10-21 10:18:57.957 081
   10-21 10:18:57.966 081
-  10-21 10:18:57.967 081 +job=u0a205:"com.google.android.calendar/.jobservices.CalendarProviderObserverJobService"
+  10-21 10:18:57.967 081 +job=u0a205:"com.example.calendar/.jobservices.CalendarProviderObserverJobService"
   10-21 10:18:58.020 081
                  Details: cpu=98870u+180450s
                           /proc/stat=114610 usr, 165300 sys, 2460 io, 16910 irq, 6950 sirq, 3492450 idle (8.1% of 10h 33m 6s 800ms), SubsystemPowerState Empty
-  10-21 10:18:58.028 081 volt=4103 -job=u0a205:"com.google.android.calendar/.jobservices.CalendarProviderObserverJobService"
+  10-21 10:18:58.028 081 volt=4103 -job=u0a205:"com.example.calendar/.jobservices.CalendarProviderObserverJobService"
   10-21 10:18:58.166 081 +audio +state=1000:"audio"
   10-21 10:18:58.191 081
   10-21 10:18:58.228 081

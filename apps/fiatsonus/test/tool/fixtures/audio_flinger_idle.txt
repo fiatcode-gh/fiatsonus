@@ -3,7 +3,7 @@ Start end:   11-03 12:47:55.520
 Now:         11-21 09:07:29.160
 Notification Clients:
    pid    uid  name
-   679  10224  com.google.android.youtube
+   679  10224  com.example.video
   1960   1041  audioserver
   2332   1013  media
   2883   1000  android.uid.system
@@ -685,44 +685,44 @@ Supported latency modes: { }
     11-16 15:09:11.626 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
     11-19 13:37:17.441 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
     11-20 10:05:26.588 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
-    11-20 10:06:01.905 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:06:03.357 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:01.830 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:10.257 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:11.281 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:13.550 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:19.642 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:23.124 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:24.973 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:48.227 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:48.759 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:50.490 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:07:52.309 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:08:00.998 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:08:42.161 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:08:48.096 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:08:51.562 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:08:55.010 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:09:16.096 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:09:49.310 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:09:49.953 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:09:57.527 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:09:59.584 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:10:00.725 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:10:14.563 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:10:18.132 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:10:19.552 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:11:22.153 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:11:37.278 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:11:43.341 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:12:05.308 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:12:10.691 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:12:42.617 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:12:43.508 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:12:47.360 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:13:31.212 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:13:39.979 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
-    11-20 10:14:43.107 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.google.android.youtube
+    11-20 10:06:01.905 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:06:03.357 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:01.830 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:10.257 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:11.281 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:13.550 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:19.642 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:23.124 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:24.973 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:48.227 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:48.759 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:50.490 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:07:52.309 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:08:00.998 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:08:42.161 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:08:48.096 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:08:51.562 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:08:55.010 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:09:16.096 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:09:49.310 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:09:49.953 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:09:57.527 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:09:59.584 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:10:00.725 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:10:14.563 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:10:18.132 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:10:19.552 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:11:22.153 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:11:37.278 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:11:43.341 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:12:05.308 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:12:10.691 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:12:42.617 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:12:43.508 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:12:47.360 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:13:31.212 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:13:39.979 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
+    11-20 10:14:43.107 UID 10224, 1 KVP received: PlaybackCaptureProtectSupport=com.example.video
     11-20 10:14:49.383 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
     11-20 10:26:51.387 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
     11-20 10:41:23.018 UID 10087, 1 KVP received: PlaybackCaptureProtectSupport=com.android.systemui
