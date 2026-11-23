@@ -39,18 +39,6 @@ final class EngineStats {
     required this.sessions,
   });
 
-  static const EngineStats zero = EngineStats(
-    playMicros: 0,
-    renderMicros: 0,
-    maxRenderMicros: 0,
-    frames: 0,
-    underruns: 0,
-    starvedMicros: 0,
-    overlaps: 0,
-    faults: 0,
-    sessions: 0,
-  );
-
   /// Reads the fields in [toFields] order. Throws when [fields] does not
   /// hold exactly nine ints.
   factory EngineStats.fromFields(List<Object?> fields) {

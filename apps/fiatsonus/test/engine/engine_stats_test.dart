@@ -43,7 +43,6 @@ void main() {
   });
 
   test('renderRatio is 0 when nothing played', () {
-    expect(EngineStats.zero.renderRatio, 0);
     expect(
       const EngineStats(
         playMicros: 0,

@@ -10,27 +10,28 @@ void main() {
 
     expect(tracks.map((t) => t.id), [214]);
     expect(tracks.single.uid, 10105);
-    expect(underrunsOfPid(threads, kPlayerPid), 0);
+    expect(tracks.single.underruns, 0);
     expect(sampleRateOfPid(threads, kPlayerPid), 48000);
   });
 
   test('underruns of the pid are read from the Underruns column', () {
     final threads = parseAudioFlinger(activeAudioFlinger(underruns: 1234));
 
-    expect(underrunsOfPid(threads, kPlayerPid), 1234);
+    expect(tracksOfPid(threads, kPlayerPid).single.underruns, 1234);
   });
 
-  test('the idle capture sums the tracks of one client', () {
+  test('the idle capture lists both tracks of one client', () {
     final threads = parseAudioFlinger(fixture('audio_flinger_idle.txt'));
+    final tracks = tracksOfPid(threads, 4887);
 
-    expect(tracksOfPid(threads, 4887).map((t) => t.id), [207, 88]);
-    expect(underrunsOfPid(threads, 4887), 0);
+    expect(tracks.map((t) => t.id), [207, 88]);
+    expect(tracks.map((t) => t.underruns), [0, 0]);
   });
 
-  test('a pid with no track has 0 underruns and no sample rate', () {
+  test('a pid with no track has no tracks and no sample rate', () {
     final threads = parseAudioFlinger(fixture('audio_flinger_active.txt'));
 
-    expect(underrunsOfPid(threads, 1), 0);
+    expect(tracksOfPid(threads, 1), isEmpty);
     expect(sampleRateOfPid(threads, 1), isNull);
   });
 

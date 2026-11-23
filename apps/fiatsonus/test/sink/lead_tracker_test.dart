@@ -71,22 +71,6 @@ void main() {
     expect(tracker.referenceMicros, 138000);
   });
 
-  test('reset clears everything', () {
-    final tracker = _tracker();
-    _feedMs(tracker, [..._steadyMs(128, blocks: 2), ..._steadyMs(-128)]);
-    expect(tracker.underruns, 1);
-
-    tracker.reset();
-
-    expect(tracker.underruns, 0);
-    expect(tracker.starvedMicros, 0);
-    expect(tracker.jitterMicros, 0);
-    expect(tracker.referenceMicros, 0);
-    _feedMs(tracker, [..._steadyMs(-500), ..._steadyMs(128)]);
-    expect(tracker.underruns, 0);
-    expect(tracker.referenceMicros, 128000);
-  });
-
   test('fewer than two full blocks report nothing', () {
     final tracker = _tracker();
     _feedMs(tracker, [0, 42, 85, 128, 128, 128, 128]);

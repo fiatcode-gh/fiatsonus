@@ -114,9 +114,6 @@ List<AudioFlingerTrack> tracksOfPid(
       if (track.pid == pid) track,
 ];
 
-int underrunsOfPid(List<AudioFlingerThread> threads, int pid) =>
-    tracksOfPid(threads, pid).fold(0, (sum, t) => sum + t.underruns);
-
 /// The sample rate of the first thread that holds a track of [pid].
 int? sampleRateOfPid(List<AudioFlingerThread> threads, int pid) {
   for (final thread in threads) {

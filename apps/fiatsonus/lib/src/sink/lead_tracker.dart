@@ -56,14 +56,4 @@ final class LeadTracker {
 
   /// The steady lead; 0 until the second block.
   int get referenceMicros => _reference;
-
-  void reset() {
-    _inBlock = 0;
-    _blockMax = 0;
-    _blocks = 0;
-    _reference = 0;
-    _underruns = 0;
-    _starved = 0;
-    _jitter = 0;
-  }
 }
