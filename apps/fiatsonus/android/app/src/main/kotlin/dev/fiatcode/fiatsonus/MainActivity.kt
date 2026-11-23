@@ -32,6 +32,10 @@ class MainActivity : AudioServiceActivity() {
     // The engine is cached by audio_service and outlives this activity.
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         channel(flutterEngine).setMethodCallHandler(null)
+        // This activity will not answer the dialog any more, and the Dart
+        // side waits for an answer before it plays.
+        pending?.success(false)
+        pending = null
         super.cleanUpFlutterEngine(flutterEngine)
     }
 
