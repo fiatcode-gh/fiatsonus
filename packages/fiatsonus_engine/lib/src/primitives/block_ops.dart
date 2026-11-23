@@ -1,8 +1,13 @@
 import 'dart:typed_data';
 
-/// Sets the first [frames] samples of [buf] to zero.
+import '../core/engine_constants.dart';
+
+/// Positive zeros, the source of every [clearBlock]; never written.
+final Float32List _zeros = Float32List(kBlockFrames);
+
+/// Sets the first [frames] samples of [buf] to zero; `frames <= kBlockFrames`.
 void clearBlock(Float32List buf, int frames) {
-  buf.fillRange(0, frames, 0.0);
+  buf.setRange(0, frames, _zeros);
 }
 
 /// Adds `src[i] * g` into `dst[i]` for the first [frames] samples, with `g`

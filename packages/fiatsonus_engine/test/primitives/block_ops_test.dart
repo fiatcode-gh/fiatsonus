@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:fiatsonus_engine/src/core/engine_constants.dart';
 import 'package:fiatsonus_engine/src/primitives/block_ops.dart';
 import 'package:test/test.dart';
 
@@ -9,6 +10,16 @@ void main() {
     clearBlock(buf, 5);
     expect(buf.sublist(0, 5), everyElement(0.0));
     expect(buf.sublist(5), everyElement(1.0));
+  });
+
+  test('clearBlock writes positive zeros over a whole block', () {
+    final buf = Float32List(kBlockFrames)
+      ..fillRange(0, kBlockFrames, double.nan)
+      ..[0] = -0.0
+      ..[kBlockFrames - 1] = double.negativeInfinity;
+    clearBlock(buf, kBlockFrames);
+    final bits = Uint32List.view(buf.buffer);
+    expect(bits, everyElement(0));
   });
 
   group('addRamp', () {
