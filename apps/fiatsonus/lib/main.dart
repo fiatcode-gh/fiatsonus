@@ -9,10 +9,6 @@ import 'src/playback/audio_focus.dart';
 import 'src/playback/notification_permission.dart';
 import 'src/playback/playback_handler.dart';
 import 'src/playback/playback_notification.dart';
-import 'src/probe/pcm_relay_sink.dart';
-import 'src/probe/probe_entry.dart';
-import 'src/probe/probe_flag.dart';
-import 'src/probe/probe_picker.dart';
 import 'src/sink/engine_entry.dart';
 import 'src/ui/debug_screen.dart';
 
@@ -20,31 +16,12 @@ const _scapeId = 'waterfall';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kProbe) {
-    runApp(
-      MaterialApp(
-        title: 'fiatsonus probe',
-        home: ProbePicker(
-          onPick: (sink) {
-            if (sink == 'pcm') startPcmRelay();
-            _run(probeEntryPoints[sink]!);
-          },
-        ),
-      ),
-    );
-    return;
-  }
-  await _run(engineIsolateMain);
-}
-
-Future<void> _run(EngineEntryPoint entryPoint) async {
   final engine = await IsolateEngineClient.spawn(
     sampleRate: await _outputSampleRate(),
     seed: DateTime.now().microsecondsSinceEpoch & 0x7fffffff,
     tempDirPath: (await getTemporaryDirectory()).path,
-    entryPoint: entryPoint,
+    entryPoint: engineIsolateMain,
   );
-  if (kProbe) probeEngine = engine;
   final focus = await AudioSessionFocus.create();
   final handler = await AudioService.init(
     builder: () => PlaybackHandler(

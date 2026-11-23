@@ -216,14 +216,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_pcm_sound:
-    dependency: transitive
-    description:
-      name: flutter_pcm_sound
-      sha256: "15c6894da8195122001375084d51449bd77849579c93fca2800c00b615699dc0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.3"
   flutter_soloud:
     dependency: transitive
     description:
@@ -436,14 +428,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  mp_audio_stream:
-    dependency: transitive
-    description:
-      name: mp_audio_stream
-      sha256: a3d084a5eb058f643e4a3f33f61d960b086885122f0871afa2c7a5aaacb72050
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   native_toolchain_c:
     dependency: transitive
     description:

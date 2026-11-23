@@ -83,10 +83,6 @@ start_app() {
     for ((i = 0; i < 10; i++)); do
       if [ -n "$(a shell logcat -d --pid "$pid" -s flutter:I | tr -d '\r' | grep -F ' flutter ' || true)" ]; then
         sleep 2
-        if [ -n "${FIATSONUS_PROBE_SINK:-}" ]; then
-          "$DEVICE_DIR/ui_tap.sh" "Sink $FIATSONUS_PROBE_SINK"
-          sleep 3
-        fi
         return 0
       fi
       sleep 1

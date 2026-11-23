@@ -3,7 +3,6 @@ import 'package:material_ui/material_ui.dart';
 
 import '../engine/engine_stats.dart';
 import '../playback/playback_handler.dart';
-import '../probe/probe_flag.dart';
 
 /// The spike's only screen: play/stop, one slider per parameter and the
 /// engine's counters.
@@ -66,26 +65,6 @@ final class _DebugScreenState extends State<DebugScreen> {
                     child: Text(error, key: const Key('error')),
                   ),
           ),
-          if (kProbe) ...[
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    final watch = Stopwatch()..start();
-                    while (watch.elapsedMilliseconds < 2000) {}
-                  },
-                  child: const Text('Stall UI 2 s'),
-                ),
-                const SizedBox(width: 16),
-                OutlinedButton(
-                  onPressed: () =>
-                      probeEngine?.setParam('probe', 'stall_ms', 1000),
-                  child: const Text('Stall engine 1 s'),
-                ),
-              ],
-            ),
-          ],
           const SizedBox(height: 16),
           for (final spec in widget.params) ...[
             Text(spec.label),
