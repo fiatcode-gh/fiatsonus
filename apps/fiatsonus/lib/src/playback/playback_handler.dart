@@ -23,6 +23,7 @@ final class PlaybackHandler extends BaseAudioHandler {
     required EngineClient engine,
     required AudioFocus focus,
     required this._requestNotificationPermission,
+    required this._clearPlaybackNotification,
     required String soundscapeId,
     required String title,
     this._log = logLine,
@@ -40,6 +41,7 @@ final class PlaybackHandler extends BaseAudioHandler {
   final EngineClient _engine;
   final AudioFocus _focus;
   final Future<void> Function() _requestNotificationPermission;
+  final Future<void> Function() _clearPlaybackNotification;
   final String _id;
   final void Function(String line) _log;
 
@@ -145,6 +147,11 @@ final class PlaybackHandler extends BaseAudioHandler {
     }
   }
 
+  /// Idle with `playing: false` makes audio_service leave the foreground and
+  /// cancel its notification. Android strips the notification's
+  /// foreground-service flag asynchronously and ignores an app's cancel
+  /// while the flag is set, so audio_service's cancel can be lost;
+  /// [_clearPlaybackNotification] cancels it again once the flag is gone.
   void _finish() {
     _setPhase(PlaybackPhase.idle);
     playbackState.add(
@@ -154,6 +161,7 @@ final class PlaybackHandler extends BaseAudioHandler {
       ),
     );
     unawaited(_focus.abandon());
+    unawaited(_clearPlaybackNotification());
   }
 
   void _startEngine() {

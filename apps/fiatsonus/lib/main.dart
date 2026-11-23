@@ -8,6 +8,7 @@ import 'src/engine/engine_client.dart';
 import 'src/playback/audio_focus.dart';
 import 'src/playback/notification_permission.dart';
 import 'src/playback/playback_handler.dart';
+import 'src/playback/playback_notification.dart';
 import 'src/sink/engine_entry.dart';
 import 'src/ui/debug_screen.dart';
 
@@ -27,6 +28,7 @@ Future<void> main() async {
       engine: engine,
       focus: focus,
       requestNotificationPermission: requestNotificationPermission,
+      clearPlaybackNotification: clearPlaybackNotification,
       soundscapeId: _scapeId,
       title: 'Waterfall',
     ),

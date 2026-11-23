@@ -15,6 +15,18 @@ class MainActivity : AudioServiceActivity() {
         channel(flutterEngine).setMethodCallHandler { call, result ->
             if (call.method == "request") requestNotifications(result) else result.notImplemented()
         }
+        // Holds only the application context, so it stays registered after
+        // this activity is gone: a notification Stop can come without it.
+        val notification = PlaybackNotification(applicationContext)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, NOTIFICATION_CHANNEL)
+            .setMethodCallHandler { call, result ->
+                if (call.method == "clear") {
+                    notification.clear()
+                    result.success(null)
+                } else {
+                    result.notImplemented()
+                }
+            }
     }
 
     // The engine is cached by audio_service and outlives this activity.
@@ -53,6 +65,7 @@ class MainActivity : AudioServiceActivity() {
 
     private companion object {
         const val CHANNEL = "fiatsonus/notification_permission"
+        const val NOTIFICATION_CHANNEL = "fiatsonus/playback_notification"
         const val REQUEST_CODE = 1001
     }
 }

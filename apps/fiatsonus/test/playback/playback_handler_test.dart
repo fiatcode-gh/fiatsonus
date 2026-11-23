@@ -29,6 +29,9 @@ final class _Rig {
           () async {
             permissionRequests++;
           },
+      clearPlaybackNotification: () async {
+        notificationClears.add(handler.playbackState.value.processingState);
+      },
       soundscapeId: _scape,
       title: 'Waterfall',
       log: log.add,
@@ -39,6 +42,9 @@ final class _Rig {
   final FakeAudioFocus focus;
   final List<String> log = [];
   int permissionRequests = 0;
+
+  /// The processing state at each `clearPlaybackNotification` call.
+  final List<AudioProcessingState> notificationClears = [];
   late final PlaybackHandler handler;
 
   PlaybackPhase get phase => handler.phase.value;
@@ -107,6 +113,7 @@ void main() {
       expect(rig.phase, PlaybackPhase.stopping);
       expect(rig.state.playing, isTrue);
       expect(rig.focus.abandons, 0);
+      expect(rig.notificationClears, isEmpty);
 
       await rig.engineState(false);
 
@@ -114,6 +121,7 @@ void main() {
       expect(rig.state.processingState, AudioProcessingState.idle);
       expect(rig.state.playing, isFalse);
       expect(rig.focus.abandons, 1);
+      expect(rig.notificationClears, [AudioProcessingState.idle]);
     });
   }
 
@@ -156,6 +164,7 @@ void main() {
       expect(rig.state.playing, isTrue);
       expect(rig.state.processingState, AudioProcessingState.ready);
       expect(states.map((s) => s.playing), everyElement(isTrue));
+      expect(rig.notificationClears, isEmpty);
     },
   );
 
@@ -286,6 +295,7 @@ void main() {
     expect(rig.state.processingState, AudioProcessingState.idle);
     expect(rig.handler.lastError.value, 'sink failed');
     expect(rig.focus.abandons, 1);
+    expect(rig.notificationClears, [AudioProcessingState.idle]);
   });
 
   test('stats events reach the stats listenable', () async {

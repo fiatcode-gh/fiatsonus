@@ -17,6 +17,7 @@ final class _Rig {
       engine: engine,
       focus: focus,
       requestNotificationPermission: () async {},
+      clearPlaybackNotification: () async {},
       soundscapeId: _scape,
       title: 'Waterfall',
       log: (_) {},
