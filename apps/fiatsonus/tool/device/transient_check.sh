@@ -26,17 +26,6 @@ if [ "$zen" != 0 ] || [ "$ringer" != 2 ]; then
   exit 2
 fi
 
-# The isForeground= value of the AudioService record ("none" without one).
-service_foreground_value() {
-  services_dump | awk '
-    /^[[:space:]]*\* ServiceRecord\{/ { in_svc = ($0 ~ /AudioService[[:space:]}]/); next }
-    /^ {0,2}[^ ]/ { in_svc = 0 }
-    in_svc && match($0, /(^|[[:space:]])isForeground=[a-z]+/) {
-      value = substr($0, RSTART, RLENGTH); sub(/^[[:space:]]*/, "", value)
-    }
-    END { print (value == "" ? "isForeground=none" : value) }'
-}
-
 session_state() {
   a shell dumpsys media_session | tr -d '\r' |
     awk '/state=PlaybackState \{state=/ && !seen {

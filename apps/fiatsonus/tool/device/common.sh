@@ -119,6 +119,17 @@ service_present() {
     END { exit !found }'
 }
 
+# The isForeground= value of the AudioService record ("none" without one).
+service_foreground_value() {
+  services_dump | awk '
+    /^[[:space:]]*\* ServiceRecord\{/ { in_svc = ($0 ~ /AudioService[[:space:]}]/); next }
+    /^ {0,2}[^ ]/ { in_svc = 0 }
+    in_svc && match($0, /(^|[[:space:]])isForeground=[a-z]+/) {
+      value = substr($0, RSTART, RLENGTH); sub(/^[[:space:]]*/, "", value)
+    }
+    END { print (value == "" ? "isForeground=none" : value) }'
+}
+
 notification_dump() { a shell dumpsys notification --noredact | tr -d '\r'; }
 
 # The NotificationRecord blocks of $PKG in the posted "Notification List"
