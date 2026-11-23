@@ -170,6 +170,33 @@ void main() {
     },
   );
 
+  test('after an uncaught isolate error every start is answered with the '
+      'error and the stopped state', () async {
+    final client = await _spawn(crashingEngineMain);
+    addTearDown(client.dispose);
+    final rec = _Recorder(client);
+    addTearDown(rec.cancel);
+
+    for (var round = 1; round <= 3; round++) {
+      client.start(_scape, fade: _fade);
+      await rec.until(() => rec.states.length == round);
+
+      expect(rec.events, hasLength(2 * round));
+      expect(
+        rec.events[2 * round - 2],
+        isA<EngineError>().having(
+          (e) => e.message,
+          'message',
+          contains('engine crashed'),
+        ),
+      );
+      expect(
+        rec.events[2 * round - 1],
+        isA<EngineStateChanged>().having((e) => e.playing, 'playing', false),
+      );
+    }
+  });
+
   test('dispose closes events', () async {
     final client = await _spawn(fakeEngineMain);
     final rec = _Recorder(client);

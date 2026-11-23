@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:fiatsonus/src/engine/device_sink.dart';
@@ -11,6 +12,12 @@ void fakeEngineMain(List<Object> boot) {
 /// Engine isolate entry point on a sink whose `start` always throws.
 void failingEngineMain(List<Object> boot) {
   runEngineIsolate(boot, _FailingSink.new);
+}
+
+/// Engine isolate entry point on a sink whose first `start` throws outside
+/// every `try`, which ends the isolate.
+void crashingEngineMain(List<Object> boot) {
+  runEngineIsolate(boot, _CrashingSink.new);
 }
 
 /// A [DeviceSink] that paces writes on the event queue and throws on any
@@ -68,6 +75,31 @@ final class _FailingSink implements DeviceSink {
   @override
   Future<void> write(Int16List interleaved) =>
       throw StateError('write on a failed sink');
+
+  @override
+  Future<void> stop() => Future<void>.delayed(Duration.zero);
+}
+
+/// A [DeviceSink] whose `start` raises an uncaught error in the isolate.
+final class _CrashingSink implements DeviceSink {
+  @override
+  String get id => 'crashing';
+
+  @override
+  int get underruns => 0;
+
+  @override
+  int get starvedMicros => 0;
+
+  @override
+  Future<void> start({required int sampleRate, required int channels}) {
+    Timer.run(() => throw StateError('engine crashed'));
+    return Completer<void>().future;
+  }
+
+  @override
+  Future<void> write(Int16List interleaved) =>
+      throw StateError('write on a crashed engine');
 
   @override
   Future<void> stop() => Future<void>.delayed(Duration.zero);

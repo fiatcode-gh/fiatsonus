@@ -34,6 +34,9 @@ final class IsolateEngineClient implements EngineClient {
   /// Id of the engine's sink, from its `ready` event.
   final String sinkId;
 
+  /// The first uncaught isolate error after `ready`; the isolate is dead.
+  String? _failure;
+
   IsolateEngineClient._(
     this._isolate,
     this._commands,
@@ -58,10 +61,11 @@ final class IsolateEngineClient implements EngineClient {
     final events = StreamController<EngineEvent>.broadcast();
     final ready = Completer<EngineReady>();
     SendPort? commands;
+    IsolateEngineClient? client;
 
     void fail(String message) {
       if (ready.isCompleted) {
-        events.add(EngineError(message));
+        client?._died(message);
       } else {
         ready.completeError(StateError(message));
       }
@@ -111,7 +115,7 @@ final class IsolateEngineClient implements EngineClient {
       await events.close();
       rethrow;
     }
-    return IsolateEngineClient._(
+    return client = IsolateEngineClient._(
       isolate,
       commands!,
       eventPort,
@@ -125,9 +129,28 @@ final class IsolateEngineClient implements EngineClient {
   @override
   Stream<EngineEvent> get events => _events.stream;
 
+  /// An uncaught error ends the engine isolate (errors are fatal there), so
+  /// nothing answers a later command. From then on the client answers every
+  /// `start` itself, the way a failed sink does (PLAN 4.4).
+  void _died(String message) {
+    _failure ??= message;
+    _reportFailure();
+  }
+
+  void _reportFailure() {
+    _events
+      ..add(EngineError(_failure!))
+      ..add(const EngineStateChanged(playing: false));
+  }
+
   @override
-  void start(String soundscapeId, {required Duration fade}) =>
-      _commands.send(EngineCommand.start(soundscapeId, fade));
+  void start(String soundscapeId, {required Duration fade}) {
+    if (_failure != null) {
+      _reportFailure();
+      return;
+    }
+    _commands.send(EngineCommand.start(soundscapeId, fade));
+  }
 
   @override
   void stop(String soundscapeId, {required Duration fade}) =>
