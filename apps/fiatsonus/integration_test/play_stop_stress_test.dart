@@ -65,6 +65,31 @@ void main() {
     expect(stat('overlaps'), 0);
     expect(stat('faults'), 0);
 
+    // The taps never reach idle (a stop takes about 3.5 s), so the stop's
+    // notification repair (PLAN 4.6) runs only after them. Each replay plays
+    // 0–99 ms after idle was seen, while that repair may still be polling.
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(Duration(milliseconds: 11 * i));
+      await tester.tap(playStop);
+      await pumpUntil(
+        () => phase() == 'playing',
+        const Duration(seconds: 5),
+        'phase playing in replay ${i + 1}',
+      );
+      await tester.pump(const Duration(seconds: 3));
+      expect(find.byKey(const Key('error')), findsNothing);
+      await tester.tap(playStop);
+      await pumpUntil(
+        () => phase() == 'idle',
+        const Duration(seconds: 8),
+        'phase idle in replay ${i + 1}',
+      );
+      // ignore: avoid_print
+      print('FLOW replay n=${i + 1} delay_ms=${11 * i}');
+    }
+    expect(stat('overlaps'), 0);
+    expect(stat('faults'), 0);
+
     await tester.tap(playStop);
     await pumpUntil(
       () => phase() == 'playing',
@@ -115,5 +140,5 @@ void main() {
       'phase idle',
     );
     expect(find.byKey(const Key('error')), findsNothing);
-  }, timeout: const Timeout(Duration(minutes: 3)));
+  }, timeout: const Timeout(Duration(minutes: 5)));
 }
