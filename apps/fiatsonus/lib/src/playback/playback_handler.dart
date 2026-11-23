@@ -57,6 +57,9 @@ final class PlaybackHandler extends BaseAudioHandler {
   bool _permissionAsked = false;
   bool _reconciling = false;
 
+  /// A focus request is in flight; [_begin] owns its outcome.
+  bool _focusPending = false;
+
   ValueListenable<PlaybackPhase> get phase => _phase;
   ValueListenable<EngineStats?> get stats => _stats;
   ValueListenable<String?> get lastError => _lastError;
@@ -117,14 +120,19 @@ final class PlaybackHandler extends BaseAudioHandler {
         // Playback does not depend on the permission.
       }
     }
-    final ok = await _focus.request();
-    if (!_want) {
-      if (_phase.value == PlaybackPhase.idle) await _focus.abandon();
-      return;
+    final bool ok;
+    _focusPending = true;
+    try {
+      ok = await _focus.request();
+    } finally {
+      _focusPending = false;
     }
-    if (!ok) {
+    if (_want && !ok) {
       _want = false;
       _lastError.value = 'Audio focus denied';
+    }
+    if (!_want) {
+      if (_phase.value == PlaybackPhase.idle) await _focus.abandon();
       return;
     }
     _setPhase(PlaybackPhase.playing);
@@ -160,7 +168,7 @@ final class PlaybackHandler extends BaseAudioHandler {
         playing: false,
       ),
     );
-    unawaited(_focus.abandon());
+    if (!_focusPending) unawaited(_focus.abandon());
     unawaited(_clearPlaybackNotification());
   }
 

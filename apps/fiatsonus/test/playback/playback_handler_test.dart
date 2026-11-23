@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
@@ -265,6 +266,7 @@ void main() {
     expect(rig.handler.lastError.value, 'Audio focus denied');
     expect(rig.engine.calls, isEmpty);
     expect(rig.state.playing, isFalse);
+    expect(rig.focus.ops, ['request', 'abandon']);
   });
 
   test('play while stopping resumes and ignores the late stop', () async {
@@ -282,6 +284,98 @@ void main() {
     expect(rig.phase, PlaybackPhase.playing);
     expect(rig.state.playing, isTrue);
     expect(rig.focus.abandons, 0);
+  });
+
+  group('a replay whose focus request is pending when the stop completes', () {
+    Future<_Rig> stopping() async {
+      final rig = _Rig();
+      await rig.playing();
+      await rig.handler.stop();
+      rig.focus.gate = Completer<void>();
+      return rig;
+    }
+
+    test('keeps the focus it asked for', () async {
+      final rig = await stopping();
+
+      final replay = rig.handler.play();
+      await rig.engineState(false);
+      rig.focus.gate!.complete();
+      await replay;
+      await pumpEventQueue();
+
+      expect(rig.focus.ops, ['request', 'request']);
+      expect(rig.phase, PlaybackPhase.playing);
+      expect(rig.state.playing, isTrue);
+      expect(rig.engine.ops, ['start', 'stop', 'start']);
+    });
+
+    test(
+      'keeps it when a stop and a third tap fall in the same wait',
+      () async {
+        final rig = await stopping();
+
+        final replay = rig.handler.play();
+        rig.handler.toggle();
+        await rig.engineState(false);
+        rig.handler.toggle();
+        rig.focus.gate!.complete();
+        await replay;
+        await pumpEventQueue();
+
+        expect(rig.focus.ops.last, 'request');
+        expect(rig.phase, PlaybackPhase.playing);
+        expect(rig.state.playing, isTrue);
+        expect(rig.engine.ops, ['start', 'stop', 'start']);
+      },
+    );
+
+    test('gives focus up once when the user stopped meanwhile', () async {
+      final rig = await stopping();
+
+      final replay = rig.handler.play();
+      rig.handler.toggle();
+      await rig.engineState(false);
+      rig.focus.gate!.complete();
+      await replay;
+      await pumpEventQueue();
+
+      expect(rig.focus.ops, ['request', 'request', 'abandon']);
+      expect(rig.phase, PlaybackPhase.idle);
+      expect(rig.state.playing, isFalse);
+      expect(rig.engine.ops, ['start', 'stop']);
+    });
+
+    test('gives focus up when the request is denied', () async {
+      final rig = await stopping();
+      rig.focus.grant = false;
+
+      final replay = rig.handler.play();
+      await rig.engineState(false);
+      rig.focus.gate!.complete();
+      await replay;
+      await pumpEventQueue();
+
+      expect(rig.focus.ops, ['request', 'request', 'abandon']);
+      expect(rig.phase, PlaybackPhase.idle);
+      expect(rig.handler.lastError.value, 'Audio focus denied');
+      expect(rig.engine.ops, ['start', 'stop']);
+    });
+
+    test('gives focus up once when the engine fails meanwhile', () async {
+      final rig = await stopping();
+
+      final replay = rig.handler.play();
+      rig.engine.push(const EngineError('sink failed'));
+      await pumpEventQueue();
+      rig.focus.gate!.complete();
+      await replay;
+      await pumpEventQueue();
+
+      expect(rig.focus.ops, ['request', 'request', 'abandon']);
+      expect(rig.phase, PlaybackPhase.idle);
+      expect(rig.engine.ops, ['start', 'stop']);
+    });
   });
 
   test('an engine error while playing goes idle', () async {
@@ -347,6 +441,7 @@ void main() {
         expect(ops[i], isNot(ops[i - 1]), reason: 'engine call $i');
       }
       expect(ops.last, want ? 'start' : 'stop');
+      expect(rig.focus.ops.last, want ? 'request' : 'abandon');
     });
   }
 
