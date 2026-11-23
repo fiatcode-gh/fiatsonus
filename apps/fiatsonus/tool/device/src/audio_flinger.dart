@@ -29,10 +29,10 @@ class AudioFlingerThread {
 final _threadHeader = RegExp(r'^\w+ thread 0x[0-9a-f]+, name (\S+?),');
 final _sampleRate = RegExp(r'^  Sample rate: (\d+) Hz');
 final _trackCount = RegExp(r'^\s+\d+ Tracks');
-// Optional type letter, track id, active flag, client pid/uid. Rows of a
+// Optional type (`S`, `F1`), track id, active flag, client pid/uid. Rows of a
 // thread's local log start with a timestamp and never match.
 final _trackRow = RegExp(
-  r'^\s+(?:\S\s+)?(\d+)\s+(?:yes|no)\s+(\d+)/\s*(\d+)\s',
+  r'^\s+(?:\S+\s+)?(\d+)\s+(?:yes|no)\s+(\d+)/\s*(\d+)\s',
 );
 
 /// Parses the threads of a `dumpsys media.audio_flinger` dump with the rows
