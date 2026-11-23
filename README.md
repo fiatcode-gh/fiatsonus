@@ -77,6 +77,20 @@ from release builds.
   and counts leftover notifications, services and wake locks.
 - `tool/device/foreground_watch.sh <outdir> [command]`: samples the service's
   foreground state and the notification's flag while a command runs.
+- `tool/device/install.sh [--profile] --target=lib/bench_main.dart
+  [--dart-define=FIATSONUS_BENCH_MODE=loop]`: builds and installs the bench
+  target instead of the app: `measure` (the default) logs the 28 render
+  digests and the stage benchmark, `loop` renders the full path for 90 s.
+- `tool/device/bench_run.sh <outdir> [--profile <seconds>]`: runs the
+  installed bench target and saves its digests, bench lines, thread
+  residency and battery; with `--profile` (profile build) it also captures
+  the bench isolate's CPU profile.
+- `dart tool/device/bench_report.dart --phone <bench.txt> [--desktop <file>]
+  [--base-phone <bench.txt>] [--base-desktop <file>]`: stage and share tables
+  of a phone bench run against the desktop `stage_bench` and earlier runs.
+- `tool/device/cpu_profile.sh <outdir> <seconds> <isolate-name-part>`: records
+  one isolate's Dart CPU samples from the running profile build into
+  `cpu_samples.json` and the function table `cpu_top.txt`.
 - `integration_test/sink_smoke_test.dart`: the engine isolate plays the
   waterfall through the soloud sink.
 - `integration_test/playback_flow_test.dart`: the app plays the waterfall
