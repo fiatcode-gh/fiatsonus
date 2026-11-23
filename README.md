@@ -92,6 +92,8 @@ All from `packages/fiatsonus_engine`:
 dart run tool/render.dart --scape waterfall --seed 42 --secs 120 --param height=0.8
 dart run tool/listening_set.dart
 mkdir -p build && dart compile exe tool/bench.dart -o build/bench && build/bench --min-factor 150
+dart compile exe tool/digest.dart -o build/digest && build/digest > build/digests.txt && build/digest --check build/digests.txt
+dart compile exe tool/stage_bench.dart -o build/stage_bench && build/stage_bench
 dart test -t soak
 ```
 
@@ -103,6 +105,14 @@ dart test -t soak
   below the given median. The number counts only on the AOT build
   (`dart compile exe`); under `dart run` it reports but refuses
   `--min-factor`.
+- `digest` renders 28 scripted cases (sessions with param changes, gain
+  steps and fades, 5-minute runs, voice stealing) and prints one FNV-1a 64
+  hash per case. `--check <file>` renders and compares with a saved list,
+  `--compare <a> <b>` compares two lists (desktop or phone logcat) without
+  rendering; both exit 1 on any difference. Hashes are per platform.
+- `stage_bench` times each stage of the engine path (full master, the whole
+  soundscape, the bus, each layer solo, reverb, limiter) and prints the
+  shares computed from the per-stage medians as `FBENCH` lines.
 - `dart test -t soak` runs the long-run checks (8 simulated hours per rate).
 
 `out/` and `build/` are not committed.
