@@ -372,29 +372,23 @@ Rain is parked. The prototype (v6, browser Web Audio) is the reference and is "g
 
 ## Flutter platform notes
 
-Flutter has no built-in way to play generated audio, so the app needs a plugin that accepts raw PCM (pulse-code modulation) samples. One checked candidate is `flutter_pcm_sound`. Other candidates were not checked yet.
+Flutter has no built-in way to play generated audio, so the app needs a plugin that accepts raw PCM (pulse-code modulation) samples. Unit 2 probed three on the phone (`flutter_soloud`, `flutter_pcm_sound`, `mp_audio_stream`) and chose `flutter_soloud` 5.3.1. The numbers and the reasons are in `docs/decisions/platform-spike.md`.
 
-**What was checked about `flutter_pcm_sound`** ([pub.dev](https://pub.dev/packages/flutter_pcm_sound), [GitHub](https://github.com/chipweinberger/flutter_pcm_sound))
+**What was built**
 
-- It sends real-time 16-bit integer PCM to the device speakers.
-- It is not for audio files. It is meant for apps that generate audio shortly before it plays.
-- It uses an event-based feed callback: you set a feed threshold, and it calls you when the queued frames fall below it.
-- Its pub.dev score page lists Android, iOS, and macOS as supported, and Linux, Windows, and Web as not supported.
+- The engine runs in one spawned Dart isolate, alive for the process. It owns the master, the sink pump and the sink, and uses no platform channel.
+- The sink is `flutter_soloud`'s pull stream: its demand callback (`onMoreDataIsNeeded`) arrives in the engine isolate. The pump renders a chunk and awaits `write`, which waits for demand; no timer schedules audio. `flutter_pcm_sound` was rejected because its callback reaches only the UI isolate, so a UI stall starves it; `mp_audio_stream` has no demand signal and needs a timer.
+- The master converts to 16-bit integers; the sink hands interleaved stereo to the stream.
+- `audio_service` 0.18.19 runs the foreground service (`mediaPlayback`) with a Stop-only notification; `audio_session` 0.2.4 handles audio focus.
+- The `AudioSink` interface still separates the engine from the plugin, so a native core can replace the Dart DSP without changing the recipes.
+- Desktop Linux plays nothing; use the offline WAV renderer there.
 
-**What this means for the design**
+**Checked in unit 2 (details in `docs/decisions/platform-spike.md`)**
 
-- The engine outputs float samples. The master converts to 16-bit integers just before the sink. This matches the plugin.
-- Use a large feed threshold (100–200 ms of frames). The plugin's own docs warn that feed callbacks can bunch up behind Dart UI work.
-- Render audio in a separate Dart isolate, so UI work does not starve the audio.
-- Desktop Linux is not supported by this plugin. For testing on a Linux desktop, use the offline WAV renderer (see testing), not live playback.
-- Keep the plugin behind the `AudioSink` interface. If Dart DSP turns out too slow, the same contract can move to a native core (C or Rust over FFI, foreign function interface) without changing soundscape recipes.
-
-**Not checked yet (must verify before building)**
-
-- [ ] Background playback with the screen off on Android (foreground service) and iOS (audio session category). This is critical for long background listening.
-- [ ] Whether the feed callback runs reliably when the app is in the background.
-- [ ] CPU cost of the Dart DSP core on a low-end Android phone.
-- [ ] Other PCM or synthesis plugins, for comparison.
+- [x] Background playback with the screen off on Android: one hour screen off on a vivo (Android 16) through the foreground service, zero underruns. iOS is not built.
+- [x] The feed in the background: the pull-stream callback kept the feed going with the screen off for the whole hour; the counters and the session's lead line show no gap.
+- [x] CPU cost of the Dart DSP core: 17.35 % of one core on a mid-range phone, over the 5 % budget; a low-end phone was not measured.
+- [x] Other PCM plugins: `flutter_pcm_sound` and `mp_audio_stream` were probed beside `flutter_soloud`; neither meets the constraints.
 
 ## Testing and acceptance
 
@@ -432,8 +426,8 @@ A small command-line tool renders any soundscape with a seed, a duration, and pa
 
 ## Open questions
 
-- [ ] Which audio plugin? `flutter_pcm_sound` is checked for its basics only. Background playback is the deciding test.
-- [ ] Dart DSP or a native core? Start in Dart, measure CPU on a low-end phone, then decide.
+- [x] Which audio plugin? `flutter_soloud` (pull stream in the engine isolate); see `docs/decisions/platform-spike.md`.
+- [x] Dart DSP or a native core? A native core: the Dart engine measured 17.35 % of one core on the phone, over the 5 % budget. Profile the Dart engine on ARM first; see `docs/decisions/platform-spike.md`.
 - [x] Build order: engine primitives + waterfall first (unit 1), then ocean, stream, forest, city.
 - [ ] Scene mixing: can users stack soundscapes (for example ocean + forest)? The master supports it. The UI needs a design.
 - [ ] Timer and fade-out length.
@@ -461,3 +455,37 @@ A small command-line tool renders any soundscape with a seed, a duration, and pa
 - Click check: the largest sample-to-sample jump divided by the RMS of the jumps in the 2048 samples before it must stay at or below 12. Fades and param steps are also proven exactly against a twin render.
 - Long run: 8 simulated hours on the AOT build with the VM's GC log on. Pass: no garbage collection during the run, memory spread within 4 MiB, at most 64 voices, the loudness of the first 60 s of every ten-minute window within ±0.5 LU of the first window's.
 - CPU: the benchmark reports the realtime factor on the AOT build. Unit 1 target: waterfall defaults at 48 kHz render at 150× realtime or faster on one desktop core.
+
+## Unit decisions: platform-spike (unit 2)
+
+- App: `apps/fiatsonus`, application id `dev.fiatcode.fiatsonus`, Android only. One `Isolate.spawn` engine isolate, spawned at app start with `[SendPort events, int sampleRate, int seed, String tempDirPath]`; it answers `['port', SendPort commands]`, then `ready`.
+- Protocol (plain lists; malformed or unknown messages are ignored without an event):
+
+| Direction | Message |
+| --- | --- |
+| UI → engine | `['start', soundscapeId, fadeMs]` |
+| UI → engine | `['stop', soundscapeId, fadeMs]` |
+| UI → engine | `['param', soundscapeId, paramId, value]` |
+| engine → UI | `['ready', sampleRate, sinkId]` |
+| engine → UI | `['state', playing]` (`true` when a session opens the sink, `false` after it closes it) |
+| engine → UI | `['stats', playMicros, renderMicros, maxRenderMicros, frames, underruns, starvedMicros, overlaps, faults, sessions]` |
+| engine → UI | `['error', message]` |
+
+- Sizes: chunk 2048 frames; sink buffer 8192 frames (171 ms at 48 kHz, 186 ms at 44.1 kHz); `bufferTriggerPosition` 0.1.
+- Fades: play 2000 ms, stop 3000 ms, interruption 200 ms; a sink failure stops every soundscape with a 5 ms fade.
+- Drain: 500 ms of silence after the master is silent, then the sink closes.
+- Sample rate: the device's output rate when it is 44100 or 48000 Hz, otherwise 48000 Hz. Seed: the current time in microseconds, masked to 31 bits.
+- Sessions (S6 across isolates): every start appends one session to a single future chain with a generation number; a superseded session returns, so one pump loop runs at a time.
+- Underruns: the lead (pull-buffer end minus voice position) is sampled at each demand; the maximum per block of 64 demands is compared with the reference set by the second block, and a drop of more than one chunk counts as one underrun.
+- Statistics: a `stats` event every second of audio and at session end; a log line every 10 s of audio and at session end:
+
+```text
+FSTAT v=1 sink=<id> rate=<hz> play_us=<n> render_us=<n> max_render_us=<n> frames=<n> underruns=<n> starved_us=<n> overlaps=<n> faults=<n> sessions=<n>
+FSTATE phase=<idle|playing|interrupted|stopping>
+FLEAD sink=soloud ref_us=<n> jitter_us=<n> underruns=<n> starved_us=<n>      (once, when the sink stops)
+```
+
+- Engine CPU = `render_us / play_us`, render time measured from the pump's chunk start to the entry of `write`.
+- Focus: `audio_session` with media/music attributes, gain type `gain`, pause when ducked. A transient loss stops the engine with the 200 ms fade and keeps `playing: true` with `processingState: buffering`; a gain resumes only from `interrupted`. A permanent loss, a notification stop and an in-app stop end with `playing: false` and idle together, the service leaves the foreground and focus is abandoned; only a tap in the app starts again. The finish step abandons focus except while a request is in flight, then the request's caller decides; a denied request is abandoned.
+- Notification: Stop only; `pause` acts as stop. After idle the app polls its own notifications every 50 ms for at most 5 s and cancels notification 1124 once its foreground flag is gone.
+- Measured (vivo, Android 16, release, screen off, speaker): engine CPU 17.35 % of one core, process CPU 19.71 %, zero underruns over 1 h 48 min, about 80 mAh/h for the whole phone with the screen off.

@@ -5,14 +5,26 @@ and no network. Use it for anything: sleep, study, work, commute or focus.
 
 ## Status
 
-Unit 1: the engine core and the waterfall soundscape, desktop offline
-rendering only. No app yet.
+Unit 1: the engine core and the waterfall soundscape, proven by offline
+renders on desktop.
+
+Unit 2 (platform-spike): the Android app plays the waterfall on a phone. The
+engine runs in its own isolate and feeds `flutter_soloud`'s pull stream;
+`audio_service` keeps playback going with the screen off as a foreground
+service with a Stop notification; audio focus pauses and resumes it. A debug
+screen has Play/Stop and the live counters. Measured on a vivo (Android 16):
+one hour screen off with zero underruns, engine CPU 17.35 % of one core
+(over the 5 % limit, so the record recommends a native core after profiling
+the Dart engine on ARM), about 80 mAh/h for the whole phone. See
+[docs/decisions/platform-spike.md](docs/decisions/platform-spike.md).
 
 ## Layout
 
 - `packages/fiatsonus_engine`: the pure Dart engine.
-- `docs/`: the design reference.
-- `apps/fiatsonus`: the Android app (engine host only so far).
+- `apps/fiatsonus`: the Android app (package `dev.fiatcode.fiatsonus`):
+  engine isolate, sink, playback service, debug screen, and the device tools
+  under `tool/device/`.
+- `docs/`: the design reference and the decision records.
 
 ## Checks
 
@@ -22,20 +34,55 @@ From the repository root:
 flutter pub get
 dart format --output=none --set-exit-if-changed .
 flutter analyze --fatal-infos
+(cd packages/fiatsonus_engine && dart test -x soak)
+(cd apps/fiatsonus && tool/test.sh)
 ```
 
-From `packages/fiatsonus_engine`:
+`tool/test.sh` runs the app's host tests. `flutter_soloud`'s build hook needs
+a clang, so the script puts the newest Android NDK's clang on PATH when none
+exists. Do not call `flutter test` directly for the app, and start the app's
+Dart tools as `dart tool/…/x.dart`, not `dart run`, for the same reason.
 
-```sh
-dart test -x soak   # fast suite
-dart test -t soak   # long-run checks
-```
+`dart test -t soak` in `packages/fiatsonus_engine` runs the engine's long-run
+checks.
 
-From `apps/fiatsonus`:
+## Device
 
-```sh
-tool/test.sh        # host tests; puts an NDK clang on PATH when none exists
-```
+From `apps/fiatsonus`, with one phone on adb. Installs need a touch on the
+phone (Play's install check); the scripts print `TOUCH THE PHONE NOW` and
+retry once a minute for up to 30 minutes. Performance numbers count only
+from release builds.
+
+- `tool/device/install.sh [--profile]`: builds the release (or profile) APK,
+  installs it and grants the notification permission.
+- `tool/device/drive.sh integration_test/<file>.dart`: runs one on-device test
+  in profile mode and keeps the app installed.
+- `tool/device/play.sh`: starts the app and taps Play.
+- `tool/device/ui_tap.sh <label>`: taps the on-screen node with that label.
+- `tool/device/snapshot.sh <dir>`: writes one snapshot (stats, CPU, cores,
+  AudioFlinger, battery, services) for the report.
+- `dart tool/device/report.dart --t0 <dir> --t1 <dir>`: turns two snapshots
+  into `RESULT` lines, a `CPU` line and a `PASS`/`FAIL` verdict.
+- `tool/device/screen_off_run.sh <minutes> <outdir>`: play, screen off,
+  report, stop and check that the service is gone.
+- `tool/device/soak_begin.sh <outdir>` and `tool/device/soak_end.sh <outdir>`:
+  the two halves of the one-hour unplugged soak with the battery window.
+- `tool/device/call_watch.sh <outdir>`: watches a long interruption pause and
+  resume playback with the service in the foreground.
+- `tool/device/transient_check.sh <outdir>`: causes short focus losses with
+  the screen off and checks pause, resume and the foreground service.
+- `tool/device/notification_stop.sh <outdir>`: stops from the notification and
+  checks the service and the notification are gone.
+- `tool/device/stop_loop.sh <outdir> <n> <inapp|notif>`: repeats play and stop
+  and counts leftover notifications, services and wake locks.
+- `tool/device/foreground_watch.sh <outdir> [command]`: samples the service's
+  foreground state and the notification's flag while a command runs.
+- `integration_test/sink_smoke_test.dart`: the engine isolate plays the
+  waterfall through the soloud sink.
+- `integration_test/playback_flow_test.dart`: the app plays the waterfall
+  through the foreground service.
+- `integration_test/play_stop_stress_test.dart`: 100 fast play/stop taps, then
+  ten quick replays after stop.
 
 ## Tools
 
