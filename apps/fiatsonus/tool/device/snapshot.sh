@@ -26,17 +26,20 @@ raw=$(a shell "
   [ -n \"\$pid\" ] && cat /proc/\$pid/stat
   echo '@@task'
   [ -n \"\$pid\" ] && cat /proc/\$pid/task/*/stat
+  echo '@@tis'
+  [ -n \"\$pid\" ] && for t in /proc/\$pid/task/*; do echo \"tid=\${t##*/}\"; cat \$t/time_in_state 2>/dev/null; done
   echo '@@cpufreq'
   for c in /sys/devices/system/cpu/cpu[0-9]*; do
     echo \"\${c##*/} cur_khz=\$(cat \$c/cpufreq/scaling_cur_freq 2>/dev/null) max_khz=\$(cat \$c/cpufreq/cpuinfo_max_freq 2>/dev/null)\"
   done
   true
 " | tr -d '\r')
-for f in time.txt pid.txt proc_stat.txt task_stat.txt cpufreq.txt; do : >"$dir/$f"; done
+for f in time.txt pid.txt proc_stat.txt task_stat.txt task_time_in_state.txt cpufreq.txt; do : >"$dir/$f"; done
 awk -v dir="$dir" '
   /^@@pid$/ { file = "pid.txt"; next }
   /^@@proc$/ { file = "proc_stat.txt"; next }
   /^@@task$/ { file = "task_stat.txt"; next }
+  /^@@tis$/ { file = "task_time_in_state.txt"; next }
   /^@@cpufreq$/ { file = "cpufreq.txt"; next }
   { print >> (dir "/" (file == "" ? "time.txt" : file)) }' <<<"$raw"
 sed -i '/^$/d' "$dir/pid.txt"

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../tool/device/src/report.dart';
+import '../../tool/device/src/time_in_state.dart';
 import 'fixtures.dart';
 import 'snapshot_pair.dart';
 
@@ -386,6 +387,118 @@ void main() {
         'no local= in t0/time.txt',
       ]);
       expect(reportOf(t0, passingT1()).failures, isEmpty);
+    });
+  });
+
+  group('engine thread residency', () {
+    const residencyKeys = [
+      'engine_thread',
+      'engine_cluster_pct',
+      'engine_mean_khz',
+      'engine_freq_pct',
+      'render_ratio_at_max_freq_pct',
+    ];
+    const file = 'task_time_in_state.txt';
+
+    Map<String, String> withTis(Map<String, String> snapshot, String name) =>
+        snapshot..[file] = fixture('task_time_in_state_$name.txt');
+
+    // Engine thread 10630 (VivoPivotZHP, the largest CPU delta) between the
+    // fixtures: cpu0 691200:500 806400:100 1804800:0, cpu4 691200:5
+    // 2208000:395, 1000 ticks.
+    test('a pair with the file prints the five lines after top_threads', () {
+      final report = reportOf(
+        withTis(passingT0(), 't0'),
+        withTis(t1AtRenderPct(17), 't1'),
+      );
+
+      expect(report.failures, isEmpty);
+      final lines = report.format().split('\n');
+      expect(
+        lines.indexWhere((l) => l.startsWith('RESULT engine_thread=')),
+        greaterThan(lines.indexWhere((l) => l.startsWith('RESULT top_'))),
+      );
+      expect(
+        lines.where(
+          (l) => residencyKeys.any((k) => l.startsWith('RESULT $k=')),
+        ),
+        [
+          'RESULT engine_thread=VivoPivotZHP:10630',
+          'RESULT engine_cluster_pct=cpu0:60.0,cpu4:40.0',
+          'RESULT engine_mean_khz=cpu0:710400,cpu4:2189040',
+          'RESULT engine_freq_pct=cpu0@691200:50.0,cpu4@2208000:39.5,'
+              'cpu0@806400:10.0',
+          'RESULT render_ratio_at_max_freq_pct=10.76',
+        ],
+      );
+      expect(lines[lines.length - 2], startsWith('CPU MISS '));
+    });
+
+    test('render_ratio_at_max_freq_pct is the ratio scaled by frequency', () {
+      final report = reportOf(
+        withTis(passingT0(), 't0'),
+        withTis(t1AtRenderPct(17), 't1'),
+      );
+
+      final delta = timeInStateDelta(
+        parseTaskTimeInState(fixture('task_time_in_state_t0.txt'))[10630]!,
+        parseTaskTimeInState(fixture('task_time_in_state_t1.txt'))[10630]!,
+      );
+      final scale = ['cpu0', 'cpu4'].fold(
+        0.0,
+        (sum, c) =>
+            sum + clusterShare(delta, c) * meanKhz(delta, c) / maxKhz(delta, c),
+      );
+      final renderPct = double.parse(report.results['render_ratio_pct']!);
+      expect(
+        report.results['render_ratio_at_max_freq_pct'],
+        (renderPct * scale).toStringAsFixed(2),
+      );
+    });
+
+    test('a thread without a block at t0 counts from zero', () {
+      final t0 = passingT0()
+        ..[file] = 'tid=10696\ncpu0\n691200 5\ncpu4\n2208000 0\n';
+
+      final report = reportOf(t0, withTis(passingT1(), 't1'));
+
+      expect(report.failures, isEmpty);
+      expect(report.results['engine_cluster_pct'], 'cpu0:62.3,cpu4:37.7');
+    });
+
+    test('a pair without the file prints none and passes', () {
+      final report = reportOf(passingT0(), passingT1());
+
+      expect(report.passed, isTrue);
+      expect(report.results.keys, isNot(anyElement(isIn(residencyKeys))));
+    });
+
+    test('a pair with the file only at t1 prints none and passes', () {
+      final report = reportOf(passingT0(), withTis(passingT1(), 't1'));
+
+      expect(report.passed, isTrue);
+      expect(report.results.keys, isNot(anyElement(isIn(residencyKeys))));
+    });
+
+    test('an engine thread without ticks prints none and passes', () {
+      final report = reportOf(
+        withTis(passingT0(), 't0'),
+        withTis(passingT1(), 't0'),
+      );
+
+      expect(report.passed, isTrue);
+      expect(report.results.keys, isNot(anyElement(isIn(residencyKeys))));
+    });
+
+    test('an unparsable file fails naming it', () {
+      final t1 = passingT1()..[file] = 'tid=10630\ncpu0\nbogus\n';
+
+      final report = reportOf(withTis(passingT0(), 't0'), t1);
+
+      expect(report.failures, [
+        startsWith('unparsable t1/task_time_in_state.txt'),
+      ]);
+      expect(report.results.keys, isNot(anyElement(isIn(residencyKeys))));
     });
   });
 }

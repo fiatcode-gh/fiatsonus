@@ -2,6 +2,7 @@ import 'audio_flinger.dart';
 import 'battery_history.dart';
 import 'fstat.dart';
 import 'proc_stat.dart';
+import 'time_in_state.dart';
 
 /// The files of one snapshot directory, by file name, and its label (`t0`
 /// or `t1`) for messages.
@@ -65,6 +66,9 @@ class _ReportBuilder {
   final results = <String, String>{};
   final failures = <String>[];
 
+  /// The first thread of `top_threads`, the engine thread.
+  ProcStat? _engineThread;
+
   Report build() {
     final time0 = _parse(t0, 'time.txt', _parseTime);
     final time1 = _parse(t1, 'time.txt', _parseTime);
@@ -88,6 +92,7 @@ class _ReportBuilder {
     final f0 = _fstat(t0);
     final f1 = _fstat(t1);
     final renderPct = _fstatResults(f0, f1, wall);
+    _residency(renderPct);
     _audioFlinger(pid0, pid1, f1);
 
     if (renderPct != null && cpuPct != null && cpuPct < 0.5 * renderPct) {
@@ -191,8 +196,73 @@ class _ReportBuilder {
           .take(5)
           .map((d) => '${d.$1.comm}:${pct(d.$2).toStringAsFixed(2)}')
           .join(',');
+      _engineThread = deltas.firstOrNull?.$1;
     }
     return cpuPct;
+  }
+
+  /// The engine thread's cluster and frequency shares between t0 and t1,
+  /// when both snapshots hold `task_time_in_state.txt` and the thread spent
+  /// ticks; information only.
+  void _residency(double? renderPct) {
+    const file = 'task_time_in_state.txt';
+    final engine = _engineThread;
+    if (engine == null ||
+        !t0.files.containsKey(file) ||
+        !t1.files.containsKey(file)) {
+      return;
+    }
+    final tis0 = _parse(t0, file, parseTaskTimeInState);
+    final tis1 = _parse(t1, file, parseTaskTimeInState);
+    final after = tis1?[engine.pid];
+    if (tis0 == null || after == null) return;
+    final TimeInState delta;
+    try {
+      delta = timeInStateDelta(tis0[engine.pid] ?? const {}, after);
+    } on FormatException catch (e) {
+      failures.add('unparsable t1/$file: tid ${engine.pid}: ${e.message}');
+      return;
+    }
+    final total = totalTicks(delta);
+    if (total == 0) return;
+
+    final clusters = delta.keys;
+    results['engine_thread'] = '${engine.comm}:${engine.pid}';
+    results['engine_cluster_pct'] = clusters
+        .map((c) => '$c:${(clusterShare(delta, c) * 100).toStringAsFixed(1)}')
+        .join(',');
+    results['engine_mean_khz'] = clusters
+        .map((c) => '$c:${meanKhz(delta, c).round()}')
+        .join(',');
+    final frequencies =
+        [
+          for (final MapEntry(key: cluster, value: khz) in delta.entries)
+            for (final MapEntry(key: freq, value: ticks) in khz.entries)
+              if (ticks * 100 >= total) (cluster, freq, ticks),
+        ]..sort((a, b) {
+          final byTicks = b.$3.compareTo(a.$3);
+          if (byTicks != 0) return byTicks;
+          final byCluster = a.$1.compareTo(b.$1);
+          return byCluster != 0 ? byCluster : a.$2.compareTo(b.$2);
+        });
+    results['engine_freq_pct'] = frequencies
+        .take(8)
+        .map(
+          (f) => '${f.$1}@${f.$2}:${(f.$3 / total * 100).toStringAsFixed(1)}',
+        )
+        .join(',');
+    if (renderPct == null) return;
+    // Assumes speed proportional to frequency inside a cluster (PLAN D8).
+    final scale = clusters
+        .where((c) => clusterShare(delta, c) > 0)
+        .fold(
+          0.0,
+          (sum, c) =>
+              sum +
+              clusterShare(delta, c) * meanKhz(delta, c) / maxKhz(delta, c),
+        );
+    results['render_ratio_at_max_freq_pct'] = (renderPct * scale)
+        .toStringAsFixed(2);
   }
 
   Fstat? _fstat(Snapshot snapshot) {
