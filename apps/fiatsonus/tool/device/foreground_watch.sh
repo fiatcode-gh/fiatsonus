@@ -5,8 +5,11 @@
 #   <HH:MM:SS.mmm> isForeground=<true|false|none> fgs_flag=<yes|no|absent>
 # then judges the samples. Without a command, judges an existing samples.txt.
 #
-# A miss is a sample with isForeground=true and fgs_flag other than yes whose
-# previous sample is also one; a single such sample is the boundary of a stop.
+# A bad stretch is a run of consecutive samples with isForeground=true and
+# fgs_flag other than yes. A miss is a sample of a bad stretch more than
+# 1000 ms after the stretch's first sample: Android posts a fresh foreground
+# notification a few hundred ms after the service starts, and a stop's
+# boundary is one or two samples, while a lost notification stays missing.
 # Misses go to <outdir>/misses.txt. The command's output goes to
 # <outdir>/command.txt.
 # Usage: tool/device/foreground_watch.sh <outdir> [<command> [args...]]
@@ -61,11 +64,17 @@ fi
 [ -f "$samples" ] || die "no $samples to judge"
 
 read -r total foreground flagged misses < <(awk -v misses="$out/misses.txt" '
+  function ms(t, p) { split(t, p, /[:.]/); return ((p[1] * 60 + p[2]) * 60 + p[3]) * 1000 + p[4] }
   BEGIN { printf "" >misses }
-  { bad = ($2 == "isForeground=true" && $3 != "fgs_flag=yes") }
+  {
+    bad = ($2 == "isForeground=true" && $3 != "fgs_flag=yes")
+    if (bad && !prev_bad) stretch_start = ms($1)
+    since = ms($1) - stretch_start
+    if (since < 0) since += 86400000
+  }
   $2 == "isForeground=true" { foreground++ }
   $2 == "isForeground=true" && $3 == "fgs_flag=yes" { flagged++ }
-  bad && prev_bad { missed++; print >misses }
+  bad && since > 1000 { missed++; print >misses }
   { prev_bad = bad }
   END { printf "%d %d %d %d\n", NR, foreground, flagged, missed }' "$samples")
 
