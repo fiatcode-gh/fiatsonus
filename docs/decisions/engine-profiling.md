@@ -2,7 +2,7 @@
 
 Unit 2b of fiatsonus: find where the engine's CPU (central processing unit) time goes on the phone, make it cheaper in Dart without changing one output sample, and settle the Dart-or-native question. Work commits `359bdbb` to `96c9e56` on `feat/engine-profiling`.
 
-Every number below comes from a file named beside it. Paths are relative to `.flow/evidence/<head>/`, a local directory that is not committed. `H0` is the baseline head `96dfb83`; `HF` is the final head `96c9e56`. A value marked "derived" is arithmetic on the named numbers, not a tool output.
+Every number below comes from a file named beside it. Paths are relative to `.flow/evidence/<head>/`, a local directory that is not committed. `H0` is the baseline head `96dfb83`; `HF` is the measured final code head `96c9e56`. One code commit follows it, `2a417c2`, which creates the shared zero block when `Master` is built instead of in the first render (acceptance finding COR-1). It writes +0.0 over a buffer that is already zero and moves one 1 KiB allocation out of render, so every sample is unchanged (desktop `DIGEST MATCH cases=28` re-run after it) and the phone evidence measured at `HF` carries over. A value marked "derived" is arithmetic on the named numbers, not a tool output.
 
 ## Summary
 
@@ -426,7 +426,7 @@ The decision stands. The contract judges the final head's 10-minute run, and the
   - `Limiter.process` H6 (3.5 %);
   - `Master.render` H10: `setRange` for the copy (1.2 %).
 - **One commit per kept fix, none for a dropped attempt.** Each commit body names its hypothesis, evidence path and numbers. Erratum: the body of `b816c64` gives the desktop texture stage as "2456 -> 2399"; the baseline value is 2520 (`96dfb83/desktop/stage_bench.txt`), so it is 2520 → 2399.
-- **The final head is the stop head.** The burst spike changed no committed file; the final campaign ran at `96c9e56` unchanged.
+- **The final head is the stop head.** The burst spike changed no committed file; the final campaign ran at `96c9e56` unchanged. The later `2a417c2` only moves the zero block's creation out of render (see the note at the top).
 
 ## Rejected alternatives
 
