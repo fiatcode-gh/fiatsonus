@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:fiatsonus_engine/src/core/engine_constants.dart';
 import 'package:fiatsonus_engine/src/primitives/biquad.dart';
 import 'package:fiatsonus_engine/src/primitives/noise_table.dart';
+import 'package:fiatsonus_engine/src/primitives/rng.dart';
 import 'package:test/test.dart';
 
 import '../support/signals.dart';
@@ -70,6 +71,55 @@ double _bandLevel(Float32List buf, int rate, double hz) {
 
 Float32List _ramp(int length, double offset) =>
     Float32List.fromList([for (var i = 0; i < length; i++) offset + i]);
+
+Float32List _filled(int size, Rng rng) => Float32List.fromList([
+  for (var i = 0; i < size; i++) rng.nextU32() / 4294967296.0,
+]);
+
+Uint32List _bits(Float32List buf) => Uint32List.sublistView(buf);
+
+/// The per-frame loop `NoiseTable.read` (add: false) and `mix` (add: true)
+/// used before the split at the wrap point.
+int _refRead(
+  NoiseTable t,
+  Float32List outL,
+  Float32List outR,
+  int pos,
+  int frames,
+  double gain, {
+  required bool add,
+}) {
+  final l = t.left, r = t.right, n = l.length;
+  for (var i = 0; i < frames; i++) {
+    if (add) {
+      outL[i] += l[pos] * gain;
+      outR[i] += r[pos] * gain;
+    } else {
+      outL[i] = l[pos] * gain;
+      outR[i] = r[pos] * gain;
+    }
+    if (++pos == n) pos = 0;
+  }
+  return pos;
+}
+
+/// The per-frame loop `NoiseTable.readMono` used before the split.
+int _refReadMono(
+  NoiseTable t,
+  Float32List out,
+  int channel,
+  int pos,
+  int start,
+  int end,
+) {
+  final src = channel == 0 ? t.left : t.right;
+  final n = src.length;
+  for (var i = start; i < end; i++) {
+    out[i] = src[pos];
+    if (++pos == n) pos = 0;
+  }
+  return pos;
+}
 
 void main() {
   for (final rate in _rates) {
@@ -233,6 +283,93 @@ void main() {
       final left = Float32List(4);
       expect(table.readMono(left, 0, 7, 0, 4), 11);
       expect(left, [7, 8, 9, 10]);
+    });
+
+    test(
+      'read, mix and readMono equal the per-frame wrap loop bit for bit',
+      () {
+        final rng = Rng(5);
+        for (final n in [1, 2, 7, 300]) {
+          final left = Float32List(n), right = Float32List(n);
+          for (var k = 0; k < n; k++) {
+            left[k] = rng.nextU32() / 4294967296.0 - 0.5;
+            right[k] = rng.nextU32() / 4294967296.0 - 0.5;
+          }
+          final t = NoiseTable.fromChannels(left, right);
+          const size = 1000;
+          for (final pos in {
+            0,
+            1,
+            n ~/ 2,
+            n - 2,
+            n - 1,
+          }.where((p) => p >= 0 && p < n)) {
+            for (final frames in {0, 1, 2, n - pos, n - pos + 1, 3 * n + 2}) {
+              final reason = 'n=$n pos=$pos frames=$frames';
+              final gotL = _filled(size, rng), gotR = _filled(size, rng);
+              final refL = Float32List.fromList(gotL);
+              final refR = Float32List.fromList(gotR);
+
+              var next = t.read(gotL, gotR, pos, frames, 0.37);
+              var refNext = _refRead(
+                t,
+                refL,
+                refR,
+                pos,
+                frames,
+                0.37,
+                add: false,
+              );
+              expect(next, refNext, reason: 'read $reason');
+              expect(_bits(gotL), _bits(refL), reason: 'read L $reason');
+              expect(_bits(gotR), _bits(refR), reason: 'read R $reason');
+
+              next = t.mix(gotL, gotR, pos, frames, -1.7);
+              refNext = _refRead(t, refL, refR, pos, frames, -1.7, add: true);
+              expect(next, refNext, reason: 'mix $reason');
+              expect(_bits(gotL), _bits(refL), reason: 'mix L $reason');
+              expect(_bits(gotR), _bits(refR), reason: 'mix R $reason');
+
+              for (final channel in [0, 1]) {
+                const start = 5;
+                next = t.readMono(gotL, channel, pos, start, start + frames);
+                refNext = _refReadMono(
+                  t,
+                  refL,
+                  channel,
+                  pos,
+                  start,
+                  start + frames,
+                );
+                expect(next, refNext, reason: 'readMono $channel $reason');
+                expect(_bits(gotL), _bits(refL), reason: 'readMono $reason');
+              }
+            }
+          }
+        }
+      },
+    );
+
+    test('a position outside the table is a RangeError when frames > 0', () {
+      final outL = Float32List(4), outR = Float32List(4);
+      for (final pos in [-1, length, length + 3]) {
+        expect(() => table.read(outL, outR, pos, 1, 1.0), throwsRangeError);
+        expect(() => table.mix(outL, outR, pos, 1, 1.0), throwsRangeError);
+        expect(() => table.readMono(outL, 0, pos, 0, 1), throwsRangeError);
+        expect(table.read(outL, outR, pos, 0, 1.0), pos);
+        expect(table.mix(outL, outR, pos, 0, 1.0), pos);
+        expect(table.readMono(outL, 0, pos, 2, 2), pos);
+      }
+    });
+
+    test('an output shorter than the frames is a RangeError', () {
+      final short = Float32List(3), long = Float32List(8);
+      expect(() => table.read(short, long, 0, 4, 1.0), throwsRangeError);
+      expect(() => table.read(long, short, 0, 4, 1.0), throwsRangeError);
+      expect(() => table.mix(short, long, 0, 4, 1.0), throwsRangeError);
+      expect(() => table.mix(long, short, 0, 4, 1.0), throwsRangeError);
+      expect(() => table.readMono(short, 1, 0, 1, 4), throwsRangeError);
+      expect(() => table.readMono(long, 1, 0, -1, 4), throwsRangeError);
     });
   });
 

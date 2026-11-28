@@ -57,10 +57,14 @@ final class NoiseTable {
     double gain,
   ) {
     final l = _left, r = _right, n = l.length;
-    for (var i = 0; i < frames; i++) {
-      outL[i] = l[pos] * gain;
-      outR[i] = r[pos] * gain;
-      if (++pos == n) pos = 0;
+    var i = 0;
+    while (i < frames) {
+      final end = _runEnd(pos, n, frames - i);
+      for (var p = pos; p < end; p++, i++) {
+        outL[i] = l[p] * gain;
+        outR[i] = r[p] * gain;
+      }
+      pos = end == n ? 0 : end;
     }
     return pos;
   }
@@ -74,10 +78,14 @@ final class NoiseTable {
     double gain,
   ) {
     final l = _left, r = _right, n = l.length;
-    for (var i = 0; i < frames; i++) {
-      outL[i] += l[pos] * gain;
-      outR[i] += r[pos] * gain;
-      if (++pos == n) pos = 0;
+    var i = 0;
+    while (i < frames) {
+      final end = _runEnd(pos, n, frames - i);
+      for (var p = pos; p < end; p++, i++) {
+        outL[i] += l[p] * gain;
+        outR[i] += r[p] * gain;
+      }
+      pos = end == n ? 0 : end;
     }
     return pos;
   }
@@ -87,11 +95,25 @@ final class NoiseTable {
   int readMono(Float32List out, int channel, int pos, int start, int end) {
     final src = channel == 0 ? _left : _right;
     final n = src.length;
-    for (var i = start; i < end; i++) {
-      out[i] = src[pos];
-      if (++pos == n) pos = 0;
+    var i = start;
+    while (i < end) {
+      final stop = _runEnd(pos, n, end - i);
+      final next = i + (stop - pos);
+      out.setRange(i, next, src, pos);
+      i = next;
+      pos = stop == n ? 0 : stop;
     }
     return pos;
+  }
+
+  /// End of the straight run of at most [rest] frames from [pos] that stops
+  /// at the wrap point [n]. A [pos] outside the table is a [RangeError], as
+  /// the table access it replaces.
+  @pragma('vm:prefer-inline')
+  static int _runEnd(int pos, int n, int rest) {
+    if (pos < 0 || pos >= n) throw RangeError.range(pos, 0, n - 1, 'pos');
+    final end = pos + rest;
+    return end < n ? end : n;
   }
 
   static Float32List _channel(NoiseColor color, int rate, int seed) {
