@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:fiatsonus_engine/src/core/engine_constants.dart';
 import 'package:fiatsonus_engine/src/primitives/block_ops.dart';
+import 'package:fiatsonus_engine/src/primitives/rng.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -47,6 +48,30 @@ void main() {
       final dst = Float32List(4);
       addRamp(src, dst, 2, 1.0, 1.0);
       expect(dst, [1.0, 1.0, 0.0, 0.0]);
+    });
+
+    test('equals the per-frame ramp loop bit for bit for any length', () {
+      Uint32List bits(Float32List buf) => Uint32List.sublistView(buf);
+      final rng = Rng(9);
+      Float32List fill(int size) => Float32List.fromList([
+        for (var i = 0; i < size; i++) rng.nextU32() / 4294967296.0 - 0.5,
+      ]);
+      for (final frames in [1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 255, 256]) {
+        for (final (g0, g1) in [(0.0, 1.0), (0.7, 0.7), (1.3, -0.4)]) {
+          final src = fill(frames + 3);
+          final dst = fill(frames + 3);
+          final ref = Float32List.fromList(dst);
+          addRamp(src, dst, frames, g0, g1);
+          // The loop addRamp ran before it was unrolled.
+          final dg = (g1 - g0) / frames;
+          var g = g0;
+          for (var i = 0; i < frames; i++) {
+            g += dg;
+            ref[i] += src[i] * g;
+          }
+          expect(bits(dst), bits(ref), reason: 'frames=$frames g0=$g0 g1=$g1');
+        }
+      }
     });
   });
 }

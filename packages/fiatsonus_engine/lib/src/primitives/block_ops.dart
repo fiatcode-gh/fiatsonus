@@ -21,7 +21,20 @@ void addRamp(
 ) {
   final dg = (g1 - g0) / frames;
   var g = g0;
-  for (var i = 0; i < frames; i++) {
+  var i = 0;
+  // Four frames per iteration, in frame order: one interrupt check and one
+  // loop test per four frames. The remainder runs in the loop below.
+  for (; i <= frames - 4; i += 4) {
+    g += dg;
+    dst[i] += src[i] * g;
+    g += dg;
+    dst[i + 1] += src[i + 1] * g;
+    g += dg;
+    dst[i + 2] += src[i + 2] * g;
+    g += dg;
+    dst[i + 3] += src[i + 3] * g;
+  }
+  for (; i < frames; i++) {
     g += dg;
     dst[i] += src[i] * g;
   }
