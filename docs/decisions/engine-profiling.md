@@ -173,7 +173,7 @@ One row per kept commit. Desktop `full` is the median factor of five `stage=full
 | `e100da3` read noise tables in straight runs around the wrap | 06, H8: the noise reads test the table wrap on every frame; straight runs that end at the wrap remove the test, and the mono read becomes a `setRange` copy | A | texture | 274.0 (3649) → 286.7 (3488) | 9504 → 9185 | 15.970 (15.83, 16.11; `e100da3/paced-3min-r2`, `paced-3min-r2-2`) |
 | `96c9e56` unroll the gain ramp by four frames | 09, H3: `addRamp` pays an interrupt check, a loop test and an increment per frame; four frames per iteration, same operations in the same order | A | roar | 286.7 (3488) → 291.8 (3427) | 9185 → 9027; roar stage −5.3 % | 16.015 (15.90, 16.13; `96c9e56/paced-3min`, `paced-3min-2`) |
 
-Class A changes only the code's shape. Class B uses an exact identity, proven by its own edge-value tests. Class C skips work whose result is unused; no class-C idea was found. Row 02r was kept on the paced path: candidate mean 16.165 against the `H0` pair's 16.945, a gain of 0.78 points (`96dfb83/iter-02r-clear-setrange/paced_judge.txt`). Rows 05, 06 and 09 were kept on the bench path.
+Class A changes only the code's shape. Class B uses an exact identity, proven by its own edge-value tests. Class C skips work whose result is unused; no class-C idea was tried (the ledger names one, skipping a clear whose block is fully overwritten before it is read). Row 02r was kept on the paced path: candidate mean 16.165 against the `H0` pair's 16.945, a gain of 0.78 points (`96dfb83/iter-02r-clear-setrange/paced_judge.txt`). Rows 05, 06 and 09 were kept on the bench path.
 
 ## Tried and dropped
 
@@ -372,7 +372,7 @@ What a native core must replace, by the final playback profile (`96c9e56/phone-p
 What Dart could not remove without changing samples or the language's safety:
 
 - one `fcvt` per `Float32List` load and store (H4), since every store is a rounding step;
-- the bounds and interrupt checks: rows 07 and 08 cut them and 4–19 % of the instructions per frame in the hottest loops, and each gained 0.055 points;
+- the bounds and interrupt checks everywhere: removing all of them needs unsafe VM pragmas, which this unit did not use. Where rows 07 and 08 cut them safely, together with 4–19 % of the instructions per frame in the hottest loops, each gained only 0.055 points;
 - the place Android chose: a little core at 691.2 MHz for 98.4 % of the run.
 
 The miss is a valid result of this unit, as the contract states. The branch line says `placement=minor`: even at the little cluster's top frequency the estimate is 6.21 %, not under 5 %. The raw ratio is measured at the frequency Android chose, and a native core would run at that frequency too.
@@ -394,7 +394,7 @@ The charge is an estimate of active-core charge only. It multiplies each thread'
 
 Other limits: the underrun tracker cannot see starvation at these chunk sizes in 3 minutes, so `underruns=0` is no evidence for a variant. The frame deficit and the AudioFlinger counter bound it instead: `deficit_ms` stayed between −3.0 and 5.5, and `af_underruns` was 0 in every run. With bursts, `max_render_us` is one chunk's render: up to 88.5 ms for a 1 s chunk and up to 321 ms for a 5 s chunk. After the Stop tap, the session took about 5 s (`v1s`) or 11 s (`v5s`) to reach idle. By code reading the fade sits behind the queued audio, so it is not heard. Nobody listened.
 
-What it means for the next unit: burst rendering is a pipeline change (chunk size, queue depth, flush), and it applies to a Dart engine and a native one alike. It changes when, where and at which frequency the render runs, not the work per sample. Whether the next unit tries it before a native core or instead of one is that unit's design question: over 3 minutes the 1 s bursts measured 5.725 % and the 5 s bursts 1.855 %, against the final 10-minute 15.95 %, and no native core was measured.
+What it means for the next unit: burst rendering is a pipeline change (chunk size, queue depth, flush), and it applies to a Dart engine and a native one alike. The engine code, and so the instructions per sample, stay the same by construction. The process's CPU time still fell, from 3281–3282 ticks for the `96c9e56` reference pair to 1173–1302 (`v1s`) and 601–624 (`v5s`) over 3 minutes (`96c9e56/burst-spike/energy/energy.txt`). How that fall splits between core placement, frequency and per-wake costs such as cold caches was not measured; per-wake cost is an inference. Whether the next unit tries it before a native core or instead of one is that unit's design question: over 3 minutes the 1 s bursts measured 5.725 % and the 5 s bursts 1.855 %, against the final 10-minute 15.95 %, and no native core was measured.
 
 The decision stands. The contract judges the final head's 10-minute run, and the spike never became the final head.
 
