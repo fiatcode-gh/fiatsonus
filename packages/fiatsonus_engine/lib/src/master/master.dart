@@ -61,6 +61,9 @@ final class Master {
     : _seed = seed,
       noise = _checkedBank(sampleRate, seed) {
     _limiter.prepare(sampleRate);
+    // Creates block_ops' lazily initialised zero block here, so the first
+    // render does not allocate it.
+    clearBlock(_mixL, kBlockFrames);
   }
 
   static NoiseBank _checkedBank(int sampleRate, int seed) {
