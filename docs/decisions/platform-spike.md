@@ -132,6 +132,8 @@ Listening: the user listened for 2 minutes after Play and 2 minutes after the re
 
 ## Dart or native
 
+**Superseded by unit 2b.** Unit 2b profiled the engine, made it faster without changing a sample, and still measured 15.95 % of one core over 10 minutes screen off, so its decision is a native core; see [engine-profiling.md](engine-profiling.md). The text below is this unit's recommendation, kept as history.
+
 **Recommendation: a native core.** Engine CPU measured 17.35 % of one core over the soak (`CPU MISS`, 3.47 times the 5 % limit), with zero underruns, so by the rule (5 % or more) the recommendation is a native core; this unit ends with the recommendation, not the core. The engine thread ran on cpu3 (little cluster, 1804.8 MHz, at its maximum) at t0 and on cpu4 (big cluster, 2208 MHz, at its maximum) at t1. Those are two snapshots, not an average: one of them found the thread on a big core at full speed while the hour's average stayed at 17.35 %, which points at the Dart engine's own cost on ARM, not only at core placement.
 
 Next steps, in order:
@@ -213,7 +215,7 @@ Next steps, in order:
 - The final app name.
 - An interruption that never ends keeps the service and its wake lock until the user stops.
 - A permanent focus loss is proven by host tests only.
-- How the CPU figure splits between core placement, core speed and the Dart code's own cost on ARM is not measured; the first next step above profiles it.
+- How the CPU figure splits between core placement, core speed and the Dart code's own cost: measured in unit 2b, see [engine-profiling.md](engine-profiling.md).
 - A process started without `MainActivity` (a media button) has no `clear` handler, so the leftover notification can recur there.
 - The notification repair gives up after 5 s; a flag still set then leaves the notification until the next stop.
 - `call_watch.sh` passes on `FSTATE phase=playing` without checking that frames advance; the user's ears stood in.

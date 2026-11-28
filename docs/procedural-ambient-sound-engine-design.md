@@ -387,7 +387,7 @@ Flutter has no built-in way to play generated audio, so the app needs a plugin t
 
 - [x] Background playback with the screen off on Android: one hour screen off on a vivo (Android 16) through the foreground service, zero underruns. iOS is not built.
 - [x] The feed in the background: the pull-stream callback kept the feed going with the screen off for the whole hour; the counters and the session's lead line show no gap.
-- [x] CPU cost of the Dart DSP core: 17.35 % of one core on a mid-range phone, over the 5 % budget; a low-end phone was not measured.
+- [x] CPU cost of the Dart DSP core: 17.35 % of one core on a mid-range phone in unit 2, and 15.95 % after unit 2b's byte-identical fixes; over the 5 % budget; a low-end phone was not measured.
 - [x] Other PCM plugins: `flutter_pcm_sound` and `mp_audio_stream` were probed beside `flutter_soloud`; neither meets the constraints.
 
 ## Testing and acceptance
@@ -427,7 +427,7 @@ A small command-line tool renders any soundscape with a seed, a duration, and pa
 ## Open questions
 
 - [x] Which audio plugin? `flutter_soloud` (pull stream in the engine isolate); see `docs/decisions/platform-spike.md`.
-- [x] Dart DSP or a native core? A native core: the Dart engine measured 17.35 % of one core on the phone, over the 5 % budget. Profile the Dart engine on ARM first; see `docs/decisions/platform-spike.md`.
+- [x] Dart DSP or a native core? A native core: after unit 2b's profiling and fixes the Dart engine measured 15.95 % of one core on the phone, over the 5 % budget; see `docs/decisions/engine-profiling.md`.
 - [x] Build order: engine primitives + waterfall first (unit 1), then ocean, stream, forest, city.
 - [ ] Scene mixing: can users stack soundscapes (for example ocean + forest)? The master supports it. The UI needs a design.
 - [ ] Timer and fade-out length.
@@ -489,3 +489,10 @@ FLEAD sink=soloud ref_us=<n> jitter_us=<n> underruns=<n> starved_us=<n>      (on
 - Focus: `audio_session` with media/music attributes, gain type `gain`, pause when ducked. A transient loss stops the engine with the 200 ms fade and keeps `playing: true` with `processingState: buffering`; a gain resumes only from `interrupted`. A permanent loss, a notification stop and an in-app stop end with `playing: false` and idle together, the service leaves the foreground and focus is abandoned; only a tap in the app starts again. The finish step abandons focus except while a request is in flight, then the request's caller decides; a denied request is abandoned.
 - Notification: Stop only; `pause` acts as stop. After idle the app polls its own notifications every 50 ms for at most 5 s and cancels notification 1124 once its foreground flag is gone.
 - Measured (vivo, Android 16, release, screen off, speaker): engine CPU 17.35 % of one core, process CPU 19.71 %, zero underruns over 1 h 48 min, about 80 mAh/h for the whole phone with the screen off.
+
+## Unit decisions: engine-profiling (unit 2b)
+
+- Measured after the unit (vivo, Android 16, normal release, 10 minutes screen off): engine CPU 15.95 % of one core (17.31 % before), process CPU 18.30 %, zero underruns. The engine thread ran on a little core at 691.2 MHz for 98.4 % of the run. Decision: a native core; see `docs/decisions/engine-profiling.md`.
+- A speed change must keep the digest set identical: `digest` renders 28 scripted cases, and their hashes at the new code must equal the baseline's on the desktop and on the phone. A change that alters one sample is a recipe change and goes through this document.
+- Allowed fix classes: A, code shape only (safe pragmas, fields into locals, loop splits at a wrap point, unrolls that keep every floating-point operation and its order, `setRange` for pure copies and zero fills, length guards before a loop); B, exact identities, each with its own edge-value tests; C, skipped work whose result is unused bit for bit. Unsafe VM pragmas need the user's approval.
+- Tools: `tool/digest.dart` (the 28 render hashes, `--check` and `--compare`), `tool/stage_bench.dart` (each stage's cost and the shares by subtraction), and the app's bench target, built with `--target=lib/bench_main.dart`, which runs both on the phone. A normal build holds none of the bench code.

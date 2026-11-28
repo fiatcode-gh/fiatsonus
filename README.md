@@ -14,9 +14,18 @@ engine runs in its own isolate and feeds `flutter_soloud`'s pull stream;
 service with a Stop notification; audio focus pauses and resumes it. A debug
 screen has Play/Stop and the live counters. Measured on a vivo (Android 16):
 one hour screen off with zero underruns, engine CPU 17.35 % of one core
-(over the 5 % limit, so the record recommends a native core after profiling
-the Dart engine on ARM), about 80 mAh/h for the whole phone. See
+(over the 5 % limit; unit 2b's record below decides on a native core), about
+80 mAh/h for the whole phone. See
 [docs/decisions/platform-spike.md](docs/decisions/platform-spike.md).
+
+Unit 2b (engine-profiling): the engine was measured stage by stage on the
+phone and on the desktop, with Dart CPU profiles. On the phone it runs on a
+little core at its lowest frequency. Four fixes made it faster without
+changing one output sample (28 render hashes equal before and after, on both
+platforms). Engine CPU over 10 minutes screen off went from 17.31 % to
+15.95 % of one core, still over the 5 % limit, so the decision is a native
+core. See
+[docs/decisions/engine-profiling.md](docs/decisions/engine-profiling.md).
 
 ## Layout
 
